@@ -1,6 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++_primer_V5 学习笔记-第一章</title>
+    <url>/2020/07/13/c-primer-1/</url>
+    <content><![CDATA[<p>本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。</p>
+<a id="more"></a>
+
+<h4 id="编写一个简单的C-程序"><a href="#编写一个简单的C-程序" class="headerlink" title="编写一个简单的C++程序"></a>编写一个简单的C++程序</h4><ul>
+<li>函数定义<ul>
+<li>返回类型</li>
+<li>函数名</li>
+<li>形参列表（允许为空</li>
+<li>函数体</li>
+</ul>
+</li>
+<li>main函数的返回类型必须为int。</li>
+<li><strong>内置类型（built-in-type）：语言自身定义的类型</strong></li>
+<li>函数体中使用return结束函数的执行，return返回的值与函数的返回类型相容</li>
+<li>大多数系统中，main的返回值被用来指示状态，返回0表示成功，非0值常用于指出错误类型</li>
+</ul>
+<h5 id="编译、运行程序"><a href="#编译、运行程序" class="headerlink" title="编译、运行程序"></a>编译、运行程序</h5><ul>
+<li><p>集成开发环境IDE：将编译器与其他程序创建和分析工具包装在一起</p>
+</li>
+<li><p>源文件：程序文件常被称为 <strong>源文件（source file</strong></p>
+</li>
+<li><p>源文件名字以后缀结尾：.cc .cxx .cpp .cp .C    …</p>
+</li>
+<li><p>命令行运行编译器</p>
+<ul>
+<li><pre><code class="cmd">$ CC prog1.cc
+&lt;!--￼<span class="number">0</span>--&gt;</code></pre>
+</li>
+</ul>
+</li>
+<li><p>unix运行可执行文件</p>
+<ul>
+<li><pre><code class="cmd">$ a.out
+$ ./a.out
+&lt;!--￼<span class="number">1</span>--&gt;</code></pre>
+</li>
+<li><p>windows 查看状态</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">%ERRORLEVEL%</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>GNU编译器</p>
+<ul>
+<li><pre><code class="cmd">$ g++ -o prog1 prog1.cc
+&lt;!--￼<span class="number">3</span>--&gt;
+
+c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre>
+</li>
+<li><p>生成可执行文件prog1.exe</p>
+</li>
+</ul>
+</li>
+<li><p>编译器可以对有问题的程序结构发出警告 打开选项</p>
+<ul>
+<li>GNU使用-Wall VS编译器使用/W4</li>
+</ul>
+</li>
+</ul>
+<h4 id="初识输入输出"><a href="#初识输入输出" class="headerlink" title="初识输入输出"></a>初识输入输出</h4><ul>
+<li><p>C++语言使用 <strong>标准库</strong> 提供IO机制等</p>
+</li>
+<li><p>iostream库 </p>
+<ul>
+<li>包含istream和ostream 表示输入流和输出流</li>
+<li>一个流是一个字符序列，从IO设备读出/写入IO设备</li>
+</ul>
+</li>
+<li><p>标准输入输出对象</p>
+<ul>
+<li>cin 标准输入 istream类型</li>
+<li>cout 标准输出 ostream类型</li>
+<li>cerr 标准错误 输出警告和错误信息</li>
+<li>clog 输出程序运行时的一般性信息</li>
+</ul>
+</li>
+<li><pre><code class="c++"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+&lt;!--￼<span class="number">4</span>--&gt;</code></pre>
+</li>
+<li><p>注释界定符不能嵌套，最好的注释方式是用单行注释方式注释掉代码段的每一行。</p>
+</li>
+</ul>
+<h4 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h4><ul>
+<li><p>while语句</p>
+</li>
+<li><p>for语句</p>
+</li>
+<li><p>读取数量不定的输入数据</p>
+<ul>
+<li><pre><code class="c++"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>
+<span class="function"></span>{
+    <span class="keyword">int</span> sum=<span class="number">0</span>,value=<span class="number">0</span>;
+    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;value)
+    {
+        sum+=value;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+&lt;!--￼<span class="number">5</span>--&gt;
+</code></pre>
+</li>
+</ul>
+<p>addItems是编译后的可执行文件，则上述命令会从当前目录的 一个名为infile的文件读取数据，并将结果写入一个名为outfile的文件中</p>
+</li>
+<li><p>成员函数（方法：定义为类的一部分的函数</p>
+</li>
+<li><p>点运算符(.)：指定类的成员</p>
+</li>
+<li><p>调用运算符（ () ）：调用一个函数，括号内放置实参（可能没有</p>
+</li>
+</ul>
+<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>缓冲区（buffer：IO设施通常将输入或输出数据保存在一个缓冲区中，读写缓冲区的动作与程序无关。<ul>
+<li>可以显式刷新输出缓冲，强制将缓冲区的数据写入输出设备</li>
+<li>读cin 或 程序非正常终止 时，会刷新cout</li>
+</ul>
+</li>
+<li>Cerr：ostream对象，写到cerr的数据默认不缓冲。常用于输出错误信息或不属于程序正常逻辑的输出内容。</li>
+<li>clog：ostream对象。写到clog的数据默认缓冲。报告程序的执行信息，存入一个日志文件中。</li>
+<li>main函数： <strong>每个程序有且只有一个命名为main的函数</strong></li>
+<li>命名空间：将库定义的名字放在一个单一位置的机制。避免名字冲突</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo文章更新较慢</title>
+    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
+    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
+<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/06/24/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
@@ -19,26 +158,5 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第一章</title>
-    <url>/2020/07/13/c-primer-1/</url>
-    <content><![CDATA[<p>本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。</p>
-<a id="more"></a>
-
-<p>test</p>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo文章更新较慢</title>
-    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
-    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
-<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
   </entry>
 </search>
