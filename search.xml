@@ -28,17 +28,28 @@
 </li>
 <li><p>命令行运行编译器</p>
 <ul>
-<li><pre><code class="cmd">$ CC prog1.cc
-&lt;!--￼<span class="number">0</span>--&gt;</code></pre>
+<li><p>CC是编译器程序的名字 main程序在prog1.cc中</p>
 </li>
-<li></li>
+<li><p>编译器生成一个可执行文件 windows为prog1.exe unix后缀为<strong>a.out</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ CC prog1.cc</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
+<li><p>windows运行可执行文件</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ prog1</span><br><span class="line">$ .\prog1</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>unix运行可执行文件</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ a.out</span><br><span class="line">$ ./a.out</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
 <ul>
-<li><pre><code class="cmd">$ a.out
-$ ./a.out
-&lt;!--￼<span class="number">1</span>--&gt;</code></pre>
+<li><p>在unix和windows中，执行完程序后都可以使用 <strong>echo命令获得返回值</strong> </p>
+<ul>
+<li><p>unix 获得状态</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> $?</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>windows 查看状态</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">%ERRORLEVEL%</span></span><br></pre></td></tr></table></figure>
@@ -48,7 +59,7 @@ $ ./a.out
 <li><p>GNU编译器</p>
 <ul>
 <li><pre><code class="cmd">$ g++ -o prog1 prog1.cc
-&lt;!--￼<span class="number">3</span>--&gt;
+&lt;!--￼<span class="number">5</span>--&gt;
 
 c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre>
 </li>
@@ -80,7 +91,7 @@ c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre
 </ul>
 </li>
 <li><pre><code class="c++"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
-&lt;!--￼<span class="number">4</span>--&gt;</code></pre>
+&lt;!--￼<span class="number">6</span>--&gt;</code></pre>
 </li>
 <li><p>注释界定符不能嵌套，最好的注释方式是用单行注释方式注释掉代码段的每一行。</p>
 </li>
@@ -102,7 +113,7 @@ c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre
     }
     <span class="keyword">return</span> <span class="number">0</span>;
 }
-&lt;!--￼<span class="number">5</span>--&gt;
+&lt;!--￼<span class="number">7</span>--&gt;
 </code></pre>
 </li>
 </ul>
