@@ -28,7 +28,7 @@
 <meta property="og:description" content="本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-13T02:00:24.000Z">
-<meta property="article:modified_time" content="2020-07-13T12:13:28.962Z">
+<meta property="article:modified_time" content="2020-07-13T12:15:12.295Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-07-13 10:00:24 / Modified: 20:13:28" itemprop="dateCreated datePublished" datetime="2020-07-13T10:00:24+08:00">2020-07-13</time>
+              <time title="Created: 2020-07-13 10:00:24 / Modified: 20:15:12" itemprop="dateCreated datePublished" datetime="2020-07-13T10:00:24+08:00">2020-07-13</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,14 +259,23 @@
 </ul>
 </li>
 <li><p>GNU编译器</p>
-<ul>
-<li><pre><code class="cmd">$ g++ -o prog1 prog1.cc
-&lt;!--￼<span class="number">5</span>--&gt;
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ g++ -o prog1 prog1.cc</span><br></pre></td></tr></table></figure>
 
-c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre>
+<ul>
+<li><p>-o prog1是编译器参数 指定可执行文件的文件名</p>
 </li>
-<li><p>生成可执行文件prog1.exe</p>
+<li><p>该指令生成可执行文件 windows后缀为.exe UNIX无后缀</p>
 </li>
+<li><p>若省略 -o prog1参数 windows生成a.exe UNIX生成a.out</p>
+</li>
+</ul>
+</li>
+<li><p>微软Visual Studio编译器</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">me</span>\<span class="title">Programs</span>&gt; <span class="title">c1</span> /<span class="title">EHsc</span> <span class="title">prog1.cpp</span></span></span><br></pre></td></tr></table></figure>
+
+<p>c1调用编译器   /EHsc是编译器选项(打开标准异常处理</p>
+<ul>
+<li>生成可执行文件prog1.exe</li>
 </ul>
 </li>
 <li><p>编译器可以对有问题的程序结构发出警告 打开选项</p>
@@ -291,9 +300,40 @@ c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre
 <li>cerr 标准错误 输出警告和错误信息</li>
 <li>clog 输出程序运行时的一般性信息</li>
 </ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用iostream库，iostream指出了一个 <strong>头文件</strong></li>
+</ul>
 </li>
-<li><pre><code class="c++"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
-&lt;!--￼<span class="number">6</span>--&gt;</code></pre>
+<li><p>表达式：由运算对象和运算符组成</p>
+</li>
+<li><p>输出运算符&lt;&lt;   ： 接受两个运算对象 左侧为ostream对象 右侧是要打印的值 将给定值写入给定的ostream对象中</p>
+</li>
+<li><p>操纵符 std::endl 写入的效果是结束当前行 <strong>将与设备关联的缓冲区内容刷到设备中</strong></p>
+<ul>
+<li>缓冲刷新操作保证 到目前为止程序产生的输出 <strong>真正写入输出流中</strong> 而非内存中等待写入</li>
+<li>调试时的打印语句应该保证一直刷新流，防止崩溃时输出还留在缓冲区 难以判断出错位置</li>
+</ul>
+</li>
+<li><p>前缀std:: 表示定义在名为std的命名空间中   ::是作用域运算符</p>
+</li>
+<li><p>标准库定义的所有名字都在命名空间std中</p>
+</li>
+<li><p>输入运算符&gt;&gt; 左侧为istream对象 右侧为存入的对象</p>
+</li>
+<li><p>标准库定义了不同版本的运算符 处理不同类型的运算对象</p>
+</li>
+</ul>
+<h4 id="注释comments-简介"><a href="#注释comments-简介" class="headerlink" title="注释comments 简介"></a>注释comments 简介</h4><ul>
+<li><p>两种注释</p>
+<ul>
+<li>单行注释：双斜线开始，换行符结束。可以包含任何文本，包括额外的双斜线。</li>
+<li>界定符对注释：以 /* 开始，以 */ 结束。可以包含除了 */ 以外的任何内容，包括换行符、</li>
+</ul>
+</li>
+<li><p>常使用的风格：注释内的每行都以一个星号开头</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//abc</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>注释界定符不能嵌套，最好的注释方式是用单行注释方式注释掉代码段的每一行。</p>
 </li>
@@ -304,21 +344,40 @@ c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre
 <li><p>for语句</p>
 </li>
 <li><p>读取数量不定的输入数据</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=<span class="number">0</span>,value=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;value)</span><br><span class="line">	&#123;</span><br><span class="line">		sum+=value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><pre><code class="c++"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span>
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>
-<span class="function"></span>{
-    <span class="keyword">int</span> sum=<span class="number">0</span>,value=<span class="number">0</span>;
-    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;value)
-    {
-        sum+=value;
-    }
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-&lt;!--￼<span class="number">7</span>--&gt;
-</code></pre>
+<li>while使用istream对象作为条件，检测流的状态。若流是有效的，检测成功；遇到文件结束符（end-of-file）或无效输入。istream对象无效，检测条件为假。</li>
+</ul>
+</li>
+<li><p>文件结束符：windows ctrl+Z 再enter或return UNIX输入ctrl+D</p>
+</li>
+<li><p>编译器：检查形式上的错误，错误信息包含行号和简短描述</p>
+<ul>
+<li>语法错误</li>
+<li>类型错误</li>
+<li>声明错误</li>
+</ul>
+</li>
+<li><p>按照报告顺序逐个修正错误，修正后立即重新编译。</p>
+</li>
+<li><p>if语句</p>
+</li>
+<li><p>左花括号必须是形参列表后的第一个非空、非注释的字符</p>
 </li>
 </ul>
+<h4 id="类简介（class"><a href="#类简介（class" class="headerlink" title="类简介（class"></a>类简介（class</h4><ul>
+<li><p>定义类来定义自己的数据结构</p>
+</li>
+<li><p>在头文件中定义（后缀.h .H .hxx .hpp …)</p>
+</li>
+<li><p>类的作者决定了类 类型对象上可以使用的所有操作</p>
+</li>
+<li><p>包含标准库的头文件 使用尖括号&lt;&gt; ；不属于标准库的头文件 使用双引号””</p>
+</li>
+<li><p>文件重定向：将标准输入和标准输出与命名文件关联起来</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ addItems &lt;infile &gt;outfile</span><br></pre></td></tr></table></figure>
+
 <p>addItems是编译后的可执行文件，则上述命令会从当前目录的 一个名为infile的文件读取数据，并将结果写入一个名为outfile的文件中</p>
 </li>
 <li><p>成员函数（方法：定义为类的一部分的函数</p>
@@ -419,7 +478,7 @@ c1调用编译器   /EHsc是编译器选项(打开标准异常处理</code></pre
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#编写一个简单的C-程序"><span class="nav-number">1.</span> <span class="nav-text">编写一个简单的C++程序</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编译、运行程序"><span class="nav-number">1.1.</span> <span class="nav-text">编译、运行程序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初识输入输出"><span class="nav-number">2.</span> <span class="nav-text">初识输入输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制流"><span class="nav-number">3.</span> <span class="nav-text">控制流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#术语表"><span class="nav-number">4.</span> <span class="nav-text">术语表</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#编写一个简单的C-程序"><span class="nav-number">1.</span> <span class="nav-text">编写一个简单的C++程序</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编译、运行程序"><span class="nav-number">1.1.</span> <span class="nav-text">编译、运行程序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初识输入输出"><span class="nav-number">2.</span> <span class="nav-text">初识输入输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注释comments-简介"><span class="nav-number">3.</span> <span class="nav-text">注释comments 简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制流"><span class="nav-number">4.</span> <span class="nav-text">控制流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类简介（class"><span class="nav-number">5.</span> <span class="nav-text">类简介（class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#术语表"><span class="nav-number">6.</span> <span class="nav-text">术语表</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
