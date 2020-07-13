@@ -205,10 +205,86 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo文章更新较慢</title>
-    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
-    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
-<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
+    <title>C++_primer_V5 学习笔记-第二章</title>
+    <url>/2020/07/13/c-primer-2/</url>
+    <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
+<a id="more"></a>
+
+<ul>
+<li>任何编程语言都具备一组公共的语法特征。最基本的特征包括：<ul>
+<li>整形、字符型等<strong>内置类型</strong></li>
+<li><strong>变量</strong>，为对象命名</li>
+<li><strong>表达式和语句</strong>，操纵上述类型的具体值</li>
+<li><strong>控制结构</strong>，控制语句执行</li>
+<li><strong>函数</strong>，定义可随时调用的计算单元</li>
+</ul>
+</li>
+<li>大多数编程语言通过两种方式进一步补充基本特征：<ul>
+<li>程序员自定义数据类型</li>
+<li>将有用的功能封装成库函数</li>
+</ul>
+</li>
+<li>C++的对象类型决定对它进行的操作。</li>
+<li>C++是一种静态数据类型语言，编译时进行类型检查。编译器要知道每个变量对应的数据类型。</li>
+<li>简单的编程语言，强大的<strong>数据结构自定义</strong></li>
+<li>最重要的语法特征是 <strong>类class</strong> ，允许新类型包含数据和函数成员</li>
+</ul>
+<h4 id="基本内置类型"><a href="#基本内置类型" class="headerlink" title="基本内置类型"></a>基本内置类型</h4><ul>
+<li><p>包括<strong>算术类型</strong>和<strong>空类型</strong></p>
+</li>
+<li><p>算术类型</p>
+<ul>
+<li>整型：包括字符和布尔类型</li>
+<li>浮点型</li>
+</ul>
+</li>
+<li><p>一个char型的大小和一个机器字节一样（8bit=1byte）</p>
+</li>
+<li><p>short16–int16–long32–long long64</p>
+</li>
+<li><p><strong>内置类型的机器实现</strong></p>
+<ul>
+<li>计算机以比特序列存储数据。可寻址的最小内存块为 <strong>字节byte</strong>，存储的基本单元称为 <strong>字word</strong> 。1word=4 or 8 byte = 32 or 64 bit</li>
+<li>一个字节对应一个地址</li>
+<li>一个字或字节的首位（bit）地址即表示这个字或字节的地址</li>
+<li>如果一个对象类型是32位，计算机一个字有4个字节，那么用4个字节/1个字存储这个对象</li>
+</ul>
+</li>
+<li><p>float单精度 6位有效数字 32位–double双精度 10位有效数字 64位–long double扩展精度 10位有效数字 96or128位</p>
+</li>
+<li><p>带符号和无符号类型</p>
+<ul>
+<li>带符号：正数 负数 0 int short long longlong。标识范围内正值和负值的量应该平衡。如8bit的char为-128-127</li>
+<li>无符号：大于等于0的值 添加unsigned即无符号 如unsigned long。所有比特都用来存储值。</li>
+<li>字符型分为三种：char 、signed char、unsigned char。但表现形式仍为两种：带符号、无符号。char表现为二者之一，由编译器决定</li>
+</ul>
+</li>
+<li><p>如何选择类型</p>
+<ul>
+<li>数值不可能为负–使用无符号</li>
+<li>整数运算用int，若超过范围使用longlong</li>
+<li>算术表达式中不用char或bool</li>
+<li>浮点数运算用double</li>
+</ul>
+</li>
+<li><p>类型转换</p>
+<ul>
+<li>赋给无符号类型超出范围的值：初始值 对 无符号表示数值的总数 取模的余数，如下c=255.</li>
+<li>赋给带符号类型超出范围的值：结果是未定义的。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> b=<span class="number">42</span>;					<span class="comment">//b=true</span></span><br><span class="line"><span class="keyword">int</span> i=b;  					<span class="comment">//i=1</span></span><br><span class="line">i=<span class="number">3.14</span>;						<span class="comment">//i=3</span></span><br><span class="line"><span class="keyword">double</span> pi=i;				<span class="comment">//pi=3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c=<span class="number">-1</span>;			<span class="comment">//c=255  0-255区间 -1对256取模得到的余数（取模操作结果为正数） （-1 mod 256=（-1+256）mod 256=255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2=<span class="number">256</span>;			<span class="comment">//c2为未定义</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -231,42 +307,9 @@
 ]]></content>
   </entry>
   <entry>
-    <title>C++_primer_V5 学习笔记-第二章</title>
-    <url>/2020/07/13/c-primer-2/</url>
-    <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
-<a id="more"></a>
-
-<ul>
-<li><p>任何编程语言都具备一组公共的语法特征。最基本的特征包括：</p>
-<ul>
-<li>整形、字符型等<strong>内置类型</strong></li>
-<li><strong>变量</strong>，为对象命名</li>
-<li><strong>表达式和语句</strong>，操纵上述类型的具体值</li>
-<li><strong>控制结构</strong>，控制语句执行</li>
-<li><strong>函数</strong>，定义可随时调用的计算单元</li>
-</ul>
-</li>
-<li><p>大多数编程语言通过两种方式进一步补充基本特征：</p>
-<ul>
-<li>程序员自定义数据类型</li>
-<li>将有用的功能封装成库函数</li>
-</ul>
-</li>
-<li><p>C++的对象类型决定对它进行的操作。</p>
-</li>
-<li><p>c++是一种静态数据类型语言，编译时进行类型检查。编译器要知道每个变量对应的数据类型。</p>
-</li>
-<li><p>简单的编程语言，强大的<strong>数据结构自定义</strong></p>
-</li>
-<li><p>最重要的语法特征是 <strong>类class</strong> ，允许新类型包含数据和函数成员</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
+    <title>hexo文章更新较慢</title>
+    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
+    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
+<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
   </entry>
 </search>
