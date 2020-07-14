@@ -1,6 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++_primer_V5 学习笔记-第二章</title>
+    <url>/2020/07/13/c-primer-2/</url>
+    <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
+<a id="more"></a>
+
+<ul>
+<li>任何编程语言都具备一组公共的语法特征。最基本的特征包括：<ul>
+<li>整形、字符型等<strong>内置类型</strong></li>
+<li><strong>变量</strong>，为对象命名</li>
+<li><strong>表达式和语句</strong>，操纵上述类型的具体值</li>
+<li><strong>控制结构</strong>，控制语句执行</li>
+<li><strong>函数</strong>，定义可随时调用的计算单元</li>
+</ul>
+</li>
+<li>大多数编程语言通过两种方式进一步补充基本特征：<ul>
+<li>程序员自定义数据类型</li>
+<li>将有用的功能封装成库函数</li>
+</ul>
+</li>
+<li>C++的对象类型决定对它进行的操作。</li>
+<li>C++是一种静态数据类型语言，编译时进行类型检查。编译器要知道每个变量对应的数据类型。</li>
+<li>简单的编程语言，强大的<strong>数据结构自定义</strong></li>
+<li>最重要的语法特征是 <strong>类class</strong> ，允许新类型包含数据和函数成员</li>
+</ul>
+<h4 id="基本内置类型"><a href="#基本内置类型" class="headerlink" title="基本内置类型"></a>基本内置类型</h4><ul>
+<li><p>包括<strong>算术类型</strong>和<strong>空类型</strong></p>
+</li>
+<li><p>算术类型</p>
+<ul>
+<li>整型：包括字符和布尔类型</li>
+<li>浮点型</li>
+</ul>
+</li>
+<li><p>一个char型的大小和一个机器字节一样（8bit=1byte）</p>
+</li>
+<li><p>short16–int16–long32–long long64</p>
+</li>
+<li><p><strong>内置类型的机器实现</strong></p>
+<ul>
+<li>计算机以比特序列存储数据。可寻址的最小内存块为 <strong>字节byte</strong>，存储的基本单元称为 <strong>字word</strong> 。1word=4 or 8 byte = 32 or 64 bit</li>
+<li>一个字节对应一个地址</li>
+<li>一个字或字节的首位（bit）地址即表示这个字或字节的地址</li>
+<li>如果一个对象类型是32位，计算机一个字有4个字节，那么用4个字节/1个字存储这个对象</li>
+</ul>
+</li>
+<li><p>float单精度 6位有效数字 32位–double双精度 10位有效数字 64位–long double扩展精度 10位有效数字 96or128位</p>
+</li>
+<li><p>带符号和无符号类型</p>
+<ul>
+<li>带符号：正数 负数 0 int short long longlong。标识范围内正值和负值的量应该平衡。如8bit的char为-128-127</li>
+<li>无符号：大于等于0的值 添加unsigned即无符号 如unsigned long。所有比特都用来存储值。</li>
+<li>字符型分为三种：char 、signed char、unsigned char。但表现形式仍为两种：带符号、无符号。char表现为二者之一，由编译器决定</li>
+</ul>
+</li>
+<li><p>如何选择类型</p>
+<ul>
+<li>数值不可能为负–使用无符号</li>
+<li>整数运算用int，若超过范围使用longlong</li>
+<li>算术表达式中不用char或bool</li>
+<li>浮点数运算用double</li>
+</ul>
+</li>
+<li><p>类型转换</p>
+<ul>
+<li>赋给无符号类型超出范围的值：初始值 对 无符号表示数值的总数 取模的余数，如下c=255.</li>
+<li>赋给带符号类型超出范围的值：结果是未定义的。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> b=<span class="number">42</span>;					<span class="comment">//b=true</span></span><br><span class="line"><span class="keyword">int</span> i=b;  					<span class="comment">//i=1</span></span><br><span class="line">i=<span class="number">3.14</span>;						<span class="comment">//i=3</span></span><br><span class="line"><span class="keyword">double</span> pi=i;				<span class="comment">//pi=3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c=<span class="number">-1</span>;			<span class="comment">//c=255  0-255区间 -1对256取模得到的余数（取模操作结果为正数） （-1 mod 256=（-1+256）mod 256=255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2=<span class="number">256</span>;			<span class="comment">//c2为未定义</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>避免无法预知和依赖于实现环境的行为</p>
+<ul>
+<li>无法预知：编译器无法检测</li>
+<li>依赖于实现环境：如把int的尺寸看做确定不变的尺寸值，则程序 <strong>不可移植</strong></li>
+</ul>
+</li>
+<li><p>bool值在算术表达式中非0即1，因此不宜在算术表达式中用bool。</p>
+</li>
+<li><p>含有无符号类型的表达式–例1</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> u=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> i=<span class="number">-42</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; i + i &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;<span class="comment">//输出-84  （-42）+（-42）=-84</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//若int占32位，输出4294967264，相加前把i（-42）转换为无符号数</span></span><br><span class="line"><span class="comment">//（-42）mod（2^32）=（2^32-42）mod（2^32）=2^32-42=4294967296-42=4294967254,也就是i转换后的值</span></span><br><span class="line"><span class="comment">//计算i+u，4294967254+10=4294967264，输出结果。</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; u + i &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>含有无符号类型的表达式–例2</p>
+<ul>
+<li>从无符号数中减去一个值时，不管这个值是不是无符号数，都必须确保结果不能是负值。否则结果为取模后的值，如下。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> u1=<span class="number">42</span>,u2=<span class="number">10</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; u1 - u2 &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;<span class="comment">//输出32 正确</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; u2 - u1 &lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;<span class="comment">//正确，但输出取模后的值 4294967264  </span></span><br><span class="line"><span class="comment">//10-42=（-32），（-32）mod（2^32）=（2^32-32）mod（2^32）=（2^32-32）= 4294967264</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无符号数+循环控制</p>
+<ul>
+<li><p>常使用while代替for，如下</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">unsigned</span> u=<span class="number">10</span>;u&gt;=<span class="number">0</span>;--u)</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; u &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"><span class="comment">//输出0后，执行--u。此时u=-1，转换为无符号数（取模），u=4294967295，陷入死循环。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//解决方法，使用while循环，同样输出10到0，避免执行 u取0时再减1。</span></span><br><span class="line"><span class="keyword">unsigned</span> u=<span class="number">11</span>;</span><br><span class="line"><span class="keyword">while</span>(u&gt;<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	--u;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; u &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>切忌混用带符号类型和无符号类型，带符号数会自动转换为无符号数，出现异常结果。</p>
+</li>
+<li><p>字面值常量：形式和值决定它的数据类型</p>
+</li>
+<li><p>整型字面值：类型默认为容纳其数值的 <strong>尺寸最小的类型</strong>。 <strong>short类型没有对应的字面值。</strong></p>
+<ul>
+<li>八进制：0开头</li>
+<li>十六进制：0x或0X开头</li>
+<li>十进制：正常表示。十进制字面值不会是负数，形如-42，负号并不属于字面值，仅对字面值取负值。</li>
+</ul>
+</li>
+<li><p>浮点型字面值默认为double</p>
+</li>
+<li><p>char型字面值：单引号包括</p>
+</li>
+<li><p>字符串型字面值:双引号包括。编译器在结尾加一个空字符（‘\0’)，字面值实际长度比内容多1。</p>
+<ul>
+<li><p>若字符串字面值紧邻，仅由空格、缩进、换行符分隔，则为一个整体</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cout</span>&lt;&lt; <span class="string">"aaaaaa"</span></span><br><span class="line">		<span class="string">"bbbb"</span>&lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="comment">//输出一行字符串“aaaaaabbbb”</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>转义序列：两类字符不能直接使用，需要使用转义序列。以反斜线作为开始，被当做一个字符使用</p>
+<ul>
+<li>不可打印字符：退格等，无可视的图符</li>
+<li>有特殊含义的字符：单双引号、问号、反斜线…</li>
+</ul>
+</li>
+<li><p>泛化转义序列：\x后加十六进制数，或\后跟1、2或3个八进制数字。数字部分表示字符对应数值。</p>
+<ul>
+<li>若反斜线后跟超过3个八进制数字，只有前三个与\构成转义序列</li>
+<li>\x后可以跟任意个十六进制数字</li>
+</ul>
+</li>
+<li><p>指定字面值类型</p>
+<ul>
+<li>添加前缀和后缀，可以改变整型、浮点型、字符型字面值的默认类型。</li>
+<li>长整型建议使用大写L标记。</li>
+<li>字符和字符串用前缀指定；整型和浮点型用后缀指定。</li>
+</ul>
+</li>
+<li><p>布尔字面值：true、false</p>
+</li>
+<li><p>指针字面值：nullptr</p>
+</li>
+</ul>
+<h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><ul>
+<li><p>变量提供一个具名的、可供程序操作的存储空间。</p>
+</li>
+<li><p>变量的数据类型决定内存大小、布局方式、存储值的范围、能参与的运算。</p>
+</li>
+<li><p>变量定义：类型说明符+一个或多个变量名的列表。</p>
+</li>
+<li><p>什么是<strong>对象</strong>？</p>
+<ul>
+<li>一块能<strong>存储数据</strong>并具有某种<strong>类型</strong>的<strong>内存空间</strong>。</li>
+</ul>
+</li>
+<li><p>初始化：对象在创建时获得一个特定的值。</p>
+<ul>
+<li><p>同一定义语句中，可以用先定义的变量值 初始化 后定义的其他变量。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> price=<span class="number">109.99</span>,discount=price*<span class="number">0.16</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>初始化不是赋值！</strong></p>
+<ul>
+<li>初始化在创建变量是赋予一个初始值</li>
+<li>赋值把对象的当前值擦除，再用一个新值替代。</li>
+</ul>
+</li>
+<li><p>列表初始化</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//四种初始化语句</span></span><br><span class="line"><span class="keyword">int</span> a=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> a=&#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> a&#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">a</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若使用列表初始化，且初始值存在丢失的风险，则编译器会报错。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++_primer_V5 学习笔记-第一章</title>
     <url>/2020/07/13/c-primer-1/</url>
     <content><![CDATA[<h3 id="第1章-开始"><a href="#第1章-开始" class="headerlink" title="第1章 开始"></a>第1章 开始</h3><p>本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。</p>
@@ -205,94 +386,6 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo文章更新较慢</title>
-    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
-    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
-<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第二章</title>
-    <url>/2020/07/13/c-primer-2/</url>
-    <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
-<a id="more"></a>
-
-<ul>
-<li>任何编程语言都具备一组公共的语法特征。最基本的特征包括：<ul>
-<li>整形、字符型等<strong>内置类型</strong></li>
-<li><strong>变量</strong>，为对象命名</li>
-<li><strong>表达式和语句</strong>，操纵上述类型的具体值</li>
-<li><strong>控制结构</strong>，控制语句执行</li>
-<li><strong>函数</strong>，定义可随时调用的计算单元</li>
-</ul>
-</li>
-<li>大多数编程语言通过两种方式进一步补充基本特征：<ul>
-<li>程序员自定义数据类型</li>
-<li>将有用的功能封装成库函数</li>
-</ul>
-</li>
-<li>C++的对象类型决定对它进行的操作。</li>
-<li>C++是一种静态数据类型语言，编译时进行类型检查。编译器要知道每个变量对应的数据类型。</li>
-<li>简单的编程语言，强大的<strong>数据结构自定义</strong></li>
-<li>最重要的语法特征是 <strong>类class</strong> ，允许新类型包含数据和函数成员</li>
-</ul>
-<h4 id="基本内置类型"><a href="#基本内置类型" class="headerlink" title="基本内置类型"></a>基本内置类型</h4><ul>
-<li><p>包括<strong>算术类型</strong>和<strong>空类型</strong></p>
-</li>
-<li><p>算术类型</p>
-<ul>
-<li>整型：包括字符和布尔类型</li>
-<li>浮点型</li>
-</ul>
-</li>
-<li><p>一个char型的大小和一个机器字节一样（8bit=1byte）</p>
-</li>
-<li><p>short16–int16–long32–long long64</p>
-</li>
-<li><p><strong>内置类型的机器实现</strong></p>
-<ul>
-<li>计算机以比特序列存储数据。可寻址的最小内存块为 <strong>字节byte</strong>，存储的基本单元称为 <strong>字word</strong> 。1word=4 or 8 byte = 32 or 64 bit</li>
-<li>一个字节对应一个地址</li>
-<li>一个字或字节的首位（bit）地址即表示这个字或字节的地址</li>
-<li>如果一个对象类型是32位，计算机一个字有4个字节，那么用4个字节/1个字存储这个对象</li>
-</ul>
-</li>
-<li><p>float单精度 6位有效数字 32位–double双精度 10位有效数字 64位–long double扩展精度 10位有效数字 96or128位</p>
-</li>
-<li><p>带符号和无符号类型</p>
-<ul>
-<li>带符号：正数 负数 0 int short long longlong。标识范围内正值和负值的量应该平衡。如8bit的char为-128-127</li>
-<li>无符号：大于等于0的值 添加unsigned即无符号 如unsigned long。所有比特都用来存储值。</li>
-<li>字符型分为三种：char 、signed char、unsigned char。但表现形式仍为两种：带符号、无符号。char表现为二者之一，由编译器决定</li>
-</ul>
-</li>
-<li><p>如何选择类型</p>
-<ul>
-<li>数值不可能为负–使用无符号</li>
-<li>整数运算用int，若超过范围使用longlong</li>
-<li>算术表达式中不用char或bool</li>
-<li>浮点数运算用double</li>
-</ul>
-</li>
-<li><p>类型转换</p>
-<ul>
-<li>赋给无符号类型超出范围的值：初始值 对 无符号表示数值的总数 取模的余数，如下c=255.</li>
-<li>赋给带符号类型超出范围的值：结果是未定义的。</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> b=<span class="number">42</span>;					<span class="comment">//b=true</span></span><br><span class="line"><span class="keyword">int</span> i=b;  					<span class="comment">//i=1</span></span><br><span class="line">i=<span class="number">3.14</span>;						<span class="comment">//i=3</span></span><br><span class="line"><span class="keyword">double</span> pi=i;				<span class="comment">//pi=3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c=<span class="number">-1</span>;			<span class="comment">//c=255  0-255区间 -1对256取模得到的余数（取模操作结果为正数） （-1 mod 256=（-1+256）mod 256=255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2=<span class="number">256</span>;			<span class="comment">//c2为未定义</span></span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2020/06/24/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
@@ -311,5 +404,11 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>hexo文章更新较慢</title>
+    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
+    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
+<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
   </entry>
 </search>
