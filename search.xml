@@ -205,19 +205,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++_primer_V5 学习笔记-第三章</title>
-    <url>/2020/07/15/c-primer-3/</url>
-    <content><![CDATA[<h3 id="第3章-字符串、向量和数组"><a href="#第3章-字符串、向量和数组" class="headerlink" title="第3章 字符串、向量和数组"></a>第3章 字符串、向量和数组</h3><p>c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。</p>
-<p>本章将分别介绍数组以及标准库类型string和vector。</p>
-<a id="more"></a>]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++_primer_V5 学习笔记-第二章</title>
     <url>/2020/07/13/c-primer-2/</url>
     <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
@@ -785,6 +772,53 @@
 <li>默认初始化<ul>
 <li>全局作用域：初始化为0</li>
 <li>局部作用域：未定义的值</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第三章</title>
+    <url>/2020/07/15/c-primer-3/</url>
+    <content><![CDATA[<h3 id="第3章-字符串、向量和数组"><a href="#第3章-字符串、向量和数组" class="headerlink" title="第3章 字符串、向量和数组"></a>第3章 字符串、向量和数组</h3><p>c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。</p>
+<p>本章将分别介绍数组以及标准库类型string和vector。</p>
+<a id="more"></a>
+
+<h4 id="命名空间的using声明"><a href="#命名空间的using声明" class="headerlink" title="命名空间的using声明"></a>命名空间的using声明</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span>::name</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>每个名字需要独立的using声明</li>
+<li>头文件中不应使用using声明</li>
+</ul>
+<h4 id="标准库类型string"><a href="#标准库类型string" class="headerlink" title="标准库类型string"></a>标准库类型string</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>定义和初始化string对象</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s4</span><span class="params">(<span class="number">10</span>,<span class="string">'c'</span>)</span></span>;<span class="comment">//字符c重复10次 即cccccccccc</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接初始化（不使用等号）和拷贝初始化（使用等号）</p>
+</li>
+<li><p>string对象上的操作</p>
+<ul>
+<li><p>读取时，string自动忽略开头的空白，从第一个真正的字符开始读起，直到遇见下一处空白。</p>
+</li>
+<li><p>读取未知数量的string对象：while(cin&gt;&gt;word){…}. 流有效则循环读取。</p>
+</li>
+<li><p>使用getline读取一整行（包括空白符。getline返回 流参数。<strong>首先从输入流中读入内容（包括换行符），之后存入string对象（不存换行符）</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> <span class="built_in">line</span>;</span><br><span class="line">	<span class="keyword">while</span>(getline(<span class="built_in">cin</span>,<span class="built_in">line</span>))	<span class="comment">//每次读一整行，直到文件末尾</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">line</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>empty函数，根据string对象是否为空返回bool值。<code>line.empty()</code> </p>
+</li>
+<li><p>size函数返回长度（string对象中字符个数）<code>line.size()</code>，返回<strong>string::size_type类型</strong>的值，<strong>无符号类型</strong>。不要在表达式中和带符号类型混用（会自动转换）</p>
+</li>
+<li><p>比较string对象：对大小写敏感。长度相等比字典序，否则比长度。</p>
+</li>
 </ul>
 </li>
 </ul>
