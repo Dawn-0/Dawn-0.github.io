@@ -28,7 +28,7 @@
 <meta property="og:description" content="第I部分 C++基础 （第2章-第7章）第2章 变量和基本类型本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-13T12:17:18.000Z">
-<meta property="article:modified_time" content="2020-07-14T13:36:26.754Z">
+<meta property="article:modified_time" content="2020-07-15T07:55:32.427Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-14 21:36:26" itemprop="dateModified" datetime="2020-07-14T21:36:26+08:00">2020-07-14</time>
+                <time title="Modified: 2020-07-15 15:55:32" itemprop="dateModified" datetime="2020-07-15T15:55:32+08:00">2020-07-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -489,7 +489,9 @@
 </li>
 <li><p>除了两种例外情况，引用的类型与绑定对象严格匹配。</p>
 </li>
-<li><p>引用只能绑定在对象上，不能是字面值或计算结果。</p>
+<li><p><strong>非常量引用只能绑定在对象上，不能是字面值或计算结果。</strong></p>
+</li>
+<li><p>定义引用后，每次使用引用都会访问它 最初绑定的那个对象。</p>
 </li>
 </ul>
 </li>
@@ -534,6 +536,127 @@
 
 <ul>
 <li>预处理器：运行于编译之前的一段程序。预处理变量由预处理器负责管理（自动将它替换为实际值</li>
+</ul>
+</li>
+<li><p>不能把int变量直接赋值给指针</p>
+</li>
+<li><p>初始化所有的指针，尽可能在定义对象后 再定义指向它的指针。或者初始化为nullptr或0.</p>
+</li>
+<li><p>给指针赋值就是给它一个新的地址，指向一个新的对象。</p>
+</li>
+<li><p>赋值永远改变的是等号左侧的对象。</p>
+</li>
+<li><p>任何非0指针对应的条件都是true。</p>
+</li>
+<li><p>比较指针的前提是都为合法指针。两个指针存放的地址相同（指针相等）有三种可能：</p>
+<ul>
+<li>都为空</li>
+<li>都指向同一个对象</li>
+<li>都指向同一个对象的下一个地址</li>
+<li>一个指针指向某对象，另一个指针指向另外对象的下一个地址</li>
+</ul>
+</li>
+<li><p>void*：特殊的指针类型，存放任意对象的地址</p>
+<ul>
+<li>仅指向一块内存空间，无法访问内存空间中的对象。</li>
+</ul>
+</li>
+<li><p>指针或引用的两种写法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//修饰符和类型名写在一起，每条语句只定义一个变量。</span></span><br><span class="line"><span class="keyword">int</span>* p1;</span><br><span class="line"><span class="keyword">int</span>* p2;</span><br><span class="line"></span><br><span class="line"><span class="comment">//修饰符和变量标识符写在一起</span></span><br><span class="line"><span class="keyword">int</span> *p1,*p2;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指向指针的指针</p>
+<ul>
+<li>使用 * 的个数区分指针的级别，如 ** 表示指向指针的指针。。。</li>
+<li>解引用 int型指针 会得到一个int型的数。解引用 指向指针的指针 会得到一个指针，再解引用 就可以得到最原始的对象。</li>
+</ul>
+</li>
+<li><p>指向指针的引用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i=<span class="number">42</span>;		</span><br><span class="line"><span class="keyword">int</span> *p;			<span class="comment">//int型指针</span></span><br><span class="line"><span class="keyword">int</span> *&amp;r=p;		<span class="comment">//r是对指针p的引用，从右向左看，首先r是一个引用，* 说明r引用的是一个指针，是int型的指针。</span></span><br><span class="line"></span><br><span class="line">r=&amp;i;			<span class="comment">//p指针指向i</span></span><br><span class="line">*r=<span class="number">0</span>;			<span class="comment">//i赋值为0</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="const限定符"><a href="#const限定符" class="headerlink" title="const限定符"></a>const限定符</h4><p>定义一种变量（常量） ，使它的值不能被改变</p>
+<ul>
+<li><p>const对象必须初始化</p>
+</li>
+<li><p>只能读const对象执行不改变内容的操作</p>
+</li>
+<li><p><strong>？</strong>const对象的常量特征 仅在改变该对象时才会发挥作用</p>
+</li>
+<li><p>const对象仅在文件内有效</p>
+</li>
+<li><p>编译器会把与const同名的变量都替换成对应的const值</p>
+</li>
+<li><p>只在一个文件中定义const，在其他多个文件中声明并使用它</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//file1.cc文件中定义并初始化一个常量，能被其他文件访问</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> bufSize=fcn();</span><br><span class="line"><span class="comment">//file1.h文件</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> bufSize;<span class="comment">//定义了同一个bufSize</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多个文件共享const对象，在定义之前添加extern关键字</p>
+</li>
+<li><p>对常量的引用</p>
+<ul>
+<li>引用也必须是常量类型</li>
+<li><strong>无法通过常量引用修改绑定对象的值</strong></li>
+<li>对const的引用可以简称为 常量引用</li>
+</ul>
+</li>
+<li><p><strong>允许为一个 常量引用 绑定 非常量的对象、字面值或一般表达式</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i=<span class="number">42</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;r1=i;		<span class="comment">//允许将const int&amp; 绑定到int对象上</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;r2=<span class="number">42</span>;		<span class="comment">//允许 r2是一个常量引用</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;r3= r1 * <span class="number">2</span>;	<span class="comment">//允许 r3是一个常量引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="keyword">int</span> &amp;r4=r1*<span class="number">2</span>;			<span class="comment">//错误 r4是一个非常量引用,右边是一个字面值，非常量引用无法绑定字面值。</span></span><br><span class="line"><span class="comment">//////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//常量引用绑定到非常量对象上</span></span><br><span class="line"><span class="keyword">double</span> dval=<span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ri=dval;</span><br><span class="line"></span><br><span class="line"><span class="comment">//为了确保让ri绑定一个整数</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> temp =dval;	<span class="comment">//由双精度浮点数生成一个临时的整型常量</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ri=temp;		<span class="comment">//ri绑定这个临时量</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>临时量对象：如上temp，编译器需要一个空间来暂存表达式的求值结果，临时创建了一个未命名的对象。</p>
+</li>
+<li><p><strong>常量引用的绑定对象若为非常量</strong></p>
+<ul>
+<li><strong>无法通过常量引用改变绑定对象的值</strong></li>
+<li><strong>可以通过直接赋值 或 绑定到非常量引用上，来更改常量引用绑定的对象的值。</strong></li>
+</ul>
+</li>
+<li><p>指向常量的指针</p>
+<ul>
+<li>不能用于改变其所指对象的值</li>
+<li>用于存放常量对象的地址</li>
+<li><strong>可以指向非常量对象</strong><ul>
+<li><strong>此时不能通过该指针修改非常量对象的值</strong></li>
+<li>可以通过别的方法直接修改非常量对象的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>常量指针：指针是对象，因此可以是常量。（引用不是对象，没有本身是常量的引用！</p>
+<ul>
+<li><p>必须初始化，初始化后其值不再改变</p>
+</li>
+<li><p>不变的是指针本身的值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> err=<span class="number">0</span>;						</span><br><span class="line"><span class="keyword">int</span> *<span class="keyword">const</span> curErr=&amp;err;				<span class="comment">//curErr是常量指针，一直指向err</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> pi=<span class="number">3.14159</span>;			</span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> *<span class="keyword">const</span> pip=&amp;pi;		<span class="comment">//从右往左看，pip是常量指针 pip是指向double的常量指针 pip是指向double常量的常量指针。</span></span><br><span class="line"><span class="comment">////////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如上，pip是指向常量对象的常量指针，因此pip的地址和pip指向的对象值都不能改变。</p>
+</li>
+<li><p>curErr是指向一般int对象的常量指针，curErr的地址不能改变，但可以用curErr改变指向对象的值。</p>
+</li>
+</ul>
+</li>
+<li><p>顶层const：表示指针本身是常量；可以表示任意的对象是常量</p>
+</li>
+<li><p>底层const：表示指针所指的对象是常量；表示 指针和引用 等复合类型中的 基本类型部分（指针指向  引用绑定。。）</p>
+</li>
+<li><p>指针类型可以是顶层const，也可以是底层const（指针的指针</p>
+</li>
+<li><p>声明引用的const都是底层const（引用本身不是对象，不可能是常量，不可能有顶层const</p>
+</li>
+<li><p><strong>执行对象的拷贝</strong></p>
+<ul>
+<li>顶层const不受影响</li>
+<li>底层const：<strong>拷入和拷出的对象必须具有相同的底层const，或两个对象的数据类型可以转换。</strong></li>
+</ul>
+</li>
+<li><p>常量表达式：<strong>值不会改变</strong>，并且<strong>在编译过程就能得到计算结果</strong>的表达式。</p>
+<ul>
+<li>字面值是常量表达式</li>
+<li>常量表达式初始化的常量对象 也是 常量表达式</li>
+</ul>
+</li>
+<li><p>constexpr变量</p>
+<ul>
+<li>变量可声明为该类型，由编译器验证变量的值是否是常量表达式</li>
 </ul>
 </li>
 </ul>
@@ -617,7 +740,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第I部分-C-基础-（第2章-第7章）"><span class="nav-number">1.</span> <span class="nav-text">第I部分 C++基础 （第2章-第7章）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第2章-变量和基本类型"><span class="nav-number">2.</span> <span class="nav-text">第2章 变量和基本类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本内置类型"><span class="nav-number">2.1.</span> <span class="nav-text">基本内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量"><span class="nav-number">2.2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复合类型"><span class="nav-number">2.3.</span> <span class="nav-text">复合类型</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第I部分-C-基础-（第2章-第7章）"><span class="nav-number">1.</span> <span class="nav-text">第I部分 C++基础 （第2章-第7章）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第2章-变量和基本类型"><span class="nav-number">2.</span> <span class="nav-text">第2章 变量和基本类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本内置类型"><span class="nav-number">2.1.</span> <span class="nav-text">基本内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量"><span class="nav-number">2.2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复合类型"><span class="nav-number">2.3.</span> <span class="nav-text">复合类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#const限定符"><span class="nav-number">2.4.</span> <span class="nav-text">const限定符</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
