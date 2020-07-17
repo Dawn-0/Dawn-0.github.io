@@ -28,7 +28,7 @@
 <meta property="og:description" content="第3章 字符串、向量和数组c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。 本章将分别介绍数组以及标准库类型string和vector。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-15T12:58:38.000Z">
-<meta property="article:modified_time" content="2020-07-16T09:36:22.277Z">
+<meta property="article:modified_time" content="2020-07-17T07:18:23.918Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-16 17:36:22" itemprop="dateModified" datetime="2020-07-16T17:36:22+08:00">2020-07-16</time>
+                <time title="Modified: 2020-07-17 15:18:23" itemprop="dateModified" datetime="2020-07-17T15:18:23+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -416,9 +416,91 @@
 <li><p><strong>复杂的数组声明</strong>：从内向外阅读，优先级最高的决定这是什么</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptrs[<span class="number">10</span>];					<span class="comment">//指针的数组</span></span><br><span class="line"><span class="keyword">int</span> &amp;refs[<span class="number">10</span>]=<span class="comment">/* ??? */</span>;		<span class="comment">//引用的数组 不存在这种，引用不是对象</span></span><br><span class="line"><span class="keyword">int</span> (*Parray)[<span class="number">10</span>]= &amp;arr;		<span class="comment">//数组的指针</span></span><br><span class="line"><span class="keyword">int</span> (&amp;arrRef)[<span class="number">10</span>]= arr;			<span class="comment">//数组的引用</span></span><br><span class="line"><span class="keyword">int</span> *(&amp;arry)[<span class="number">10</span>]= ptrs;			<span class="comment">//指针的数组的引用</span></span><br><span class="line"><span class="keyword">int</span> (*(&amp;x))[<span class="number">10</span>]=Parray;  		<span class="comment">//数组的指针的引用</span></span><br></pre></td></tr></table></figure>
 </li>
-<li></li>
 </ul>
 </li>
+<li><p>访问数组元素</p>
+<ul>
+<li>数组下标为size_t类型 无符号类型。在cstddef头文件中定义</li>
+<li>下标运算符由c++语言直接定义</li>
+<li>for语句遍历数组所有元素</li>
+<li>注意检查下标的值是否合法</li>
+</ul>
+</li>
+<li><p>指针和数组</p>
+<ul>
+<li>对数组元素取地址，可以得到指向该元素的指针</li>
+<li>编译器会将数组转换为 指向首元素的指针</li>
+<li>auto的初始值是数组时，会得到指针类型；但decltype返回的类型是数组</li>
+<li>数组的指针也是迭代器，同样，不能对尾后指针进行解引用或递增等操作。</li>
+<li>begin和end函数：将数组作为参数。分别返回首元素指针和尾后指针。 注意尾后指针不能解引用和递增</li>
+<li>指针运算：相减的结果类型是ptrdiff_t类型，是带符号类型，也定义在cstddef头文件中<ul>
+<li>运算同样适用于空指针 和 指向非数组的指针</li>
+</ul>
+</li>
+<li>解引用和指针运算的交互</li>
+<li>下标与指针：使用下标运算符时，编译器对指向数组的指针执行下标运算<ul>
+<li>·和标准库的string  vector 不同（下标无符号） ，<strong>数组的下标运算符可以处理负值</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>C风格字符串</p>
+<ul>
+<li>c++程序中最好不要使用</li>
+<li>C风格字符串是一种写法，字符串存在字符数组中，并以空字符结束。(‘\0’) 一般用指针操作</li>
+<li>C标准库string函数：定义在cstring头文件中。<ul>
+<li>传入此类函数的指针 <strong>必须指向空字符结尾的数组</strong></li>
+</ul>
+</li>
+<li>比较字符串：与比较string不同。若直接使用运算符比较，实际比较的是 指向数组首元素的指针<ul>
+<li>若两个指针未指向同一对象，将得到未定义的结果</li>
+<li>需要调用strcmp函数，比较字符串</li>
+</ul>
+</li>
+<li>使用strcpy和strcat函数拷贝和连接字符串数组，需要预先考虑数组大小。</li>
+<li>因此尽可能使用标准库的string，更安全也更高效</li>
+</ul>
+</li>
+<li><p>与旧代码的接口</p>
+<ul>
+<li>C++程序与旧代码的衔接</li>
+<li>混用string和c风格字符串<ul>
+<li>用空字符结尾的字符数组初始化string</li>
+<li>相关运算中，允许使用空字符结尾的数组作为 <strong>其中一个运算对象</strong></li>
+<li>string的成员函数c_str，返回一个c风格的字符串（返回指针指向空字符结尾的数组，指针类型为const char*。</li>
+<li>使用c_str函数，最好拷贝一份返回的数组进行后续操作</li>
+</ul>
+</li>
+<li>数组初始化vector对象<ul>
+<li>指明拷贝区域的首元素地址和尾后地址（使用对应指针构造）</li>
+</ul>
+</li>
+<li>C++程序尽量使用vector和迭代器，避免使用内置数组和指针；尽量使用string，避免使用c风格字符串</li>
+</ul>
+</li>
+</ul>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><p>C++的多维数组，其实是数组的数组。</p>
+<ul>
+<li>二维数组 第一维称为行，第二维称为列</li>
+<li>多维数组的初始化：花括号括起来的一组值初始化</li>
+<li>多维数组的下标引用：每个维度对应一个下标运算符</li>
+<li>范围for语句处理多维数组<ul>
+<li>若要改变元素的值，需要把控制变量声明为引用类型</li>
+<li><strong>除了最内层的循环外，其他所有循环的控制变量都应该是引用类型。防止外层变量被自动转成指针，内层就开始在指针内遍历（不合法）。</strong></li>
+</ul>
+</li>
+<li>指针和多维数组<ul>
+<li>程序使用多维数组的名字时，也会自动将其转换为指向首元素的指针，实际上是指向第一个内层数组的指针。</li>
+<li>可以使用auto或decltype，避免声明指针时，在数组前面加上指针类型。</li>
+<li>类型别名 简化 多维数组的指针</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>string对象是一个可变长的字符序列</li>
+<li>vector对象是一组同类型对象的容器</li>
+<li>迭代器允许对容器中的对象进行间接访问，可以用于访问string和vector的元素或在元素间移动</li>
+<li>数组和 指向数组的指针在一个较低的层次上实现了与标准库类型string和vector类似的功能。一般来说，应该优先选用标准库提供的类型，之后再考虑c++语言内置的底层替代品：数组和指针。</li>
 </ul>
 
     </div>
@@ -500,7 +582,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第3章-字符串、向量和数组"><span class="nav-number">1.</span> <span class="nav-text">第3章 字符串、向量和数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命名空间的using声明"><span class="nav-number">1.1.</span> <span class="nav-text">命名空间的using声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标准库类型string"><span class="nav-number">1.2.</span> <span class="nav-text">标准库类型string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标准库类型vector"><span class="nav-number">1.3.</span> <span class="nav-text">标准库类型vector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器介绍"><span class="nav-number">1.4.</span> <span class="nav-text">迭代器介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组"><span class="nav-number">1.5.</span> <span class="nav-text">数组</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第3章-字符串、向量和数组"><span class="nav-number">1.</span> <span class="nav-text">第3章 字符串、向量和数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命名空间的using声明"><span class="nav-number">1.1.</span> <span class="nav-text">命名空间的using声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标准库类型string"><span class="nav-number">1.2.</span> <span class="nav-text">标准库类型string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标准库类型vector"><span class="nav-number">1.3.</span> <span class="nav-text">标准库类型vector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器介绍"><span class="nav-number">1.4.</span> <span class="nav-text">迭代器介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组"><span class="nav-number">1.5.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多维数组"><span class="nav-number">1.6.</span> <span class="nav-text">多维数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">1.7.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
