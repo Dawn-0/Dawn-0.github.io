@@ -28,7 +28,7 @@
 <meta property="og:description" content="第5章 语句本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-21T07:03:14.000Z">
-<meta property="article:modified_time" content="2020-07-21T07:04:55.835Z">
+<meta property="article:modified_time" content="2020-07-21T12:30:48.828Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-07-21 15:03:14 / Modified: 15:04:55" itemprop="dateCreated datePublished" datetime="2020-07-21T15:03:14+08:00">2020-07-21</time>
+              <time title="Created: 2020-07-21 15:03:14 / Modified: 20:30:48" itemprop="dateCreated datePublished" datetime="2020-07-21T15:03:14+08:00">2020-07-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,6 +207,191 @@
       
         <h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
 <a id="more"></a>
+
+<ul>
+<li>c++语句提供了一组控制流语句以支持更复杂的执行路径</li>
+</ul>
+<h4 id="简单语句"><a href="#简单语句" class="headerlink" title="简单语句"></a>简单语句</h4><ul>
+<li>表达式语句：执行表达式并丢弃求值结果</li>
+<li>空语句：只含有单独的分号，常用于循环条件。使用空语句时加上注释</li>
+<li>复合语句（块）：用花括号括起来的 语句和声明的序列<ul>
+<li>一个块就是一个作用域，其中引入的名字只能在块内部以及子块里访问</li>
+<li>块不以分号结束</li>
+<li>空块：内部没有任何语句，等价于空语句</li>
+</ul>
+</li>
+</ul>
+<h4 id="语句作用域"><a href="#语句作用域" class="headerlink" title="语句作用域"></a>语句作用域</h4><ul>
+<li>可在控制结构内自定义变量，语句结束后，变量超出其作用范围。</li>
+<li>控制结构内的变量必须初始化</li>
+</ul>
+<h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><ul>
+<li><p>if语句：根据条件决定控制流</p>
+<ul>
+<li>条件的类型必须能转换为布尔类型</li>
+<li>嵌套if语句：使用花括号组合成块</li>
+<li>悬垂else：c++规定，else与 离他最近的 且 尚未匹配的 if匹配</li>
+<li>使用花括号控制执行路径</li>
+</ul>
+</li>
+<li><p>switch语句：计算表达式的值，根据值从几条执行路径中选择一条</p>
+<ul>
+<li><p>break语句：中断当前的控制流</p>
+</li>
+<li><p>case标签：case和对应的值组成，case标签必须是 整型常量表达式</p>
+</li>
+<li><p>若某个case标签匹配成功，将从该标签向后顺序执行所有case分支，除非程序显式中断这一过程（如break语句）</p>
+</li>
+<li><p>case标签后不一定要换行，以强调它们代表的是某一范围的值</p>
+</li>
+<li><p>最好在标签后加上break</p>
+</li>
+<li><p>default标签：若所有case标签都不能匹配上switch表达式的值，执行default标签之后的语句</p>
+</li>
+<li><p>最好定义一个空的default标签，代表考虑了默认情况</p>
+</li>
+<li><p>不允许跨过变量的初始化语句，直接跳转到该变量作用域内的另一个位置</p>
+<ul>
+<li><p>应该把变量定义在块内，从而确保后面的所有case标签都在变量的作用域之外</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="literal">true</span>:</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">string</span> name=get_name();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">false</span>:</span><br><span class="line">	<span class="keyword">if</span>(name.empty())<span class="comment">//直接报错，name变量在作用域之外</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="迭代语句"><a href="#迭代语句" class="headerlink" title="迭代语句"></a>迭代语句</h4><ul>
+<li>通常称为循环。while和for语句在循环前检查条件；do while先循环，再检查条件。</li>
+<li>while语句：只要条件为真，就重复执行循环体。条件不能为空<ul>
+<li>定义在条件部分或循环体内的变量，每次迭代都经历创建到销毁的过程</li>
+<li>不确定循环次数；循环结束后要访问循环控制变量：可以用while</li>
+</ul>
+</li>
+<li>for语句<ul>
+<li>for语句头：for+初始化值+循环控制条件+初始化变量修改</li>
+<li>执行流程：初始化 判断条件 若为真-执行循环 修改初始化的控制变量值</li>
+<li>for语句头中定义的变量只在循环体内可见</li>
+<li>for语句头的多重定义：初始化部分只能有一条声明语句，<strong>因此声明变量的基础类型必须相同</strong></li>
+<li>省略语句头的任意部分：分号必须保留。</li>
+<li>范围for语句（c++11）：表达式必须是一个序列（列表、数组、拥有begin/end成员的类型）<ul>
+<li>可以使用auto定义变量</li>
+<li>对序列元素执行写操作，<strong>循环变量要声明成引用类型</strong></li>
+<li>范围for语句预存了end()的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>do while语句<ul>
+<li>先执行循环体，后检查条件，至少执行一次循环</li>
+<li>条件后面要用 <strong>分号</strong>表示语句结束</li>
+<li>条件不能为空，循环的条件变量必须定义在循环体之外。<strong>条件部分不能定义变量</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h4><ul>
+<li><p>break语句：终止最近的while dowhile for switch语句，从这些语句之后的第一条语句开始继续执行。</p>
+<ul>
+<li>只能出现在迭代语句或switch语句内部</li>
+</ul>
+</li>
+<li><p>continue语句：终止最近循环中的当前迭代，立即开始下一次迭代</p>
+<ul>
+<li>只能出现在for while dowhile内部或嵌套。</li>
+<li>只有当switch嵌套时，才能用在switch内部。</li>
+</ul>
+</li>
+<li><p>goto语句：无条件跳转到同一函数内的另一条语句</p>
+<ul>
+<li><p>不要在程序中使用goto语句，难理解、难修改</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">goto</span> <span class="built_in">end</span>;</span><br><span class="line"><span class="built_in">end</span>: <span class="keyword">return</span>;<span class="comment">//带标签语句，可以作为goto的目标</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转向的带标签语句必须在<strong>同一函数内</strong></p>
+</li>
+<li><p><strong>不能将程序的控制权从变量的作用域之外转移到作用域之内？</strong></p>
+<ul>
+<li>不允许跨过变量声明跳转到该变量位置</li>
+</ul>
+</li>
+<li><p>可以跳过已经执行的定义；跳回到变量定义前，会销毁并重新创建该变量</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h4><ul>
+<li><p>异常：运行反常行为，超出函数正常功能的范围。例如失去数据库连接、遇到意外输入等</p>
+</li>
+<li><p>异常处理：程序检测到无法处理的问题，发出某种信号表明遇到故障，<strong>无须知道故障将在何处解决</strong></p>
+</li>
+<li><p>异常处理机制</p>
+<ul>
+<li>throw表达式：异常检测。引发（raise）异常</li>
+<li>try语句块：异常处理。以try开始，若干catch子句结束。catch子句处理异常，也被称为异常处理代码。</li>
+<li>异常类：在throw表达式和catch子句之间传递异常的具体信息。</li>
+</ul>
+</li>
+<li><p>throw表达式</p>
+<ul>
+<li><p>关键字throw+表达式（类型为抛出的异常类型）+分号，构成表达式语句</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a!=b)</span><br><span class="line">	<span class="keyword">throw</span> runtime_error(<span class="string">"ERROR!"</span>);<span class="comment">//抛出异常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>runtime_error是标准库异常类型的一种，定义在stdexcept头文件中。</p>
+</li>
+</ul>
+</li>
+<li><p>try语句块</p>
+<ul>
+<li><p>try块+若干catch子句</p>
+</li>
+<li><p>catch子句包括：关键字catch+括号内的异常声明+一个块。选中catch子句处理异常之后，执行与之对应的块。</p>
+</li>
+<li><p>catch完成后，跳转到最后一个catch子句后的语句继续执行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//执行正常情况的代码</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(runtime_error err)<span class="comment">//处理runtime_error的异常</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//异常处理</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;err.what()</span><br><span class="line">            &lt;&lt;<span class="string">"ERROR!"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>err.what()：what是runtime_error的一个成员函数，返回c风格字符串– 初始化一个具体对象所用的 string对象 的副本</p>
+</li>
+<li><p>函数在寻找处理代码的过程中退出</p>
+<ul>
+<li>抛出异常时，首先搜索抛出该异常的函数，如果没找到匹配的catch子句，终止该函数，在调用它的函数中继续寻找；若还没有找到catch，终止函数，继续在调用当前函数的函数中寻找。。。如此沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为止。</li>
+<li>若最后也没找到catch子句，程序转到标准库函数terminate，执行该函数将导致程序非正常退出</li>
+<li>对于没有try语句块定义的异常，处理方式一样。最终系统调用terminate函数并终止程序运行。</li>
+</ul>
+</li>
+<li><p>编写 异常 安全（exception safe）的代码很困难</p>
+<ul>
+<li>异常中断了程序的正常流程</li>
+<li>发生异常时，某些对象处理到一半就中止了，处于无效或未完成状态，资源没有正常释放</li>
+<li>异常发生期间正确执行“清理”工作的程序代码即 异常 安全（exception safe）</li>
+<li>异常发生后，<strong>程序如何确保对象有效</strong>、<strong>资源无泄漏</strong>、<strong>程序处于合理状态</strong>，十分关键</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>标准异常</p>
+<ul>
+<li>c++标准库定义的一组异常类，用于报告标准库函数遇到的问题</li>
+<li>分别定义在4个头文件中：<ul>
+<li>exception头文件：定义了最通用的异常类exception，只报告异常的发生，不提供额外信息</li>
+<li>stdexcept头文件：定义了集中常用的异常类</li>
+<li>new头文件：定义了bad_alloc异常类型</li>
+<li>type_info头文件：定义了bad_cast异常类型</li>
+</ul>
+</li>
+<li>只能以默认初始化的方式初始化exception、bad_alloc和bad_cast对象，<strong>不允许赋初值</strong></li>
+<li>其他异常行为需要使用string或C风格字符串初始化，<strong>不允许默认初始化</strong>，初始值含有错误相关的信息</li>
+<li>异常类型只定义了一个成员函数what，该函数没有参数，返回一个指向C字符串的const char*，提供关于异常的文本信息。</li>
+<li>what返回的字符串内容与异常对象的类型有关，若有字符串初始值则返回，否则由编译器决定</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>复合语句：即块</li>
+<li>悬垂else</li>
+<li>异常声明：catch子句中的声明</li>
+<li>异常安全：抛出异常后，程序能执行正确的行为</li>
+<li>控制流：程序的执行路径</li>
+</ul>
+
     </div>
 
     
@@ -286,7 +471,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第5章-语句"><span class="nav-number">1.</span> <span class="nav-text">第5章 语句</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第5章-语句"><span class="nav-number">1.</span> <span class="nav-text">第5章 语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单语句"><span class="nav-number">1.1.</span> <span class="nav-text">简单语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语句作用域"><span class="nav-number">1.2.</span> <span class="nav-text">语句作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条件语句"><span class="nav-number">1.3.</span> <span class="nav-text">条件语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代语句"><span class="nav-number">1.4.</span> <span class="nav-text">迭代语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跳转语句"><span class="nav-number">1.5.</span> <span class="nav-text">跳转语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#try语句块和异常处理"><span class="nav-number">1.6.</span> <span class="nav-text">try语句块和异常处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">1.7.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#术语表"><span class="nav-number">1.8.</span> <span class="nav-text">术语表</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
