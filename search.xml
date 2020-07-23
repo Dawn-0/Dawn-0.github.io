@@ -205,246 +205,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++_primer_V5 学习笔记-第四章</title>
-    <url>/2020/07/17/c-primer-4/</url>
-    <content><![CDATA[<h3 id="第4章-表达式"><a href="#第4章-表达式" class="headerlink" title="第4章 表达式"></a>第4章 表达式</h3><p>本章主要介绍由语言本身定义、并用于内置类型运算对象的运算符，同时简单介绍几种标准库定义的运算符。</p>
-<a id="more"></a>
-
-<p>表达式由一个或多个运算对象组成，对表达式求值将得到一个结果。字面值和变量是最简单的表达式，其结果就是字面值和变量本身的值。</p>
-<p>把 一个运算符 和 一个或多个运算对象 组合起来，可以生成较复杂的表达式。</p>
-<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><ul>
-<li>基本概念<ul>
-<li>一元运算符：作用于一个运算对象，如取地址符&amp;、解引用符*</li>
-<li>二元运算符：作用于两个运算对象，如相等==、乘法*</li>
-<li>三元运算符</li>
-<li>函数调用：特殊的运算符，对运算对象的数量没有限制</li>
-<li>一些符号能作为一元运算符、也能作为二元运算符，由上下文决定</li>
-<li>组合运算符与运算对象：优先级、结合律、运算对象的求值顺序</li>
-<li>运算对象转换：表达式求值时转换类型，小尺寸的整数类型常常被提升为大尺寸的整数类型</li>
-<li>重载运算符：运算符作用于类 类型的运算对象时，用户可以自行定义其含义，即重载运算符。<ul>
-<li>重载运算符可以定义运算对象的类型和返回值的类型，但对象个数、运算符优先级和结合律无法改变</li>
-</ul>
-</li>
-<li>左值和右值：c++的表达式不是右值就是左值<ul>
-<li>对象被用作右值：使用对象的值（内容</li>
-<li>对象被用作左值：使用对象的身份（在内存中的位置</li>
-<li>需要右值的地方可以用左值（也使用对象的内容）；需要左值的地方不能用右值</li>
-<li>使用decltype时，若表达式结果是左值，得到一个引用类型</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>优先级与结合律<ul>
-<li>复合表达式：含有两个或多个运算符的表达式。优先级和结合律决定了运算对象组合的方式，括号无视上述规则。</li>
-<li>高优先级运算符的运算对象比低优先级更紧密地结合在一起。</li>
-<li>若运算符的优先级相同，将按照从左向右的顺序组合运算对象。</li>
-</ul>
-</li>
-<li>求值顺序<ul>
-<li>若运算符没有指定执行顺序，若表达式指向并修改了同一个对象，将会引发错误并产生未定义的行为。</li>
-<li>4种运算符规定了求值顺序：逻辑与 逻辑或 条件运算符?:  逗号运算符，</li>
-<li>运算对象的求值顺序与优先级 结合律无关</li>
-<li>处理复合表达式<ul>
-<li>用括号强制让表达式的组合关系符合程序的逻辑要求</li>
-<li>若改变了某个运算对象的值，在表达式的其他地方不要再使用这个运算对象</li>
-<li>若改变运算对象的子表达式本身 就是 另外一个子表达式的运算对象时，该规则无效。<code>*++iter</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><ul>
-<li>能作用于任意算术类型（或能转换成算术类型的类型）</li>
-<li>运算对象和求值结果都是右值。</li>
-<li>表达式求值前，小整数类型会被提升为大整数类型，最终所有运算对象转换为同一种类型。</li>
-<li>一元正号运算符、加减运算符都能作用于指针，返回运算对象的一个副本。</li>
-<li>bool值不应该参与运算，会先被提升为int类型，造成相关错误。（bool值1求负号，变int型-1 转回bool 还是true）</li>
-<li>溢出和其他算术运算异常<ul>
-<li>除数是0 产生未定义结果</li>
-<li>溢出：计算结果超出该类型能表示的范围。结果不可预知，可能环绕，即符号位溢出被修改。</li>
-</ul>
-</li>
-<li>整数相除商还是整数，弃掉商的小数部分</li>
-<li>%取余：运算对象必须是整数类型。若m%n不等于0，则符号和m相同</li>
-</ul>
-<h4 id="逻辑运算符和关系运算符"><a href="#逻辑运算符和关系运算符" class="headerlink" title="逻辑运算符和关系运算符"></a>逻辑运算符和关系运算符</h4><ul>
-<li>逻辑运算符和关系运算符的返回值都是bool类型，运算对象和求值结果都是右值。</li>
-<li>逻辑与 和 逻辑或<ul>
-<li>先求左侧值，再求右侧值；</li>
-<li>短路求值：左侧运算对象无法确定 表达式结果 时，才会计算右侧表达式的值</li>
-</ul>
-</li>
-<li>基于范围的for循环中，将其中的元素声明为引用类型，可以避免对过大元素的拷贝</li>
-<li>逻辑非</li>
-<li>关系运算符<ul>
-<li>关系运算符尽量不要连写，可以用 逻辑与 连接</li>
-</ul>
-</li>
-<li>相等性测试与布尔字面值<ul>
-<li>比较运算时，除非比较的对象是bool型，不要用bool字面值true或false作为比较对象</li>
-</ul>
-</li>
-</ul>
-<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><ul>
-<li>赋值运算的结果是它的左侧运算对象，并且是一个左值。结果的类型是左侧运算对象的类型。</li>
-<li>若左右类型不同，右侧运算对象会转为左侧对象的类型</li>
-<li>C++11允许花括号括起来的初始值列表作为右侧对象<ul>
-<li>初始列表为空时，编译器创建一个值初始化的临时量，赋给左侧对象。</li>
-</ul>
-</li>
-<li>赋值运算符满足 右结合律</li>
-<li>多重赋值语句：其中的每一个对象，类型与右边对象相同，或可由右边对象类型转换得到。</li>
-<li>赋值运算符优先级 &lt; 关系运算符优先级，条件语句中，赋值部分加括号。</li>
-<li>切勿混淆赋值运算符和相等运算符</li>
-<li>复合赋值运算符：相比普通运算符（求值两次），复合运算符只求值一次。</li>
-</ul>
-<h4 id="递增和递减运算符"><a href="#递增和递减运算符" class="headerlink" title="递增和递减运算符"></a>递增和递减运算符</h4><ul>
-<li><p>前置和后置</p>
-<ul>
-<li>前置：运算对象先加1，然后将改变后的对象作为求值结果。将对象本身作为左值返回。</li>
-<li>后置：运算对象加1，求值结果是 改变前的运算对象的副本。将 对象原始值的副本 作为右值返回。</li>
-<li>尽可能不用后置版本，需要存储原始值，这种操作可能是一种浪费。</li>
-</ul>
-</li>
-<li><p>混用解引用和递增</p>
-<ul>
-<li><p>后置递增优先级 &gt; 解引用</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> pbeg=v.<span class="built_in">begin</span>();</span><br><span class="line"><span class="keyword">while</span>(pbeg!=v.<span class="built_in">end</span>() &amp;&amp; *pbeg&gt;=<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt; *pbeg++ &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出当前pbeg指向的值，并将指针pbeg向前移动一个位置</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; *(pbeg++) &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//等价于上面一句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>赋值运算符左右两端用到了同一个运算对象并改变了值。可能出现未知错误</p>
-</li>
-</ul>
-<h4 id="成员访问运算符"><a href="#成员访问运算符" class="headerlink" title="成员访问运算符"></a>成员访问运算符</h4><ul>
-<li>点运算符：获取类对象的一个成员。结果和成员所属的对象一致。成员所属对象是左值，结果就是左值。</li>
-<li>箭头运算符：作用于指针类型的运算对象，结果是一个左值。</li>
-</ul>
-<h4 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符"></a>条件运算符</h4><ul>
-<li>把简单的if-else逻辑嵌入到单个表达式中。</li>
-<li>cond ?expr1:expr2</li>
-<li>首先求cond 的值，若条件为真，对expr1求值并返回，否则对expr2求值并返回。</li>
-<li>嵌套条件运算符</li>
-<li>条件运算符满足 右结合律</li>
-<li>嵌套不宜过多</li>
-<li>条件运算符优先级很低，在长表达式中通常要加括号</li>
-</ul>
-<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><ul>
-<li>作用于整数类型的运算对象，并把运算对象看成二进制位的集合</li>
-<li>提供检查和设置二进制位的功能</li>
-<li>小整型的对象值会被提升为较大的整数类型</li>
-<li>处理有符号类型的结果未知（依赖机器），因此尽量处理无符号类型</li>
-<li>移位运算符<ul>
-<li>&lt;&lt;和&gt;&gt;：对运算对象执行基于二进制位的移动操作</li>
-<li>右侧运算对象不能为负，且其值严格小于结果的位数。否则会产生未定义结果。</li>
-<li>移出边界外的位数被舍弃</li>
-</ul>
-</li>
-<li>位求反运算符<ul>
-<li>char类型先提升成int型</li>
-</ul>
-</li>
-<li>位与、位或、位异或运算符</li>
-<li>移位（IO）运算符满足左结合律</li>
-</ul>
-<h4 id="sizeof运算符"><a href="#sizeof运算符" class="headerlink" title="sizeof运算符"></a>sizeof运算符</h4><ul>
-<li><p>返回一条表达式或一个类型名字所占的字节数</p>
-</li>
-<li><p>满足右结合律</p>
-</li>
-<li><p>运算对象</p>
-<ul>
-<li>类型：返回类型大小</li>
-<li>表达式结果：返回结果的类型大小,并不计算实际对象的值</li>
-</ul>
-</li>
-<li><p>对象可以是未定义的指针，因为不计算具体值，指针并没有被真正使用</p>
-</li>
-<li><p>c++11允许使用作用域运算符来获取类成员的大小</p>
-</li>
-<li><p>sizeof运算符结果依赖于作用的类型</p>
-<ul>
-<li>对char执行，结果为1</li>
-<li>对引用执行：得到被引用对象所占空间大小</li>
-<li>对指针执行：得到指针本身所占空间大小</li>
-<li>对解引用指针执行：得到指针指向对象所占空间大小，指针不需要有效。</li>
-<li>对数组执行：得到整个数组所占空间大小，等价于对其中每个元素执行并求和。不会把数组转换为指针处理</li>
-<li>对string或vector处理：只返回该类型固定部分的大小，不计算其中的元素占多少空间</li>
-</ul>
-</li>
-<li><p>可以用数组大小除以单个元素大小，得到数组元素个数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">100</span>];</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">size_t</span> sz = <span class="keyword">sizeof</span>(ia) / <span class="keyword">sizeof</span>(*ia);</span><br><span class="line"><span class="keyword">int</span> arr2[sz];</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h4><ul>
-<li>两个运算对象，求值顺序从左到右</li>
-<li><strong>首先对左侧表达式求值，然后丢弃求值结果。真正的结果是右侧表达式的值</strong></li>
-</ul>
-<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><ul>
-<li>如果两种类型可以相互转换，那么它们就是关联的</li>
-<li>隐式转换：自动执行类型转换，尽可能避免损失精度</li>
-<li>何时发生隐式转换：<ul>
-<li>比int小的整数类型提升</li>
-<li>非布尔转换为布尔</li>
-<li>初始化时，初始值转换为变量类型；赋值语句中，右侧对象转换为左侧对象类型</li>
-<li>算术运算或关系运算的对象有多种类型，需要转换为同一种</li>
-<li>函数调用时</li>
-</ul>
-</li>
-<li>算术转换：一种算术类型转换为另一种算术类型<ul>
-<li>运算符的运算对象转换为最宽的类型</li>
-<li>表达式中既有浮点又有整数，整数转浮点</li>
-<li>无符号运算对象：整型提升-&gt;有无符号也有带符号类型<ul>
-<li>无符号类型大于带符号类型：带符号转为无符号</li>
-<li>无符号类型小于带符号类型：转换结果依赖机器，看无符号的所有值能否都存在带符号类型中，能就转为带符号</li>
-</ul>
-</li>
-<li>其他隐式类型转换<ul>
-<li>数组转换为指针</li>
-<li>指针的转换</li>
-<li>转换为布尔类型：0-false</li>
-<li>转换成常量：将指向非常量类型的指针转换为指向相应常量的指针</li>
-<li>类类型定义的转换：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>显式转换<ul>
-<li>强制类型转换</li>
-<li>cast-name&lt; type &gt;(expression):cast-name指定执行哪一种转换，type是转换的目标类型，expression是待转换的值</li>
-<li>执行哪一种转换<ul>
-<li>static_cast：不包含底层const就可以用，较大的算数类型赋值给较小的类型；编译器无法自动执行的类型转换</li>
-<li>const_cast：只能改变运算对象的底层const，常量转非常量（去const），对象只能改变常量属性</li>
-<li>reinterpret_cast：为运算对象的位模式提供较低层次的重新解释。如改int指针为char指针，但所指还是int型对象。很可能在运行时引发错误</li>
-<li>dynamic_cast</li>
-</ul>
-</li>
-<li>避免强制类型转换</li>
-<li>旧式的强制类型转换：表现形式不那么清晰</li>
-</ul>
-</li>
-</ul>
-<h4 id="运算符优先级表"><a href="#运算符优先级表" class="headerlink" title="运算符优先级表"></a>运算符优先级表</h4><h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>对于超过一个运算符的表达式，理解其含义需要关键要理解优先级、结合律和求值顺序</li>
-<li>大多数运算符并不明确规定运算对象的求值顺序：编译器有权自由选择先对左侧或右侧运算对象求值；如果两个运算对象指向同一个对象，且其中一个改变了对象的值，就会导致程序的严重缺陷</li>
-<li>运算对象经常从原始类型自动转换成某种关联的类型，若需要的话，也可以进行显式的类型转换</li>
-</ul>
-<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
-<li>算术转换</li>
-<li>隐式转换</li>
-<li>整型提升</li>
-<li>短路求值</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++_primer_V5 学习笔记-第二章</title>
     <url>/2020/07/13/c-primer-2/</url>
     <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
@@ -1326,6 +1086,463 @@
       </tags>
   </entry>
   <entry>
+    <title>C++_primer_V5 学习笔记-第四章</title>
+    <url>/2020/07/17/c-primer-4/</url>
+    <content><![CDATA[<h3 id="第4章-表达式"><a href="#第4章-表达式" class="headerlink" title="第4章 表达式"></a>第4章 表达式</h3><p>本章主要介绍由语言本身定义、并用于内置类型运算对象的运算符，同时简单介绍几种标准库定义的运算符。</p>
+<a id="more"></a>
+
+<p>表达式由一个或多个运算对象组成，对表达式求值将得到一个结果。字面值和变量是最简单的表达式，其结果就是字面值和变量本身的值。</p>
+<p>把 一个运算符 和 一个或多个运算对象 组合起来，可以生成较复杂的表达式。</p>
+<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><ul>
+<li>基本概念<ul>
+<li>一元运算符：作用于一个运算对象，如取地址符&amp;、解引用符*</li>
+<li>二元运算符：作用于两个运算对象，如相等==、乘法*</li>
+<li>三元运算符</li>
+<li>函数调用：特殊的运算符，对运算对象的数量没有限制</li>
+<li>一些符号能作为一元运算符、也能作为二元运算符，由上下文决定</li>
+<li>组合运算符与运算对象：优先级、结合律、运算对象的求值顺序</li>
+<li>运算对象转换：表达式求值时转换类型，小尺寸的整数类型常常被提升为大尺寸的整数类型</li>
+<li>重载运算符：运算符作用于类 类型的运算对象时，用户可以自行定义其含义，即重载运算符。<ul>
+<li>重载运算符可以定义运算对象的类型和返回值的类型，但对象个数、运算符优先级和结合律无法改变</li>
+</ul>
+</li>
+<li>左值和右值：c++的表达式不是右值就是左值<ul>
+<li>对象被用作右值：使用对象的值（内容</li>
+<li>对象被用作左值：使用对象的身份（在内存中的位置</li>
+<li>需要右值的地方可以用左值（也使用对象的内容）；需要左值的地方不能用右值</li>
+<li>使用decltype时，若表达式结果是左值，得到一个引用类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优先级与结合律<ul>
+<li>复合表达式：含有两个或多个运算符的表达式。优先级和结合律决定了运算对象组合的方式，括号无视上述规则。</li>
+<li>高优先级运算符的运算对象比低优先级更紧密地结合在一起。</li>
+<li>若运算符的优先级相同，将按照从左向右的顺序组合运算对象。</li>
+</ul>
+</li>
+<li>求值顺序<ul>
+<li>若运算符没有指定执行顺序，若表达式指向并修改了同一个对象，将会引发错误并产生未定义的行为。</li>
+<li>4种运算符规定了求值顺序：逻辑与 逻辑或 条件运算符?:  逗号运算符，</li>
+<li>运算对象的求值顺序与优先级 结合律无关</li>
+<li>处理复合表达式<ul>
+<li>用括号强制让表达式的组合关系符合程序的逻辑要求</li>
+<li>若改变了某个运算对象的值，在表达式的其他地方不要再使用这个运算对象</li>
+<li>若改变运算对象的子表达式本身 就是 另外一个子表达式的运算对象时，该规则无效。<code>*++iter</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><ul>
+<li>能作用于任意算术类型（或能转换成算术类型的类型）</li>
+<li>运算对象和求值结果都是右值。</li>
+<li>表达式求值前，小整数类型会被提升为大整数类型，最终所有运算对象转换为同一种类型。</li>
+<li>一元正号运算符、加减运算符都能作用于指针，返回运算对象的一个副本。</li>
+<li>bool值不应该参与运算，会先被提升为int类型，造成相关错误。（bool值1求负号，变int型-1 转回bool 还是true）</li>
+<li>溢出和其他算术运算异常<ul>
+<li>除数是0 产生未定义结果</li>
+<li>溢出：计算结果超出该类型能表示的范围。结果不可预知，可能环绕，即符号位溢出被修改。</li>
+</ul>
+</li>
+<li>整数相除商还是整数，弃掉商的小数部分</li>
+<li>%取余：运算对象必须是整数类型。若m%n不等于0，则符号和m相同</li>
+</ul>
+<h4 id="逻辑运算符和关系运算符"><a href="#逻辑运算符和关系运算符" class="headerlink" title="逻辑运算符和关系运算符"></a>逻辑运算符和关系运算符</h4><ul>
+<li>逻辑运算符和关系运算符的返回值都是bool类型，运算对象和求值结果都是右值。</li>
+<li>逻辑与 和 逻辑或<ul>
+<li>先求左侧值，再求右侧值；</li>
+<li>短路求值：左侧运算对象无法确定 表达式结果 时，才会计算右侧表达式的值</li>
+</ul>
+</li>
+<li>基于范围的for循环中，将其中的元素声明为引用类型，可以避免对过大元素的拷贝</li>
+<li>逻辑非</li>
+<li>关系运算符<ul>
+<li>关系运算符尽量不要连写，可以用 逻辑与 连接</li>
+</ul>
+</li>
+<li>相等性测试与布尔字面值<ul>
+<li>比较运算时，除非比较的对象是bool型，不要用bool字面值true或false作为比较对象</li>
+</ul>
+</li>
+</ul>
+<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><ul>
+<li>赋值运算的结果是它的左侧运算对象，并且是一个左值。结果的类型是左侧运算对象的类型。</li>
+<li>若左右类型不同，右侧运算对象会转为左侧对象的类型</li>
+<li>C++11允许花括号括起来的初始值列表作为右侧对象<ul>
+<li>初始列表为空时，编译器创建一个值初始化的临时量，赋给左侧对象。</li>
+</ul>
+</li>
+<li>赋值运算符满足 右结合律</li>
+<li>多重赋值语句：其中的每一个对象，类型与右边对象相同，或可由右边对象类型转换得到。</li>
+<li>赋值运算符优先级 &lt; 关系运算符优先级，条件语句中，赋值部分加括号。</li>
+<li>切勿混淆赋值运算符和相等运算符</li>
+<li>复合赋值运算符：相比普通运算符（求值两次），复合运算符只求值一次。</li>
+</ul>
+<h4 id="递增和递减运算符"><a href="#递增和递减运算符" class="headerlink" title="递增和递减运算符"></a>递增和递减运算符</h4><ul>
+<li><p>前置和后置</p>
+<ul>
+<li>前置：运算对象先加1，然后将改变后的对象作为求值结果。将对象本身作为左值返回。</li>
+<li>后置：运算对象加1，求值结果是 改变前的运算对象的副本。将 对象原始值的副本 作为右值返回。</li>
+<li>尽可能不用后置版本，需要存储原始值，这种操作可能是一种浪费。</li>
+</ul>
+</li>
+<li><p>混用解引用和递增</p>
+<ul>
+<li><p>后置递增优先级 &gt; 解引用</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> pbeg=v.<span class="built_in">begin</span>();</span><br><span class="line"><span class="keyword">while</span>(pbeg!=v.<span class="built_in">end</span>() &amp;&amp; *pbeg&gt;=<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt; *pbeg++ &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出当前pbeg指向的值，并将指针pbeg向前移动一个位置</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; *(pbeg++) &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//等价于上面一句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>赋值运算符左右两端用到了同一个运算对象并改变了值。可能出现未知错误</p>
+</li>
+</ul>
+<h4 id="成员访问运算符"><a href="#成员访问运算符" class="headerlink" title="成员访问运算符"></a>成员访问运算符</h4><ul>
+<li>点运算符：获取类对象的一个成员。结果和成员所属的对象一致。成员所属对象是左值，结果就是左值。</li>
+<li>箭头运算符：作用于指针类型的运算对象，结果是一个左值。</li>
+</ul>
+<h4 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符"></a>条件运算符</h4><ul>
+<li>把简单的if-else逻辑嵌入到单个表达式中。</li>
+<li>cond ?expr1:expr2</li>
+<li>首先求cond 的值，若条件为真，对expr1求值并返回，否则对expr2求值并返回。</li>
+<li>嵌套条件运算符</li>
+<li>条件运算符满足 右结合律</li>
+<li>嵌套不宜过多</li>
+<li>条件运算符优先级很低，在长表达式中通常要加括号</li>
+</ul>
+<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><ul>
+<li>作用于整数类型的运算对象，并把运算对象看成二进制位的集合</li>
+<li>提供检查和设置二进制位的功能</li>
+<li>小整型的对象值会被提升为较大的整数类型</li>
+<li>处理有符号类型的结果未知（依赖机器），因此尽量处理无符号类型</li>
+<li>移位运算符<ul>
+<li>&lt;&lt;和&gt;&gt;：对运算对象执行基于二进制位的移动操作</li>
+<li>右侧运算对象不能为负，且其值严格小于结果的位数。否则会产生未定义结果。</li>
+<li>移出边界外的位数被舍弃</li>
+</ul>
+</li>
+<li>位求反运算符<ul>
+<li>char类型先提升成int型</li>
+</ul>
+</li>
+<li>位与、位或、位异或运算符</li>
+<li>移位（IO）运算符满足左结合律</li>
+</ul>
+<h4 id="sizeof运算符"><a href="#sizeof运算符" class="headerlink" title="sizeof运算符"></a>sizeof运算符</h4><ul>
+<li><p>返回一条表达式或一个类型名字所占的字节数</p>
+</li>
+<li><p>满足右结合律</p>
+</li>
+<li><p>运算对象</p>
+<ul>
+<li>类型：返回类型大小</li>
+<li>表达式结果：返回结果的类型大小,并不计算实际对象的值</li>
+</ul>
+</li>
+<li><p>对象可以是未定义的指针，因为不计算具体值，指针并没有被真正使用</p>
+</li>
+<li><p>c++11允许使用作用域运算符来获取类成员的大小</p>
+</li>
+<li><p>sizeof运算符结果依赖于作用的类型</p>
+<ul>
+<li>对char执行，结果为1</li>
+<li>对引用执行：得到被引用对象所占空间大小</li>
+<li>对指针执行：得到指针本身所占空间大小</li>
+<li>对解引用指针执行：得到指针指向对象所占空间大小，指针不需要有效。</li>
+<li>对数组执行：得到整个数组所占空间大小，等价于对其中每个元素执行并求和。不会把数组转换为指针处理</li>
+<li>对string或vector处理：只返回该类型固定部分的大小，不计算其中的元素占多少空间</li>
+</ul>
+</li>
+<li><p>可以用数组大小除以单个元素大小，得到数组元素个数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">100</span>];</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">size_t</span> sz = <span class="keyword">sizeof</span>(ia) / <span class="keyword">sizeof</span>(*ia);</span><br><span class="line"><span class="keyword">int</span> arr2[sz];</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h4><ul>
+<li>两个运算对象，求值顺序从左到右</li>
+<li><strong>首先对左侧表达式求值，然后丢弃求值结果。真正的结果是右侧表达式的值</strong></li>
+</ul>
+<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><ul>
+<li>如果两种类型可以相互转换，那么它们就是关联的</li>
+<li>隐式转换：自动执行类型转换，尽可能避免损失精度</li>
+<li>何时发生隐式转换：<ul>
+<li>比int小的整数类型提升</li>
+<li>非布尔转换为布尔</li>
+<li>初始化时，初始值转换为变量类型；赋值语句中，右侧对象转换为左侧对象类型</li>
+<li>算术运算或关系运算的对象有多种类型，需要转换为同一种</li>
+<li>函数调用时</li>
+</ul>
+</li>
+<li>算术转换：一种算术类型转换为另一种算术类型<ul>
+<li>运算符的运算对象转换为最宽的类型</li>
+<li>表达式中既有浮点又有整数，整数转浮点</li>
+<li>无符号运算对象：整型提升-&gt;有无符号也有带符号类型<ul>
+<li>无符号类型大于带符号类型：带符号转为无符号</li>
+<li>无符号类型小于带符号类型：转换结果依赖机器，看无符号的所有值能否都存在带符号类型中，能就转为带符号</li>
+</ul>
+</li>
+<li>其他隐式类型转换<ul>
+<li>数组转换为指针</li>
+<li>指针的转换</li>
+<li>转换为布尔类型：0-false</li>
+<li>转换成常量：将指向非常量类型的指针转换为指向相应常量的指针</li>
+<li>类类型定义的转换：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>显式转换<ul>
+<li>强制类型转换</li>
+<li>cast-name&lt; type &gt;(expression):cast-name指定执行哪一种转换，type是转换的目标类型，expression是待转换的值</li>
+<li>执行哪一种转换<ul>
+<li>static_cast：不包含底层const就可以用，较大的算数类型赋值给较小的类型；编译器无法自动执行的类型转换</li>
+<li>const_cast：只能改变运算对象的底层const，常量转非常量（去const），对象只能改变常量属性</li>
+<li>reinterpret_cast：为运算对象的位模式提供较低层次的重新解释。如改int指针为char指针，但所指还是int型对象。很可能在运行时引发错误</li>
+<li>dynamic_cast</li>
+</ul>
+</li>
+<li>避免强制类型转换</li>
+<li>旧式的强制类型转换：表现形式不那么清晰</li>
+</ul>
+</li>
+</ul>
+<h4 id="运算符优先级表"><a href="#运算符优先级表" class="headerlink" title="运算符优先级表"></a>运算符优先级表</h4><h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>对于超过一个运算符的表达式，理解其含义需要关键要理解优先级、结合律和求值顺序</li>
+<li>大多数运算符并不明确规定运算对象的求值顺序：编译器有权自由选择先对左侧或右侧运算对象求值；如果两个运算对象指向同一个对象，且其中一个改变了对象的值，就会导致程序的严重缺陷</li>
+<li>运算对象经常从原始类型自动转换成某种关联的类型，若需要的话，也可以进行显式的类型转换</li>
+</ul>
+<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>算术转换</li>
+<li>隐式转换</li>
+<li>整型提升</li>
+<li>短路求值</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第五章</title>
+    <url>/2020/07/21/c-primer-5/</url>
+    <content><![CDATA[<h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
+<a id="more"></a>
+
+
+
+<p>c++语句提供了一组控制流语句以支持更复杂的执行路径</p>
+<h4 id="简单语句"><a href="#简单语句" class="headerlink" title="简单语句"></a>简单语句</h4><ul>
+<li>表达式语句：执行表达式并丢弃求值结果</li>
+<li>空语句：只含有单独的分号，常用于循环条件。使用空语句时加上注释</li>
+<li>复合语句（块）：用花括号括起来的 语句和声明的序列<ul>
+<li>一个块就是一个作用域，其中引入的名字只能在块内部以及子块里访问</li>
+<li>块不以分号结束</li>
+<li>空块：内部没有任何语句，等价于空语句</li>
+</ul>
+</li>
+</ul>
+<h4 id="语句作用域"><a href="#语句作用域" class="headerlink" title="语句作用域"></a>语句作用域</h4><ul>
+<li>可在控制结构内自定义变量，语句结束后，变量超出其作用范围。</li>
+<li>控制结构内的变量必须初始化</li>
+</ul>
+<h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><ul>
+<li><p>if语句：根据条件决定控制流</p>
+<ul>
+<li>条件的类型必须能转换为布尔类型</li>
+<li>嵌套if语句：使用花括号组合成块</li>
+<li>悬垂else：c++规定，else与 离他最近的 且 尚未匹配的 if匹配</li>
+<li>使用花括号控制执行路径</li>
+</ul>
+</li>
+<li><p>switch语句：计算表达式的值，根据值从几条执行路径中选择一条</p>
+<ul>
+<li><p>break语句：中断当前的控制流</p>
+</li>
+<li><p>case标签：case和对应的值组成，case标签必须是 整型常量表达式</p>
+</li>
+<li><p>若某个case标签匹配成功，将从该标签向后顺序执行所有case分支，除非程序显式中断这一过程（如break语句）</p>
+</li>
+<li><p>case标签后不一定要换行，以强调它们代表的是某一范围的值</p>
+</li>
+<li><p>最好在标签后加上break</p>
+</li>
+<li><p>default标签：若所有case标签都不能匹配上switch表达式的值，执行default标签之后的语句</p>
+</li>
+<li><p>最好定义一个空的default标签，代表考虑了默认情况</p>
+</li>
+<li><p>不允许跨过变量的初始化语句，直接跳转到该变量作用域内的另一个位置</p>
+<ul>
+<li><p>应该把变量定义在块内，从而确保后面的所有case标签都在变量的作用域之外</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="literal">true</span>:</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">string</span> name=get_name();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">false</span>:</span><br><span class="line">	<span class="keyword">if</span>(name.empty())<span class="comment">//直接报错，name变量在作用域之外</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="迭代语句"><a href="#迭代语句" class="headerlink" title="迭代语句"></a>迭代语句</h4><ul>
+<li>通常称为循环。while和for语句在循环前检查条件；do while先循环，再检查条件。</li>
+<li>while语句：只要条件为真，就重复执行循环体。条件不能为空<ul>
+<li>定义在条件部分或循环体内的变量，每次迭代都经历创建到销毁的过程</li>
+<li>不确定循环次数；循环结束后要访问循环控制变量：可以用while</li>
+</ul>
+</li>
+<li>for语句<ul>
+<li>for语句头：for+初始化值+循环控制条件+初始化变量修改</li>
+<li>执行流程：初始化 判断条件 若为真-执行循环 修改初始化的控制变量值</li>
+<li>for语句头中定义的变量只在循环体内可见</li>
+<li>for语句头的多重定义：初始化部分只能有一条声明语句，<strong>因此声明变量的基础类型必须相同</strong></li>
+<li>省略语句头的任意部分：分号必须保留。</li>
+<li>范围for语句（c++11）：表达式必须是一个序列（列表、数组、拥有begin/end成员的类型）<ul>
+<li>可以使用auto定义变量</li>
+<li>对序列元素执行写操作，<strong>循环变量要声明成引用类型</strong></li>
+<li>范围for语句预存了end()的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>do while语句<ul>
+<li>先执行循环体，后检查条件，至少执行一次循环</li>
+<li>条件后面要用 <strong>分号</strong>表示语句结束</li>
+<li>条件不能为空，循环的条件变量必须定义在循环体之外。<strong>条件部分不能定义变量</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h4><ul>
+<li><p>break语句：终止最近的while dowhile for switch语句，从这些语句之后的第一条语句开始继续执行。</p>
+<ul>
+<li>只能出现在迭代语句或switch语句内部</li>
+</ul>
+</li>
+<li><p>continue语句：终止最近循环中的当前迭代，立即开始下一次迭代</p>
+<ul>
+<li>只能出现在for while dowhile内部或嵌套。</li>
+<li>只有当switch嵌套时，才能用在switch内部。</li>
+</ul>
+</li>
+<li><p>goto语句：无条件跳转到同一函数内的另一条语句</p>
+<ul>
+<li><p>不要在程序中使用goto语句，难理解、难修改</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">goto</span> <span class="built_in">end</span>;</span><br><span class="line"><span class="built_in">end</span>: <span class="keyword">return</span>;<span class="comment">//带标签语句，可以作为goto的目标</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转向的带标签语句必须在<strong>同一函数内</strong></p>
+</li>
+<li><p><strong>不能将程序的控制权从变量的作用域之外转移到作用域之内？</strong></p>
+<ul>
+<li>不允许跨过变量声明跳转到该变量位置</li>
+</ul>
+</li>
+<li><p>可以跳过已经执行的定义；跳回到变量定义前，会销毁并重新创建该变量</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h4><ul>
+<li><p>异常：运行反常行为，超出函数正常功能的范围。例如失去数据库连接、遇到意外输入等</p>
+</li>
+<li><p>异常处理：程序检测到无法处理的问题，发出某种信号表明遇到故障，<strong>无须知道故障将在何处解决</strong></p>
+</li>
+<li><p>异常处理机制</p>
+<ul>
+<li>throw表达式：异常检测。引发（raise）异常</li>
+<li>try语句块：异常处理。以try开始，若干catch子句结束。catch子句处理异常，也被称为异常处理代码。</li>
+<li>异常类：在throw表达式和catch子句之间传递异常的具体信息。</li>
+</ul>
+</li>
+<li><p>throw表达式</p>
+<ul>
+<li><p>关键字throw+表达式（类型为抛出的异常类型）+分号，构成表达式语句</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a!=b)</span><br><span class="line">	<span class="keyword">throw</span> runtime_error(<span class="string">"ERROR!"</span>);<span class="comment">//抛出异常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>runtime_error是标准库异常类型的一种，定义在stdexcept头文件中。</p>
+</li>
+</ul>
+</li>
+<li><p>try语句块</p>
+<ul>
+<li><p>try块+若干catch子句</p>
+</li>
+<li><p>catch子句包括：关键字catch+括号内的异常声明+一个块。选中catch子句处理异常之后，执行与之对应的块。</p>
+</li>
+<li><p>catch完成后，跳转到最后一个catch子句后的语句继续执行</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//执行正常情况的代码</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(runtime_error err)<span class="comment">//处理runtime_error的异常</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//异常处理</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;err.what()</span><br><span class="line">            &lt;&lt;<span class="string">"ERROR!"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>err.what()：what是runtime_error的一个成员函数，返回c风格字符串– 初始化一个具体对象所用的 string对象 的副本</p>
+</li>
+<li><p>函数在寻找处理代码的过程中退出</p>
+<ul>
+<li>抛出异常时，首先搜索抛出该异常的函数，如果没找到匹配的catch子句，终止该函数，在调用它的函数中继续寻找；若还没有找到catch，终止函数，继续在调用当前函数的函数中寻找。。。如此沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为止。</li>
+<li>若最后也没找到catch子句，程序转到标准库函数terminate，执行该函数将导致程序非正常退出</li>
+<li>对于没有try语句块定义的异常，处理方式一样。最终系统调用terminate函数并终止程序运行。</li>
+</ul>
+</li>
+<li><p>编写 异常 安全（exception safe）的代码很困难</p>
+<ul>
+<li>异常中断了程序的正常流程</li>
+<li>发生异常时，某些对象处理到一半就中止了，处于无效或未完成状态，资源没有正常释放</li>
+<li>异常发生期间正确执行“清理”工作的程序代码即 异常 安全（exception safe）</li>
+<li>异常发生后，<strong>程序如何确保对象有效</strong>、<strong>资源无泄漏</strong>、<strong>程序处于合理状态</strong>，十分关键</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>标准异常</p>
+<ul>
+<li>c++标准库定义的一组异常类，用于报告标准库函数遇到的问题</li>
+<li>分别定义在4个头文件中：<ul>
+<li>exception头文件：定义了最通用的异常类exception，只报告异常的发生，不提供额外信息</li>
+<li>stdexcept头文件：定义了集中常用的异常类</li>
+<li>new头文件：定义了bad_alloc异常类型</li>
+<li>type_info头文件：定义了bad_cast异常类型</li>
+</ul>
+</li>
+<li>只能以默认初始化的方式初始化exception、bad_alloc和bad_cast对象，<strong>不允许赋初值</strong></li>
+<li>其他异常行为需要使用string或C风格字符串初始化，<strong>不允许默认初始化</strong>，初始值含有错误相关的信息</li>
+<li>异常类型只定义了一个成员函数what，该函数没有参数，返回一个指向C字符串的const char*，提供关于异常的文本信息。</li>
+<li>what返回的字符串内容与异常对象的类型有关，若有字符串初始值则返回，否则由编译器决定</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>复合语句：即块</li>
+<li>悬垂else</li>
+<li>异常声明：catch子句中的声明</li>
+<li>异常安全：抛出异常后，程序能执行正确的行为</li>
+<li>控制流：程序的执行路径</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/06/24/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>C++_primer_V5 学习笔记-第六章</title>
     <url>/2020/07/21/c-primer-6/</url>
     <content><![CDATA[<h3 id="第6章-函数"><a href="#第6章-函数" class="headerlink" title="第6章 函数"></a>第6章 函数</h3><p>本章首先介绍函数的定义和声明，接下来介绍重载函数的方法，以及编译器如何从函数的若干重载形式中选取一个与调用匹配的版本。最后，介绍一些关于函数指针的知识。</p>
@@ -1912,223 +2129,6 @@
 <li>分离式编译</li>
 <li>尾置返回类型</li>
 <li>可行函数</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/06/24/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第五章</title>
-    <url>/2020/07/21/c-primer-5/</url>
-    <content><![CDATA[<h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
-<a id="more"></a>
-
-
-
-<p>c++语句提供了一组控制流语句以支持更复杂的执行路径</p>
-<h4 id="简单语句"><a href="#简单语句" class="headerlink" title="简单语句"></a>简单语句</h4><ul>
-<li>表达式语句：执行表达式并丢弃求值结果</li>
-<li>空语句：只含有单独的分号，常用于循环条件。使用空语句时加上注释</li>
-<li>复合语句（块）：用花括号括起来的 语句和声明的序列<ul>
-<li>一个块就是一个作用域，其中引入的名字只能在块内部以及子块里访问</li>
-<li>块不以分号结束</li>
-<li>空块：内部没有任何语句，等价于空语句</li>
-</ul>
-</li>
-</ul>
-<h4 id="语句作用域"><a href="#语句作用域" class="headerlink" title="语句作用域"></a>语句作用域</h4><ul>
-<li>可在控制结构内自定义变量，语句结束后，变量超出其作用范围。</li>
-<li>控制结构内的变量必须初始化</li>
-</ul>
-<h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><ul>
-<li><p>if语句：根据条件决定控制流</p>
-<ul>
-<li>条件的类型必须能转换为布尔类型</li>
-<li>嵌套if语句：使用花括号组合成块</li>
-<li>悬垂else：c++规定，else与 离他最近的 且 尚未匹配的 if匹配</li>
-<li>使用花括号控制执行路径</li>
-</ul>
-</li>
-<li><p>switch语句：计算表达式的值，根据值从几条执行路径中选择一条</p>
-<ul>
-<li><p>break语句：中断当前的控制流</p>
-</li>
-<li><p>case标签：case和对应的值组成，case标签必须是 整型常量表达式</p>
-</li>
-<li><p>若某个case标签匹配成功，将从该标签向后顺序执行所有case分支，除非程序显式中断这一过程（如break语句）</p>
-</li>
-<li><p>case标签后不一定要换行，以强调它们代表的是某一范围的值</p>
-</li>
-<li><p>最好在标签后加上break</p>
-</li>
-<li><p>default标签：若所有case标签都不能匹配上switch表达式的值，执行default标签之后的语句</p>
-</li>
-<li><p>最好定义一个空的default标签，代表考虑了默认情况</p>
-</li>
-<li><p>不允许跨过变量的初始化语句，直接跳转到该变量作用域内的另一个位置</p>
-<ul>
-<li><p>应该把变量定义在块内，从而确保后面的所有case标签都在变量的作用域之外</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="literal">true</span>:</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">string</span> name=get_name();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">false</span>:</span><br><span class="line">	<span class="keyword">if</span>(name.empty())<span class="comment">//直接报错，name变量在作用域之外</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="迭代语句"><a href="#迭代语句" class="headerlink" title="迭代语句"></a>迭代语句</h4><ul>
-<li>通常称为循环。while和for语句在循环前检查条件；do while先循环，再检查条件。</li>
-<li>while语句：只要条件为真，就重复执行循环体。条件不能为空<ul>
-<li>定义在条件部分或循环体内的变量，每次迭代都经历创建到销毁的过程</li>
-<li>不确定循环次数；循环结束后要访问循环控制变量：可以用while</li>
-</ul>
-</li>
-<li>for语句<ul>
-<li>for语句头：for+初始化值+循环控制条件+初始化变量修改</li>
-<li>执行流程：初始化 判断条件 若为真-执行循环 修改初始化的控制变量值</li>
-<li>for语句头中定义的变量只在循环体内可见</li>
-<li>for语句头的多重定义：初始化部分只能有一条声明语句，<strong>因此声明变量的基础类型必须相同</strong></li>
-<li>省略语句头的任意部分：分号必须保留。</li>
-<li>范围for语句（c++11）：表达式必须是一个序列（列表、数组、拥有begin/end成员的类型）<ul>
-<li>可以使用auto定义变量</li>
-<li>对序列元素执行写操作，<strong>循环变量要声明成引用类型</strong></li>
-<li>范围for语句预存了end()的值</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>do while语句<ul>
-<li>先执行循环体，后检查条件，至少执行一次循环</li>
-<li>条件后面要用 <strong>分号</strong>表示语句结束</li>
-<li>条件不能为空，循环的条件变量必须定义在循环体之外。<strong>条件部分不能定义变量</strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h4><ul>
-<li><p>break语句：终止最近的while dowhile for switch语句，从这些语句之后的第一条语句开始继续执行。</p>
-<ul>
-<li>只能出现在迭代语句或switch语句内部</li>
-</ul>
-</li>
-<li><p>continue语句：终止最近循环中的当前迭代，立即开始下一次迭代</p>
-<ul>
-<li>只能出现在for while dowhile内部或嵌套。</li>
-<li>只有当switch嵌套时，才能用在switch内部。</li>
-</ul>
-</li>
-<li><p>goto语句：无条件跳转到同一函数内的另一条语句</p>
-<ul>
-<li><p>不要在程序中使用goto语句，难理解、难修改</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">goto</span> <span class="built_in">end</span>;</span><br><span class="line"><span class="built_in">end</span>: <span class="keyword">return</span>;<span class="comment">//带标签语句，可以作为goto的目标</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>转向的带标签语句必须在<strong>同一函数内</strong></p>
-</li>
-<li><p><strong>不能将程序的控制权从变量的作用域之外转移到作用域之内？</strong></p>
-<ul>
-<li>不允许跨过变量声明跳转到该变量位置</li>
-</ul>
-</li>
-<li><p>可以跳过已经执行的定义；跳回到变量定义前，会销毁并重新创建该变量</p>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h4><ul>
-<li><p>异常：运行反常行为，超出函数正常功能的范围。例如失去数据库连接、遇到意外输入等</p>
-</li>
-<li><p>异常处理：程序检测到无法处理的问题，发出某种信号表明遇到故障，<strong>无须知道故障将在何处解决</strong></p>
-</li>
-<li><p>异常处理机制</p>
-<ul>
-<li>throw表达式：异常检测。引发（raise）异常</li>
-<li>try语句块：异常处理。以try开始，若干catch子句结束。catch子句处理异常，也被称为异常处理代码。</li>
-<li>异常类：在throw表达式和catch子句之间传递异常的具体信息。</li>
-</ul>
-</li>
-<li><p>throw表达式</p>
-<ul>
-<li><p>关键字throw+表达式（类型为抛出的异常类型）+分号，构成表达式语句</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a!=b)</span><br><span class="line">	<span class="keyword">throw</span> runtime_error(<span class="string">"ERROR!"</span>);<span class="comment">//抛出异常</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>runtime_error是标准库异常类型的一种，定义在stdexcept头文件中。</p>
-</li>
-</ul>
-</li>
-<li><p>try语句块</p>
-<ul>
-<li><p>try块+若干catch子句</p>
-</li>
-<li><p>catch子句包括：关键字catch+括号内的异常声明+一个块。选中catch子句处理异常之后，执行与之对应的块。</p>
-</li>
-<li><p>catch完成后，跳转到最后一个catch子句后的语句继续执行</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//执行正常情况的代码</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(runtime_error err)<span class="comment">//处理runtime_error的异常</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//异常处理</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;err.what()</span><br><span class="line">            &lt;&lt;<span class="string">"ERROR!"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>err.what()：what是runtime_error的一个成员函数，返回c风格字符串– 初始化一个具体对象所用的 string对象 的副本</p>
-</li>
-<li><p>函数在寻找处理代码的过程中退出</p>
-<ul>
-<li>抛出异常时，首先搜索抛出该异常的函数，如果没找到匹配的catch子句，终止该函数，在调用它的函数中继续寻找；若还没有找到catch，终止函数，继续在调用当前函数的函数中寻找。。。如此沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为止。</li>
-<li>若最后也没找到catch子句，程序转到标准库函数terminate，执行该函数将导致程序非正常退出</li>
-<li>对于没有try语句块定义的异常，处理方式一样。最终系统调用terminate函数并终止程序运行。</li>
-</ul>
-</li>
-<li><p>编写 异常 安全（exception safe）的代码很困难</p>
-<ul>
-<li>异常中断了程序的正常流程</li>
-<li>发生异常时，某些对象处理到一半就中止了，处于无效或未完成状态，资源没有正常释放</li>
-<li>异常发生期间正确执行“清理”工作的程序代码即 异常 安全（exception safe）</li>
-<li>异常发生后，<strong>程序如何确保对象有效</strong>、<strong>资源无泄漏</strong>、<strong>程序处于合理状态</strong>，十分关键</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>标准异常</p>
-<ul>
-<li>c++标准库定义的一组异常类，用于报告标准库函数遇到的问题</li>
-<li>分别定义在4个头文件中：<ul>
-<li>exception头文件：定义了最通用的异常类exception，只报告异常的发生，不提供额外信息</li>
-<li>stdexcept头文件：定义了集中常用的异常类</li>
-<li>new头文件：定义了bad_alloc异常类型</li>
-<li>type_info头文件：定义了bad_cast异常类型</li>
-</ul>
-</li>
-<li>只能以默认初始化的方式初始化exception、bad_alloc和bad_cast对象，<strong>不允许赋初值</strong></li>
-<li>其他异常行为需要使用string或C风格字符串初始化，<strong>不允许默认初始化</strong>，初始值含有错误相关的信息</li>
-<li>异常类型只定义了一个成员函数what，该函数没有参数，返回一个指向C字符串的const char*，提供关于异常的文本信息。</li>
-<li>what返回的字符串内容与异常对象的类型有关，若有字符串初始值则返回，否则由编译器决定</li>
-</ul>
-</li>
-</ul>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
-<li>复合语句：即块</li>
-<li>悬垂else</li>
-<li>异常声明：catch子句中的声明</li>
-<li>异常安全：抛出异常后，程序能执行正确的行为</li>
-<li>控制流：程序的执行路径</li>
 </ul>
 ]]></content>
       <categories>
