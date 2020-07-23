@@ -205,6 +205,1170 @@
       </tags>
   </entry>
   <entry>
+    <title>C++_primer_V5 学习笔记-第四章</title>
+    <url>/2020/07/17/c-primer-4/</url>
+    <content><![CDATA[<h3 id="第4章-表达式"><a href="#第4章-表达式" class="headerlink" title="第4章 表达式"></a>第4章 表达式</h3><p>本章主要介绍由语言本身定义、并用于内置类型运算对象的运算符，同时简单介绍几种标准库定义的运算符。</p>
+<a id="more"></a>
+
+<p>表达式由一个或多个运算对象组成，对表达式求值将得到一个结果。字面值和变量是最简单的表达式，其结果就是字面值和变量本身的值。</p>
+<p>把 一个运算符 和 一个或多个运算对象 组合起来，可以生成较复杂的表达式。</p>
+<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><ul>
+<li>基本概念<ul>
+<li>一元运算符：作用于一个运算对象，如取地址符&amp;、解引用符*</li>
+<li>二元运算符：作用于两个运算对象，如相等==、乘法*</li>
+<li>三元运算符</li>
+<li>函数调用：特殊的运算符，对运算对象的数量没有限制</li>
+<li>一些符号能作为一元运算符、也能作为二元运算符，由上下文决定</li>
+<li>组合运算符与运算对象：优先级、结合律、运算对象的求值顺序</li>
+<li>运算对象转换：表达式求值时转换类型，小尺寸的整数类型常常被提升为大尺寸的整数类型</li>
+<li>重载运算符：运算符作用于类 类型的运算对象时，用户可以自行定义其含义，即重载运算符。<ul>
+<li>重载运算符可以定义运算对象的类型和返回值的类型，但对象个数、运算符优先级和结合律无法改变</li>
+</ul>
+</li>
+<li>左值和右值：c++的表达式不是右值就是左值<ul>
+<li>对象被用作右值：使用对象的值（内容</li>
+<li>对象被用作左值：使用对象的身份（在内存中的位置</li>
+<li>需要右值的地方可以用左值（也使用对象的内容）；需要左值的地方不能用右值</li>
+<li>使用decltype时，若表达式结果是左值，得到一个引用类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>优先级与结合律<ul>
+<li>复合表达式：含有两个或多个运算符的表达式。优先级和结合律决定了运算对象组合的方式，括号无视上述规则。</li>
+<li>高优先级运算符的运算对象比低优先级更紧密地结合在一起。</li>
+<li>若运算符的优先级相同，将按照从左向右的顺序组合运算对象。</li>
+</ul>
+</li>
+<li>求值顺序<ul>
+<li>若运算符没有指定执行顺序，若表达式指向并修改了同一个对象，将会引发错误并产生未定义的行为。</li>
+<li>4种运算符规定了求值顺序：逻辑与 逻辑或 条件运算符?:  逗号运算符，</li>
+<li>运算对象的求值顺序与优先级 结合律无关</li>
+<li>处理复合表达式<ul>
+<li>用括号强制让表达式的组合关系符合程序的逻辑要求</li>
+<li>若改变了某个运算对象的值，在表达式的其他地方不要再使用这个运算对象</li>
+<li>若改变运算对象的子表达式本身 就是 另外一个子表达式的运算对象时，该规则无效。<code>*++iter</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><ul>
+<li>能作用于任意算术类型（或能转换成算术类型的类型）</li>
+<li>运算对象和求值结果都是右值。</li>
+<li>表达式求值前，小整数类型会被提升为大整数类型，最终所有运算对象转换为同一种类型。</li>
+<li>一元正号运算符、加减运算符都能作用于指针，返回运算对象的一个副本。</li>
+<li>bool值不应该参与运算，会先被提升为int类型，造成相关错误。（bool值1求负号，变int型-1 转回bool 还是true）</li>
+<li>溢出和其他算术运算异常<ul>
+<li>除数是0 产生未定义结果</li>
+<li>溢出：计算结果超出该类型能表示的范围。结果不可预知，可能环绕，即符号位溢出被修改。</li>
+</ul>
+</li>
+<li>整数相除商还是整数，弃掉商的小数部分</li>
+<li>%取余：运算对象必须是整数类型。若m%n不等于0，则符号和m相同</li>
+</ul>
+<h4 id="逻辑运算符和关系运算符"><a href="#逻辑运算符和关系运算符" class="headerlink" title="逻辑运算符和关系运算符"></a>逻辑运算符和关系运算符</h4><ul>
+<li>逻辑运算符和关系运算符的返回值都是bool类型，运算对象和求值结果都是右值。</li>
+<li>逻辑与 和 逻辑或<ul>
+<li>先求左侧值，再求右侧值；</li>
+<li>短路求值：左侧运算对象无法确定 表达式结果 时，才会计算右侧表达式的值</li>
+</ul>
+</li>
+<li>基于范围的for循环中，将其中的元素声明为引用类型，可以避免对过大元素的拷贝</li>
+<li>逻辑非</li>
+<li>关系运算符<ul>
+<li>关系运算符尽量不要连写，可以用 逻辑与 连接</li>
+</ul>
+</li>
+<li>相等性测试与布尔字面值<ul>
+<li>比较运算时，除非比较的对象是bool型，不要用bool字面值true或false作为比较对象</li>
+</ul>
+</li>
+</ul>
+<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><ul>
+<li>赋值运算的结果是它的左侧运算对象，并且是一个左值。结果的类型是左侧运算对象的类型。</li>
+<li>若左右类型不同，右侧运算对象会转为左侧对象的类型</li>
+<li>C++11允许花括号括起来的初始值列表作为右侧对象<ul>
+<li>初始列表为空时，编译器创建一个值初始化的临时量，赋给左侧对象。</li>
+</ul>
+</li>
+<li>赋值运算符满足 右结合律</li>
+<li>多重赋值语句：其中的每一个对象，类型与右边对象相同，或可由右边对象类型转换得到。</li>
+<li>赋值运算符优先级 &lt; 关系运算符优先级，条件语句中，赋值部分加括号。</li>
+<li>切勿混淆赋值运算符和相等运算符</li>
+<li>复合赋值运算符：相比普通运算符（求值两次），复合运算符只求值一次。</li>
+</ul>
+<h4 id="递增和递减运算符"><a href="#递增和递减运算符" class="headerlink" title="递增和递减运算符"></a>递增和递减运算符</h4><ul>
+<li><p>前置和后置</p>
+<ul>
+<li>前置：运算对象先加1，然后将改变后的对象作为求值结果。将对象本身作为左值返回。</li>
+<li>后置：运算对象加1，求值结果是 改变前的运算对象的副本。将 对象原始值的副本 作为右值返回。</li>
+<li>尽可能不用后置版本，需要存储原始值，这种操作可能是一种浪费。</li>
+</ul>
+</li>
+<li><p>混用解引用和递增</p>
+<ul>
+<li><p>后置递增优先级 &gt; 解引用</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> pbeg=v.<span class="built_in">begin</span>();</span><br><span class="line"><span class="keyword">while</span>(pbeg!=v.<span class="built_in">end</span>() &amp;&amp; *pbeg&gt;=<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt; *pbeg++ &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出当前pbeg指向的值，并将指针pbeg向前移动一个位置</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; *(pbeg++) &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//等价于上面一句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>赋值运算符左右两端用到了同一个运算对象并改变了值。可能出现未知错误</p>
+</li>
+</ul>
+<h4 id="成员访问运算符"><a href="#成员访问运算符" class="headerlink" title="成员访问运算符"></a>成员访问运算符</h4><ul>
+<li>点运算符：获取类对象的一个成员。结果和成员所属的对象一致。成员所属对象是左值，结果就是左值。</li>
+<li>箭头运算符：作用于指针类型的运算对象，结果是一个左值。</li>
+</ul>
+<h4 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符"></a>条件运算符</h4><ul>
+<li>把简单的if-else逻辑嵌入到单个表达式中。</li>
+<li>cond ?expr1:expr2</li>
+<li>首先求cond 的值，若条件为真，对expr1求值并返回，否则对expr2求值并返回。</li>
+<li>嵌套条件运算符</li>
+<li>条件运算符满足 右结合律</li>
+<li>嵌套不宜过多</li>
+<li>条件运算符优先级很低，在长表达式中通常要加括号</li>
+</ul>
+<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><ul>
+<li>作用于整数类型的运算对象，并把运算对象看成二进制位的集合</li>
+<li>提供检查和设置二进制位的功能</li>
+<li>小整型的对象值会被提升为较大的整数类型</li>
+<li>处理有符号类型的结果未知（依赖机器），因此尽量处理无符号类型</li>
+<li>移位运算符<ul>
+<li>&lt;&lt;和&gt;&gt;：对运算对象执行基于二进制位的移动操作</li>
+<li>右侧运算对象不能为负，且其值严格小于结果的位数。否则会产生未定义结果。</li>
+<li>移出边界外的位数被舍弃</li>
+</ul>
+</li>
+<li>位求反运算符<ul>
+<li>char类型先提升成int型</li>
+</ul>
+</li>
+<li>位与、位或、位异或运算符</li>
+<li>移位（IO）运算符满足左结合律</li>
+</ul>
+<h4 id="sizeof运算符"><a href="#sizeof运算符" class="headerlink" title="sizeof运算符"></a>sizeof运算符</h4><ul>
+<li><p>返回一条表达式或一个类型名字所占的字节数</p>
+</li>
+<li><p>满足右结合律</p>
+</li>
+<li><p>运算对象</p>
+<ul>
+<li>类型：返回类型大小</li>
+<li>表达式结果：返回结果的类型大小,并不计算实际对象的值</li>
+</ul>
+</li>
+<li><p>对象可以是未定义的指针，因为不计算具体值，指针并没有被真正使用</p>
+</li>
+<li><p>c++11允许使用作用域运算符来获取类成员的大小</p>
+</li>
+<li><p>sizeof运算符结果依赖于作用的类型</p>
+<ul>
+<li>对char执行，结果为1</li>
+<li>对引用执行：得到被引用对象所占空间大小</li>
+<li>对指针执行：得到指针本身所占空间大小</li>
+<li>对解引用指针执行：得到指针指向对象所占空间大小，指针不需要有效。</li>
+<li>对数组执行：得到整个数组所占空间大小，等价于对其中每个元素执行并求和。不会把数组转换为指针处理</li>
+<li>对string或vector处理：只返回该类型固定部分的大小，不计算其中的元素占多少空间</li>
+</ul>
+</li>
+<li><p>可以用数组大小除以单个元素大小，得到数组元素个数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">100</span>];</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">size_t</span> sz = <span class="keyword">sizeof</span>(ia) / <span class="keyword">sizeof</span>(*ia);</span><br><span class="line"><span class="keyword">int</span> arr2[sz];</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h4><ul>
+<li>两个运算对象，求值顺序从左到右</li>
+<li><strong>首先对左侧表达式求值，然后丢弃求值结果。真正的结果是右侧表达式的值</strong></li>
+</ul>
+<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><ul>
+<li>如果两种类型可以相互转换，那么它们就是关联的</li>
+<li>隐式转换：自动执行类型转换，尽可能避免损失精度</li>
+<li>何时发生隐式转换：<ul>
+<li>比int小的整数类型提升</li>
+<li>非布尔转换为布尔</li>
+<li>初始化时，初始值转换为变量类型；赋值语句中，右侧对象转换为左侧对象类型</li>
+<li>算术运算或关系运算的对象有多种类型，需要转换为同一种</li>
+<li>函数调用时</li>
+</ul>
+</li>
+<li>算术转换：一种算术类型转换为另一种算术类型<ul>
+<li>运算符的运算对象转换为最宽的类型</li>
+<li>表达式中既有浮点又有整数，整数转浮点</li>
+<li>无符号运算对象：整型提升-&gt;有无符号也有带符号类型<ul>
+<li>无符号类型大于带符号类型：带符号转为无符号</li>
+<li>无符号类型小于带符号类型：转换结果依赖机器，看无符号的所有值能否都存在带符号类型中，能就转为带符号</li>
+</ul>
+</li>
+<li>其他隐式类型转换<ul>
+<li>数组转换为指针</li>
+<li>指针的转换</li>
+<li>转换为布尔类型：0-false</li>
+<li>转换成常量：将指向非常量类型的指针转换为指向相应常量的指针</li>
+<li>类类型定义的转换：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>显式转换<ul>
+<li>强制类型转换</li>
+<li>cast-name&lt; type &gt;(expression):cast-name指定执行哪一种转换，type是转换的目标类型，expression是待转换的值</li>
+<li>执行哪一种转换<ul>
+<li>static_cast：不包含底层const就可以用，较大的算数类型赋值给较小的类型；编译器无法自动执行的类型转换</li>
+<li>const_cast：只能改变运算对象的底层const，常量转非常量（去const），对象只能改变常量属性</li>
+<li>reinterpret_cast：为运算对象的位模式提供较低层次的重新解释。如改int指针为char指针，但所指还是int型对象。很可能在运行时引发错误</li>
+<li>dynamic_cast</li>
+</ul>
+</li>
+<li>避免强制类型转换</li>
+<li>旧式的强制类型转换：表现形式不那么清晰</li>
+</ul>
+</li>
+</ul>
+<h4 id="运算符优先级表"><a href="#运算符优先级表" class="headerlink" title="运算符优先级表"></a>运算符优先级表</h4><h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>对于超过一个运算符的表达式，理解其含义需要关键要理解优先级、结合律和求值顺序</li>
+<li>大多数运算符并不明确规定运算对象的求值顺序：编译器有权自由选择先对左侧或右侧运算对象求值；如果两个运算对象指向同一个对象，且其中一个改变了对象的值，就会导致程序的严重缺陷</li>
+<li>运算对象经常从原始类型自动转换成某种关联的类型，若需要的话，也可以进行显式的类型转换</li>
+</ul>
+<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>算术转换</li>
+<li>隐式转换</li>
+<li>整型提升</li>
+<li>短路求值</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第六章</title>
+    <url>/2020/07/21/c-primer-6/</url>
+    <content><![CDATA[<h3 id="第6章-函数"><a href="#第6章-函数" class="headerlink" title="第6章 函数"></a>第6章 函数</h3><p>本章首先介绍函数的定义和声明，接下来介绍重载函数的方法，以及编译器如何从函数的若干重载形式中选取一个与调用匹配的版本。最后，介绍一些关于函数指针的知识。</p>
+<a id="more"></a>
+
+<p>函数是命名的代码块，调用函数执行相应的代码。</p>
+<p>函数可以有0个或多个参数，通常会产生一个结果。</p>
+<p>可以重载函数，同一个名字可以对应几个不同的函数</p>
+<h4 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h4><ul>
+<li>函数定义：返回类型+函数名字+形参列表+函数体</li>
+<li>使用 <strong>调用运算符</strong> 执行函数：一对圆括号，其中是一个逗号隔开的 <strong>实参</strong>列表。使用实参初始化形参，调用表达式的类型就是函数的类型</li>
+<li>函数调用<ul>
+<li>用定义并用实参初始化 函数对应的形参</li>
+<li>将控制权转移给被调用函数</li>
+<li>主调函数执行中断，被调函数开始执行</li>
+<li>return语句：返回return语句中的值；将控制权从被调函数移回主调函数</li>
+<li>函数返回值 初始化 调用表达式的结果</li>
+</ul>
+</li>
+<li>形参和实参<ul>
+<li>实参是形参的初始值，存在数量对应、一一对应关系</li>
+<li>未规定实参的求值顺序</li>
+<li>实参类型与对应形参类型匹配，或能转换为形参类型</li>
+<li>形参列表可以为空，但不能省略。可以用void表示函数没有形参。</li>
+<li>形参列表中，每个形参的类型都要注明；形参不能同名</li>
+<li>函数最外层作用域的局部变量不能与形参同名</li>
+<li>形参可以不命名，表示函数体不使用，但也需要一个对应的实参</li>
+</ul>
+</li>
+<li>函数返回类型<ul>
+<li>void返回类型：函数不返回任何值</li>
+<li>函数的返回类型不能是数组或函数，但可以是指向它们的指针</li>
+</ul>
+</li>
+<li>局部对象<ul>
+<li>名字的作用域：程序文本的一部分，名字在其中可见</li>
+<li>对象的生命周期：程序在执行过程中，该对象存在的一段时间</li>
+<li>局部变量：形参和函数体内部定义的变量<ul>
+<li>隐藏在外层作用域中同名的其他所有声明中</li>
+</ul>
+</li>
+<li>函数体外对应的对象存在于程序的整个执行过程中，程序启动时创建，程序结束时销毁</li>
+<li>局部变量的声明周期依赖于定义的方式</li>
+<li>自动对象：只存在于块执行期间的对象，块执行结束后，其值变为未定义<ul>
+<li>形参是自动对象，传递给函数的实参初始化该自动对象。</li>
+<li>变量定义含有初始值—用这个初始值初始化</li>
+<li>变量定义不含初始值—默认初始化</li>
+<li>内置类型的未初始化局部变量–产生未定义的值（默认初始化</li>
+</ul>
+</li>
+<li>局部静态对象：声明周期贯穿函数调用 以及 <strong>之后的时间</strong>，局部变量定义成static类型。<ul>
+<li>程序第一次经过定义时初始化，直到程序终止才被销毁。及时函数结束执行也不影响</li>
+<li>没有显式的初始值，执行 <strong>值初始化</strong>；内置类型的局部静态变量初始化为0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>函数声明<ul>
+<li>函数名字必须在使用前声明</li>
+<li>函数声明无需函数体，用一个分号替代即可</li>
+<li>声明时可以写上形参的名字</li>
+<li><strong>也被称作函数原型</strong></li>
+<li>三要素（返回类型 函数名 形参类型）描述了函数的接口，说明了调用该函数所需的全部信息</li>
+<li>在头文件中函数声明，在源文件中定义，<strong>包含函数声明头文件</strong></li>
+</ul>
+</li>
+<li>分离式编译：把程序分割到几个文件中去，每个文件独立编译<ul>
+<li>分别编译代码文件</li>
+<li>产生后缀名是.obj（win）或.o（UNIX）的文件，代表该文件包含对象代码</li>
+<li>编译器把对象文件 <strong>链接</strong>在一起，形成可执行文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h4><ul>
+<li><p>每次调用函数都会重新创建它的形参，并用传入的实参对形参进行初始化</p>
+</li>
+<li><p>形参是引用，会绑定到实参上；实参被 引用传递，函数被 传引用调用。引用形参是对应实参的别名</p>
+</li>
+<li><p>否则将实参的值拷贝后赋给形参，形参和实参是两个相互独立的对象。实参被值传递，函数被传值调用。</p>
+</li>
+<li><p>传值参数</p>
+<ul>
+<li>初始化 非引用类型的变量，初始值拷贝给变量。对变量的改动不影响初始值</li>
+<li>传值参数同上，函数对形参做的所有操作都不会影响实参 </li>
+<li>指针形参：指针形参和指针实参是两个不同的指针，但指向同一个值。可以通过指针形参改变实参所指对象的值，但实参本身没有改变。</li>
+<li>建议使用引用类型的形参代替指针，访问函数外部对象</li>
+</ul>
+</li>
+<li><p>传引用参数</p>
+<ul>
+<li><p>使用引用形参，允许函数改变一个或多个实参的值</p>
+</li>
+<li><p>某种类型不支持拷贝时，函数只能通过引用形参访问该类型的对象</p>
+</li>
+<li><p>使用引用来避免拷贝，但如果函数无须拷贝，形参最好使用常量引用</p>
+</li>
+<li><p>给函数传入额外的引用实参</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Three</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> &amp;b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//传入额外的引用实参b，是的函数被调用时，除了修改a的值外，返回额外的信息b</span></span><br><span class="line">	a=<span class="number">3</span>;</span><br><span class="line">	b++;</span><br><span class="line">	<span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;Three(j,k);<span class="comment">//输出3</span></span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;k&lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出k=1</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>const形参和实参</p>
+<ul>
+<li><p>用实参初始化形参时，会忽略顶层const。形参有顶层const时，传给它常量或非常量都可以。但可出现如下情况：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//错误，重复定义f(int)。因为顶层const被忽略，传入这两个函数的参数可以完全一样，形参列表没有明显区别，因此算作重复定义。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指针或引用实参 与 const</p>
+<ul>
+<li>参数传递的初始化规则与指针、引用的初始化一致</li>
+</ul>
+</li>
+<li><p>尽量使用常量引用</p>
+<ul>
+<li>普通引用会限制函数接收的实参类型（const对象、字面值、类型转换对象…)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数组形参</p>
+<ul>
+<li><p>不允许拷贝数组–无法以值传递的方式使用数组参数</p>
+</li>
+<li><p>使用数组时通常转为指针–传数组给函数时，实际上传递的是指向数组首元素的指针</p>
+</li>
+<li><p>可以把形参写成类似数组的形式，实参会自动转换为指向数组首元素的指针，匹配形参类型</p>
+<ul>
+<li>以数组作为形参的函数也必须确保使用数组时不越界</li>
+</ul>
+</li>
+<li><p>数组以指针的形式传给函数，但不知道数组的确切尺寸，因此需要提供额外的信息</p>
+</li>
+<li><p>管理指针形参的三种常用技术</p>
+<ul>
+<li>要求数组本身含有一个结束标记，防止越界</li>
+<li>使用标准库规范：向函数传递指向数组首元素和尾后元素的指针，传入的指针正确就安全</li>
+<li>显式传递一个表示数组大小的形参<ul>
+<li>专门定义一个表示数组大小的形参，和一个表示数组大小的形参</li>
+<li>传递的数组大小不超过实际大小，就是安全的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>不需要对数组执行写操作时，<strong>数组形参是指向const的指针</strong>；要改变数组元素值时，才把形参定义成非向量的指针</p>
+</li>
+<li><p>形参也可以是数组的引用</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span> (&amp;arr)[<span class="number">10</span>])</span><span class="comment">//形参是数组的引用，维度是类型的一部分</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> elem:arr)</span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//限制了print的可用性，实参必须是大小为10的数组</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>传递多维数组：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span> (*matrix)[<span class="number">10</span>],<span class="keyword">int</span> rowSize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//max指向数组的首元素，该数组的元素是 由10个整数构成的数组</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//等价定义</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span> matrix[][<span class="number">10</span>],<span class="keyword">int</span> rowSize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>main：处理命令行选项</p>
+<ul>
+<li><p>main函数的可选形参</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//等价定义</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>argv是一个数组，元素是C风格字符串的指针；argc表示argv数组中字符串的数量</p>
+</li>
+<li><p>实参传给main函数之后，argv的第一个元素指向程序的名字或空字符串，接下来的元素依次传递命令行提供的实参，最后一个指针之后的元素保证为0</p>
+</li>
+<li><p>使用argv的实参时，可选的实参从argv[1]开始；argv[0]保存程序的名字，<strong>而非用户输入</strong></p>
+</li>
+</ul>
+</li>
+<li><p>含有可变形参的函数</p>
+<ul>
+<li>有时无法提前预知要向函数传递几个实参</li>
+<li>c++11提供两种主要方法<ul>
+<li>若所有实参类型相同，可以传递一个名为initializer_list的标准库类型</li>
+<li>若实参类型不同，可以编写一种特殊的函数，也就是可变参数模板</li>
+</ul>
+</li>
+<li>initializer_list形参<ul>
+<li>标准库类型，表示 某种特定类型的值 的数组</li>
+<li>定义在同名头文件中</li>
+<li>和vector一样是一种模板类型</li>
+<li><strong>其中的元素永远是常量型，无法改变其中元素的值</strong></li>
+<li>向initializer_list形参中传递一个值的序列，需要把序列放在花括号内</li>
+<li>含有initializer_list形参的函数，也可以同时拥有其他形参</li>
+</ul>
+</li>
+<li>省略符形参（…)<ul>
+<li>使用了名为varargs的C标准库功能</li>
+<li>仅用于C和C++通用的类型，大多数类对象传给省略符形参时都不能正确拷贝</li>
+<li>只能出现在形参列表的最后一个位置</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="返回类型和return语句"><a href="#返回类型和return语句" class="headerlink" title="返回类型和return语句"></a>返回类型和return语句</h4><ul>
+<li><p>return语句终止当前正在执行的函数，并将控制权返回到调用该函数的地方。</p>
+</li>
+<li><p>无返回值函数：</p>
+<ul>
+<li>返回类型是void的函数</li>
+<li>函数的最后一句后会隐式执行return</li>
+<li>想提前退出，用return</li>
+<li>void函数也能返回表达式，但必须是另一个返回void的函数</li>
+</ul>
+</li>
+<li><p>有返回值函数</p>
+<ul>
+<li><p>函数内的return必须返回一个值</p>
+</li>
+<li><p>返回值的类型必须与函数的返回类型相同，或能隐式转换为函数的返回类型</p>
+</li>
+<li><p>具有返回值的函数只能通过一条有效的return语句退出</p>
+</li>
+<li><p>含有return语句的循环后面应该也有一条return语句。</p>
+</li>
+<li><p>返回值的方式和初始化一个变量或形参是一样的：返回的值用于初始化调用点的一个临时量，即函数调用的结果</p>
+</li>
+<li><p>不要返回局部对象的引用或指针</p>
+<ul>
+<li><p>函数完成后，所占的存储空间也被释放，此时局部变量的引用将指向无效的内存区域</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> <span class="built_in">string</span> &amp;<span class="title">manip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> ret;</span><br><span class="line">	<span class="keyword">if</span>(!ret.empty())<span class="keyword">return</span> ret;<span class="comment">//错误，返回局部对象的引用</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> <span class="string">"Empty"</span>;<span class="comment">//错误，字面值转换为局部临时的string对象，返回局部临时量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>返回局部对象的引用和指针都是错误的</p>
+</li>
+</ul>
+</li>
+<li><p>返回类 类型的函数和调用运算符</p>
+<ul>
+<li>若函数返回指针、引用或类的对象，就能使用调用结果访问结果对象的成员</li>
+</ul>
+</li>
+<li><p>引用返回左值</p>
+<ul>
+<li>函数的返回类型决定函数调用是否是左值</li>
+<li>调用一个 返回引用 的函数得到左值，可以放在赋值语句的左侧；调用其他函数得到右值。</li>
+<li>若返回类型是常量引用，不能给调用的结果赋值。</li>
+</ul>
+</li>
+<li><p>列表初始化返回值</p>
+<ul>
+<li>c++11规定，函数可以返回花括号包围的值的列表，列表也对函数返回的临时量进行初始化</li>
+<li>若函数返回的是内置类型，花括号包围的列表最多包含一个值，且该值所占空间不能大于目标类型的空间</li>
+</ul>
+</li>
+<li><p>主函数main的返回值</p>
+<ul>
+<li><p>允许main函数没有返回值直接结束，编译器会在最后隐式插入一条返回0的return语句</p>
+</li>
+<li><p>cstdlib头文件定义了两个预处理变量，可以使用这两个变量表示成功或失败</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(some_failure)</span><br><span class="line">		<span class="keyword">return</span> EXIT_FAILURE;<span class="comment">//定义在cstdlib</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> EXIT_SUCCESS;<span class="comment">//定义在cstdlib</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>递归</p>
+<ul>
+<li>递归函数：调用自身</li>
+<li>递归循环：函数不断调用自身，直到程序栈空间耗尽</li>
+<li>main函数不能调用自身</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>返回数组指针</p>
+<ul>
+<li><p>函数不能返回数组，但可以返回数组的指针或引用</p>
+</li>
+<li><p>使用类型别名返回数组指针</p>
+</li>
+<li><p>声明一个返回数组指针的函数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> (*func(<span class="keyword">int</span> i))[<span class="number">10</span>];<span class="comment">//函数声明</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>func(int i)表示调用func函数需要一个int实参</li>
+<li>(*func(int i))表示可以对函数调用的结果执行解引用操作</li>
+<li>int (*func(int i)) [10]表示，对func的调用结果解引用，可以得到一个大小为10的int型数组</li>
+</ul>
+</li>
+<li><p>使用尾置返回类型</p>
+<ul>
+<li><p>c++11</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">auto func(int i) -&gt; int(*)[10]//func接收一个int型的实参，返回一个指针，指针指向大小为10的int型数组</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>尾置返回类型跟在形参列表后面，前面用auto代替原来的返回类型</p>
+</li>
+</ul>
+</li>
+<li><p>使用decltype</p>
+<ul>
+<li>如果我们知道函数返回的指针将指向哪个数组，就可以使用decltype关键字声明返回类型</li>
+<li>注意decltype的结果是数组，因此声明的函数返回指针时，还要记得加*号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h4><ul>
+<li><p>重载函数：同一作用域内的几个函数名字相同，但形参列表不同。</p>
+</li>
+<li><p>调用重载函数时，编译器根据传递的实参类型推断想要的是哪个函数</p>
+</li>
+<li><p>main函数不能重载</p>
+</li>
+<li><p>定义重载函数</p>
+<ul>
+<li>不允许两个函数除了返回类型外，其他所有的要素都相同</li>
+<li>不允许形参列表一样，但返回类型不同（报错</li>
+</ul>
+</li>
+<li><p>判断形参类型是否相异</p>
+<ul>
+<li>形参名字不影响形参列表的异同判断</li>
+<li>类型别名与形参异同无关</li>
+</ul>
+</li>
+<li><p>重载和const形参</p>
+<ul>
+<li>顶层const不影响传入函数的对象，因此顶层const无法区分形参异同</li>
+<li>底层const可以区分形参异同（指向常量还是非常量对象）<ul>
+<li>若传递非常量对象或指向非常量的指针，编译器优先选择非常量版本的函数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>有时不需要重载函数，以保留函数名中本来拥有的信息</p>
+</li>
+<li><p>const_cast和重载</p>
+<ul>
+<li><p>一个函数的形参和返回类型都是const型</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//参数和返回类型都是const string的引用，实参可以是非常量，但结果还是const string的引用。</span></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="built_in">string</span> &amp;<span class="title">f</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;s1,<span class="keyword">const</span> <span class="built_in">string</span> &amp;s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> s1.<span class="built_in">size</span>()&lt;=s2.<span class="built_in">size</span>()?s1:s2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//重载函数，实参不是常量时，返回普通的引用</span></span><br><span class="line"><span class="function"><span class="built_in">string</span> &amp;<span class="title">f</span><span class="params">(<span class="built_in">string</span> &amp;s1,<span class="built_in">string</span> &amp;s2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//实参强制转换为对const的引用，以调用上面的函数，函数返回对const的引用</span></span><br><span class="line">	<span class="keyword">auto</span> &amp;r=f(<span class="keyword">const_cast</span>&lt;<span class="keyword">const</span> <span class="built_in">string</span>&amp;&gt;(s1),<span class="keyword">const_cast</span>&lt;<span class="keyword">const</span> <span class="built_in">string</span>&amp;&gt;(s2));</span><br><span class="line">	<span class="comment">//返回值实际上绑定的是非const的值，因此强制转换为普通的引用，并返回。</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">const_cast</span>&lt;<span class="built_in">string</span>&amp;&gt;(r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这个重载函数的意义：如果直接强制转换第一个函数的返回类型，有可能会把绑定const的const引用转换为非const引用，这是不安全的。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用重载的函数</p>
+<ul>
+<li>函数匹配/重载确定：把函数调用与一组重载函数中的某一个 关联起来</li>
+<li>复杂的情况：重载函数的参数数量相同，且参数类型可以相互转换</li>
+<li>三种可能结果<ul>
+<li>编译器找到了与实参 最佳匹配 的函数，并调用该函数</li>
+<li>找不到任何一个函数与调用的实参匹配，编译器报 无匹配 的错误</li>
+<li>有多于一个函数可以匹配，但都不是最佳选择，报错。二义性调用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>重载与作用域</p>
+<ul>
+<li>尽量不在局部作用域中声明函数</li>
+<li>若在内层作用域中声明名字，<strong>它将隐藏外层作用域中声明的同名实体</strong></li>
+<li>在不同的作用域中无法重载函数名</li>
+<li>c++中，名字查找发生在类型检查之前</li>
+</ul>
+</li>
+</ul>
+<h4 id="特殊用途语言特性"><a href="#特殊用途语言特性" class="headerlink" title="特殊用途语言特性"></a>特殊用途语言特性</h4><ul>
+<li><p>默认实参</p>
+<ul>
+<li><p>在函数的很多次调用中，总是被赋予一个相同的值的形参。反复出现的值就是默认实参</p>
+</li>
+<li><p>可以在函数声明时，为形参提供默认实参</p>
+</li>
+<li><p>一旦某个形参被赋予了默认值，<strong>后面的所有形参都必须有默认值</strong></p>
+</li>
+<li><p>使用默认实参调用函数</p>
+<ul>
+<li>在调用函数时省略该实参</li>
+<li>调用时，实参按位置解析，默认实参填补缺少的尾部实参（靠右侧）</li>
+<li>合理设置形参的顺序，不怎么使用默认值的形参出现在前面</li>
+</ul>
+</li>
+<li><p>默认实参声明</p>
+<ul>
+<li>在给定的作用域中，一个形参只能被赋予一次默认实参</li>
+<li>函数的后续声明只能为之前没有默认值的形参添加 默认实参</li>
+</ul>
+</li>
+<li><p>默认实参初始值</p>
+<ul>
+<li><p>局部变量不能作为默认实参</p>
+</li>
+<li><p>表达式类型能转换成形参所需的类型，该表达式就能作为默认实参</p>
+</li>
+<li><p>用作默认实参的名字在函数声明所在的作用域内解析，这些名字的求值过程发生在函数调用时</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">string</span>::size_type sz;<span class="comment">//类型别名</span></span><br><span class="line">sz wd=<span class="number">80</span>;</span><br><span class="line"><span class="keyword">char</span> def=<span class="string">' '</span>;</span><br><span class="line"><span class="function">sz <span class="title">ht</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">screen</span><span class="params">(sz=ht(),sz=wd,<span class="keyword">char</span>=def)</span></span>;<span class="comment">//使用默认实参声明函数</span></span><br><span class="line"><span class="built_in">string</span> window =screen();<span class="comment">//调用screen(ht(),80,' ')</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	def=<span class="string">'*'</span>;<span class="comment">//改变默认实参的值</span></span><br><span class="line">	sz wd=<span class="number">100</span>;<span class="comment">//声明局部变量wd，隐藏了外层定义wd，但没有改变screen的默认实参，与screen的默认实参无关</span></span><br><span class="line">	window=screen();<span class="comment">//调用screen(ht(),80,'*')</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>内联函数和constexpr函数</p>
+<ul>
+<li>小规模操作定义为函数的优缺点<ul>
+<li>可读性更好</li>
+<li>确保相关操作统一</li>
+<li>更容易修改操作过程</li>
+<li>可以被其他应用重复利用</li>
+<li>调用函数会稍慢一点</li>
+</ul>
+</li>
+<li>内联函数可避免函数调用的开销<ul>
+<li>将函数在每个调用点上“内联地”展开，（直接在调用点展开</li>
+<li>函数的返回类型前加关键字<strong>inline</strong>，即可声明为内联函数</li>
+<li>内联说明 是向编译器发出的一个请求</li>
+<li>内联机制用于优化规模较小、流程直接、频繁调用的函数</li>
+<li>很多编译器不支持内联递归函数</li>
+</ul>
+</li>
+<li>constexpr函数<ul>
+<li>能作用于常量表达式的函数</li>
+<li>函数的返回类型及所有形参的类型都得是字面值类型</li>
+<li>函数体中有且只有一条return语句</li>
+<li>函数体内除了return，可以包含其他语句，但这些语句在运行时不能执行任何操作</li>
+<li>constexpr函数不一定返回常量表达式</li>
+</ul>
+</li>
+<li>把内联函数和constexpr函数放在头文件内<ul>
+<li>对于给定的内联函数或constexpr函数，它的多个定义必须完全一致</li>
+<li>因此内联函数和constexpr函数，通常定义在头文件中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调试帮助</p>
+<ul>
+<li><p>程序可以包含调试代码，但只在开发程序时使用。程序编写完准备发布时，要先屏蔽掉调试代码</p>
+</li>
+<li><p>assert预处理宏</p>
+<ul>
+<li>预处理宏：预处理变量</li>
+<li>assert宏定义在cassert头文件中</li>
+<li>对assert的表达式求值，若表达式为假（0），assert输出信息并终止程序执行；若表达式为真（非0），assert什么也不做</li>
+<li>宏名字在程序内必须唯一，最好不要为了其他目的使用assert</li>
+<li>常用于检查“不能发生”的条件</li>
+</ul>
+</li>
+<li><p>NDEBUG预处理变量</p>
+<ul>
+<li><p>assert的行为依赖于NDEBUG预处理变量的状态</p>
+</li>
+<li><p>若定义了NDEBUG，assert什么也不做；默认状态下没有定义NDEBUG，assert将执行运行时检查</p>
+</li>
+<li><p>可以使用#define语句定义NDEBUG，从而关闭调试状态</p>
+</li>
+<li><p>很多编译器提供了命令行选项使我们可以定义预处理变量</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ CC -D NDEBUG main.C # use /D with the Microsoft compiler</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这条命令在main.C文件的一开始写#define NDEBUG</p>
+</li>
+<li><p>定义NDEBUG能避免检查各种条件所需的运行时开销，此时不会执行运行时检查</p>
+</li>
+<li><p>assert仅用于验证 确实不可能发生的事情</p>
+</li>
+<li><p>也可以使用NDEBUG编写自己的条件调试代码</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//若NDEBUG未定义，执行之间的代码；否则代码被忽略</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NDEBUG</span></span><br><span class="line">	...</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译器定义的局部静态变量，便于调试</p>
+<ul>
+<li>__ func __ 当前调试的函数名</li>
+<li>__ FILE __ 存放文件名的字符串字面值</li>
+<li>__ LINE __ 存放当前行号的整型字面值</li>
+<li>__ TIME __ 存放文件编译时间的字符串字面值</li>
+<li>__ DATE __ 存放文件编译日期的字符串字面值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="函数匹配"><a href="#函数匹配" class="headerlink" title="函数匹配"></a>函数匹配</h4><ul>
+<li><p>对于几个重载函数的形参数量相等，某些形参的类型可以由其他类型转换，该怎么选重载函数？</p>
+</li>
+<li><p>确定候选函数和可行函数</p>
+<ul>
+<li>选定候选函数：本次调用对应的重载函数集 中的函数<ul>
+<li>与被调用的函数同名</li>
+<li>声明在调用点可见</li>
+</ul>
+</li>
+<li>考察本次调用提供的实参，从候选函数中选出能被这组实参调用的函数–<strong>可行函数</strong><ul>
+<li>形参数量与调用提供的实参数量相等</li>
+<li>每个实参的类型与对应的形参类型相同，或能转换成形参的类型</li>
+</ul>
+</li>
+<li>若函数含有默认实参，调用时传入的实参数量可能少于实际使用的实参数量</li>
+<li>若没找到可行函数，编译器报错：无匹配函数</li>
+</ul>
+</li>
+<li><p>寻找最佳匹配</p>
+<ul>
+<li>从可行函数中选择与本次调用最匹配的函数（形参与实参 最匹配）<ul>
+<li>形参与实参类型越接近，匹配得越好</li>
+<li>精确匹配&gt;类型转换的匹配</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>含有多个形参的函数匹配</p>
+<ul>
+<li>匹配条件<ul>
+<li>该函数每个实参的匹配都不劣于其他可行函数的匹配</li>
+<li>至少有一个实参的匹配优于其他可行函数提供的匹配</li>
+</ul>
+</li>
+<li>若检查所有实参后，没有一个函数脱颖而出，则报调用错误：二义性调用</li>
+</ul>
+</li>
+<li><p>调用重载函数时，应尽量避免强制类型转换。</p>
+</li>
+<li><p>实参类型转换</p>
+<ul>
+<li><p>优先级</p>
+<ul>
+<li>精确匹配：实参=形参，数组或函数转指针，实参的顶层const</li>
+<li>const转换实现的匹配</li>
+<li>类型提升实现的匹配</li>
+<li>算术类型转换或指针转换实现的匹配</li>
+<li>类 类型转换实现的匹配</li>
+</ul>
+</li>
+<li><p>小整型会直接提升到int或更大，若有int和short形参的重载，会直接提到int，匹配int版本</p>
+</li>
+<li><p>所有算术转换的优先级一样，double既能转换为long也能转换为float，因此double型调这两个版本的重载，会报二义性调用错误</p>
+</li>
+<li><p>函数匹配和const实参</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">Record <span class="title">lookup</span><span class="params">(Account&amp;)</span></span>;<span class="comment">//形参是普通引用</span></span><br><span class="line"><span class="function">Record <span class="title">lookup</span><span class="params">(<span class="keyword">const</span> Account&amp;)</span></span>;<span class="comment">//形参是常量引用</span></span><br><span class="line"><span class="keyword">const</span> Account a;<span class="comment">//常量对象a</span></span><br><span class="line">Account b;<span class="comment">//非常量对象b</span></span><br><span class="line"></span><br><span class="line">lookup(a);<span class="comment">//调用lookup(const Account&amp;)，a是常量对象，只有常量引用能绑定常量对象</span></span><br><span class="line">lookup(b);<span class="comment">//调用lookup(Account&amp;)，b是非常量对象，若形参是常量引用，会发生类型转换；因此选择精确匹配的非常量引用版本</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>引用：如果两个函数的唯一区别是形参是常量引用或非常量引用，编译器通过实参来确定选择哪个函数，具体如上</li>
+<li>指针：若两个函数的唯一区别是指针形参指向常量或非常量，则编译器能通过实参决定选择哪个函数，实参指向常量，调const*的函数；实参指向非常量，调普通指针的函数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h4><ul>
+<li><p>指向函数而非对象</p>
+</li>
+<li><p>函数的类型由返回类型和形参类型共同决定，与函数名无关</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;<span class="comment">//声明一个int函数f</span></span><br><span class="line"><span class="keyword">int</span> （*pf）（<span class="keyword">int</span> a,<span class="keyword">int</span> b);<span class="comment">//pf指向一个函数，该函数的形参是两个int，返回int</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> *<span class="title">pf</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;<span class="comment">//pf是一个函数，该函数形参是两个int，返回指向int的指针</span></span><br><span class="line"><span class="comment">//指针两端的括号不能少，不然意思就一样</span></span><br><span class="line"></span><br><span class="line">pf=f;<span class="comment">//pf指向函数f</span></span><br><span class="line">pf=&amp;f;<span class="comment">//与上一条等价，取地址符可选</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//调用函数指针,以下三种调用等价</span></span><br><span class="line"><span class="keyword">int</span> k1=pf(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">int</span> k2=(*pf)(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">int</span> k3=f(<span class="number">1</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用函数指针</p>
+<ul>
+<li>把函数名作为一个值使用时，该函数自动转换为指针</li>
+<li>指向不同函数类型的指针之间没有转换规则</li>
+<li>可以给函数指针赋一个nullptr或值为0的整型常量表达式，表示该指针没有指向任何一个函数</li>
+<li>给函数指针赋值，注意类型要精确匹配</li>
+</ul>
+</li>
+<li><p>重载函数的指针</p>
+<ul>
+<li>若定义了重载函数的指针，编译器通过指针类型决定选哪个函数，指针类型必须与重载函数中的某一个精确匹配</li>
+</ul>
+</li>
+<li><p>函数指针形参</p>
+<ul>
+<li>不能定义函数 类型的形参，但形参可以是指向函数的指针</li>
+<li>可以直接把函数作为实参使用，此时它会自动转换成指针</li>
+<li>可以用typedef和decltype简化函数指针的形参声明</li>
+</ul>
+</li>
+<li><p>返回指向函数的指针</p>
+<ul>
+<li><p>不能返回一个函数，但可以返回指向函数类型的指针</p>
+</li>
+<li><p>返回类型必须写成指针形式</p>
+</li>
+<li><p>使用类型别名，声明 返回函数指针 的函数；必须显式地将返回类型指定为指针</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> F=<span class="keyword">int</span>(<span class="keyword">int</span>*,<span class="keyword">int</span>);<span class="comment">//F是函数类型的别名</span></span><br><span class="line"><span class="keyword">using</span> PF=<span class="keyword">int</span> (*)(<span class="keyword">int</span>*,<span class="keyword">int</span>);<span class="comment">//PF是指向函数的指针的别名</span></span><br><span class="line"></span><br><span class="line"><span class="function">PF <span class="title">f1</span><span class="params">(<span class="keyword">int</span>)</span></span>;<span class="comment">//正确：f1返回指向函数的指针PF</span></span><br><span class="line"><span class="function">F <span class="title">f1</span><span class="params">(<span class="keyword">int</span>)</span></span>;<span class="comment">//错误：f1不能返回函数类型</span></span><br><span class="line"><span class="function">F *<span class="title">f1</span><span class="params">(<span class="keyword">int</span>)</span></span>;<span class="comment">//正确：f1返回指向函数F的指针</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//直接声明f1，f1有形参列表，f1是函数，返回一个指针，指针指向一个返回int型的，形参是一个int的函数</span></span><br><span class="line"><span class="keyword">int</span> (*f1(<span class="keyword">int</span>))(<span class="keyword">int</span>*,<span class="keyword">int</span>);</span><br><span class="line"><span class="comment">//使用尾置返回类型的方式声明：返回函数指针的函数</span></span><br><span class="line">auto f1(int) -&gt; int (*)(int*,int);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>将auto和decltype用于函数指针类型</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f2</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br><span class="line"><span class="keyword">decltype</span>(f1) *f3(<span class="keyword">int</span> a);<span class="comment">//声明函数f3，返回一个指向f1或f2的指针</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>二义性调用</li>
+<li>自动对象</li>
+<li>最佳匹配</li>
+<li>候选函数</li>
+<li>内联函数</li>
+<li>对象生命周期</li>
+<li>重载函数</li>
+<li>值传递/引用传递</li>
+<li>递归循环</li>
+<li>分离式编译</li>
+<li>尾置返回类型</li>
+<li>可行函数</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第三章</title>
+    <url>/2020/07/15/c-primer-3/</url>
+    <content><![CDATA[<h3 id="第3章-字符串、向量和数组"><a href="#第3章-字符串、向量和数组" class="headerlink" title="第3章 字符串、向量和数组"></a>第3章 字符串、向量和数组</h3><p>c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。</p>
+<p>本章将分别介绍数组以及标准库类型string和vector。</p>
+<a id="more"></a>
+
+<h4 id="命名空间的using声明"><a href="#命名空间的using声明" class="headerlink" title="命名空间的using声明"></a>命名空间的using声明</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span>::name</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>每个名字需要独立的using声明</li>
+<li>头文件中不应使用using声明</li>
+</ul>
+<h4 id="标准库类型string"><a href="#标准库类型string" class="headerlink" title="标准库类型string"></a>标准库类型string</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>定义和初始化string对象</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s4</span><span class="params">(<span class="number">10</span>,<span class="string">'c'</span>)</span></span>;<span class="comment">//字符c重复10次 即cccccccccc</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接初始化（不使用等号）和拷贝初始化（使用等号）</p>
+</li>
+<li><p>string对象上的操作</p>
+<ul>
+<li><p>读取时，string自动忽略开头的空白，从第一个真正的字符开始读起，直到遇见下一处空白。</p>
+</li>
+<li><p>读取未知数量的string对象：while(cin&gt;&gt;word){…}. 流有效则循环读取。</p>
+</li>
+<li><p>使用getline读取一整行（包括空白符。getline返回 流参数。<strong>首先从输入流中读入内容（包括换行符），之后存入string对象（不存换行符）</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> <span class="built_in">line</span>;</span><br><span class="line">	<span class="keyword">while</span>(getline(<span class="built_in">cin</span>,<span class="built_in">line</span>))	<span class="comment">//每次读一整行，直到文件末尾</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">line</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>empty函数，根据string对象是否为空返回bool值。<code>line.empty()</code> </p>
+</li>
+<li><p>size函数返回长度（string对象中字符个数）<code>line.size()</code>，返回<strong>string::size_type类型</strong>的值，<strong>无符号类型</strong>。不要在表达式中和带符号类型混用（会自动转换）</p>
+</li>
+<li><p>比较string对象：对大小写敏感。长度相等比字典序，否则比长度。</p>
+</li>
+<li><p>string对象赋值：等号</p>
+</li>
+<li><p>相加：两个string串接</p>
+<ul>
+<li><p>和字面值相加：必须确保每个 + 两侧的对象至少有一个是string</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">string</span> s6=s1+<span class="string">","</span>+<span class="string">"world"</span>;<span class="comment">//ok，等价于下一行</span></span><br><span class="line"><span class="built_in">string</span> s6=(s1+<span class="string">","</span>)+<span class="string">"world"</span>;<span class="comment">//每个加号两侧都至少有一个string</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>字符串字面值与string是 <strong>不同的类型</strong></p>
+</li>
+</ul>
+</li>
+<li><p>处理string对象中的字符</p>
+<ul>
+<li>cctype头文件</li>
+</ul>
+</li>
+<li><p>C++版本的c标准库头文件</p>
+<ul>
+<li>c语言头文件形如name.h  c++将这些文件命名为cname，去掉了h后缀。</li>
+<li>在cname头文件中定义的名字属于命名空间std，.h头文件中的不属于。</li>
+<li>C++程序应使用cname的头文件，名字总在命名空间std中，更方便。</li>
+</ul>
+</li>
+<li><p>基于范围的for语句–处理字符</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">"aaaaaa"</span>)</span></span>;</span><br><span class="line"><span class="comment">//每行输出str的一个字符</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> c:str)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;c&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范围for–改变字符串中的字符</p>
+<ul>
+<li><p>必须把循环变量定义为引用类型</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> &amp;c:s)</span><br><span class="line">&#123;</span><br><span class="line">	c=<span class="string">'a'</span>;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实际上改变了引用绑定的 字符串中实际字符的值</p>
+</li>
+</ul>
+</li>
+<li><p>访问string的单个字符</p>
+<ul>
+<li>使用下标<ul>
+<li>从0计起</li>
+<li>检查下标的合法性</li>
+</ul>
+</li>
+<li>使用迭代器<ul>
+<li>之后介绍….</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>逻辑 与 （&amp;&amp;）</p>
+<ul>
+<li>左侧运算对象为真时，再检查右侧运算对象</li>
+</ul>
+</li>
+</ul>
+<h4 id="标准库类型vector"><a href="#标准库类型vector" class="headerlink" title="标准库类型vector"></a>标准库类型vector</h4><ul>
+<li><p>vector表示对象的集合，其中所有对象的类型都相同。每个对象有一个与之对应的索引</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ivec;</span><br><span class="line"><span class="built_in">vector</span>&lt;Sales_item&gt; Sales_vec;	<span class="comment">//包含类的vector</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; file;	<span class="comment">//vector对象的vector</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>vector是一个类模板</p>
+<ul>
+<li>模板可以看作 编译器生成类或函数编写的一份说明</li>
+<li>实例化：编译器根据模板创建类或函数</li>
+<li>提供额外信息指定模板到底实例化成什么样的类</li>
+</ul>
+</li>
+<li><p>vector不是类型（是模板</p>
+</li>
+<li><p>vector不能包含引用（引用不是对象</p>
+</li>
+<li><p>定义和初始化</p>
+<ul>
+<li>默认初始化一个vector，创建一个空vector</li>
+<li>拷贝指定初始值，类型要相同</li>
+<li>列表初始化 用大括号{}</li>
+</ul>
+</li>
+<li><p><strong>三种初始化的特点</strong></p>
+<ul>
+<li>拷贝初始化（=）：只能提供一个初始值</li>
+<li>类内初始值只能使用 拷贝初始化 或 花括号初始化</li>
+<li>初始元素值的列表，只能放在花括号里{} 进行列表初始化。</li>
+</ul>
+</li>
+<li><p>创建指定数量的vector元素</p>
+</li>
+<li><p>值初始化：只提供元素数量而略去初始值。此时会创建 值初始化 的元素初值。</p>
+<ul>
+<li>初值由元素类型决定</li>
+<li>若有些 类 类型的元素必须明确提供初值，则必须提供元素初值</li>
+<li>若只提供元素数量，则只能使用 直接初始化。</li>
+<li>使用圆括号和花括号区分初始化<ul>
+<li>圆括号：提供的值用于构造vector（容量、元素初值….）</li>
+<li>花括号：列表初始化vector，括号内的值与元素类型匹配；若括号中的值不能列表初始化，则考虑构造vector</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>向vector对象中添加元素</p>
+<ul>
+<li>push_back：将一个值压到vector的尾端</li>
+<li>vector对象能高效增长，不需要先设定大小。先定义空vector，再加入具体值。</li>
+<li>不能用for循环向vector添加元素。for语句体内不应改变其遍历序列的大小。</li>
+</ul>
+</li>
+<li><p>其他vector操作</p>
+<ul>
+<li>for语句修改所有元素（若赋值需要用引用类型）</li>
+<li>两个vector比较 依据字典序。前提是vector中元素的值可比较。</li>
+<li>计算vector对象的索引，确认下标在合理范围内</li>
+<li>不能用下标形式添加vector元素，要用push_back</li>
+<li>只能对确定已存在的元素执行下标操作，否则会出现 缓冲区溢出  的错误。 尽可能使用for语句确保下标合法。</li>
+</ul>
+</li>
+</ul>
+<h4 id="迭代器介绍"><a href="#迭代器介绍" class="headerlink" title="迭代器介绍"></a>迭代器介绍</h4><p>所有标准库容器都可以使用迭代器，但只有少部分也支持下标。</p>
+<p>迭代器也提供了对 对象 的间接访问。</p>
+<p>有效的迭代器：指向某个元素 或 指向容器中尾元素的下个位置</p>
+<ul>
+<li>使用迭代器<ul>
+<li>有迭代器的类型也拥有 返回迭代器的成员</li>
+<li>begin成员：返回 指向第一个元素的迭代器</li>
+<li>end成员： 返回 指向容器（或string）“尾元素的下一个位置”的迭代器（尾后迭代器</li>
+<li>容器为空，则begin和end指向同一个迭代器（尾后迭代器</li>
+<li>不在意迭代器的准确类型，可用auto</li>
+<li>迭代器相等：指向的元素相同，或指向同一个尾后迭代器</li>
+<li>解引用（*）迭代器来获取所指元素，前提是迭代器合法且有所指。</li>
+<li>end返回的迭代器不能递增或解引用</li>
+<li><strong>泛型编程</strong>：c++ 比如在for循环中，尽可能使用迭代器和!= == ，所有标准库容器都定义了。但很多都没有定义&lt;和&gt;。</li>
+<li>迭代器类型：标准库使用iterator、const_iterator表示。const_iterator和常量指针类似</li>
+<li>迭代器：认定某个类型是迭代器–它支持一套操作，使我们能访问容器的元素 或 从某一个元素移动到另外一个元素</li>
+<li>begin和end返回的类型由对象是否是常量决定 iterator 或const_iterator</li>
+<li>cbegin，cend一定返回const_iterator</li>
+<li>箭头运算符：解引用+成员访问</li>
+<li>任何一种改变vector容量的操作，都会使它的迭代器失效。若循环体使用了迭代器，不要向对应容器添加元素。</li>
+</ul>
+</li>
+<li>迭代器运算<ul>
+<li>算术运算<ul>
+<li>迭代器距离，类型为difference_type 带符号整型。</li>
+</ul>
+</li>
+<li>使用迭代器运算<ul>
+<li>二分搜索：有序序列中寻找给定值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><ul>
+<li><p>存放 类型相同的对象 的容器。数组大小确定不变，不能随意向数组中添加元素。</p>
+</li>
+<li><p>不清楚元素确切个数–用vector</p>
+</li>
+<li><p>定义和初始化内置数组</p>
+<ul>
+<li><p>维度：数组元素的个数，必须是常量表达式。</p>
+</li>
+<li><p>数组元素被默认初始化。若在函数体内，默认初始化后，数组就会含有未定义的值</p>
+</li>
+<li><p>定义数组不能用auto推断列表</p>
+</li>
+<li><p>显示初始化：剩余元素被初始化为默认值。</p>
+</li>
+<li><p>字符串初始化字符数组时，要注意：字符串结尾有一个空字符。注意数组维度</p>
+</li>
+<li><p>不允许数组拷贝和赋值。一些编译器扩展支持数组赋值，但最好避免使用非标准特性。</p>
+</li>
+<li><p><strong>复杂的数组声明</strong>：从内向外阅读，优先级最高的决定这是什么</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptrs[<span class="number">10</span>];					<span class="comment">//指针的数组</span></span><br><span class="line"><span class="keyword">int</span> &amp;refs[<span class="number">10</span>]=<span class="comment">/* ??? */</span>;		<span class="comment">//引用的数组 不存在这种，引用不是对象</span></span><br><span class="line"><span class="keyword">int</span> (*Parray)[<span class="number">10</span>]= &amp;arr;		<span class="comment">//数组的指针</span></span><br><span class="line"><span class="keyword">int</span> (&amp;arrRef)[<span class="number">10</span>]= arr;			<span class="comment">//数组的引用</span></span><br><span class="line"><span class="keyword">int</span> *(&amp;arry)[<span class="number">10</span>]= ptrs;			<span class="comment">//指针的数组的引用</span></span><br><span class="line"><span class="keyword">int</span> (*(&amp;x))[<span class="number">10</span>]=Parray;  		<span class="comment">//数组的指针的引用</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>访问数组元素</p>
+<ul>
+<li>数组下标为size_t类型 无符号类型。在cstddef头文件中定义</li>
+<li>下标运算符由c++语言直接定义</li>
+<li>for语句遍历数组所有元素</li>
+<li>注意检查下标的值是否合法</li>
+</ul>
+</li>
+<li><p>指针和数组</p>
+<ul>
+<li>对数组元素取地址，可以得到指向该元素的指针</li>
+<li>编译器会将数组转换为 指向首元素的指针</li>
+<li>auto的初始值是数组时，会得到指针类型；但decltype返回的类型是数组</li>
+<li>数组的指针也是迭代器，同样，不能对尾后指针进行解引用或递增等操作。</li>
+<li>begin和end函数：将数组作为参数。分别返回首元素指针和尾后指针。 注意尾后指针不能解引用和递增</li>
+<li>指针运算：相减的结果类型是ptrdiff_t类型，是带符号类型，也定义在cstddef头文件中<ul>
+<li>运算同样适用于空指针 和 指向非数组的指针</li>
+</ul>
+</li>
+<li>解引用和指针运算的交互</li>
+<li>下标与指针：使用下标运算符时，编译器对指向数组的指针执行下标运算<ul>
+<li>·和标准库的string  vector 不同（下标无符号） ，<strong>数组的下标运算符可以处理负值</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>C风格字符串</p>
+<ul>
+<li>c++程序中最好不要使用</li>
+<li>C风格字符串是一种写法，字符串存在字符数组中，并以空字符结束。(‘\0’) 一般用指针操作</li>
+<li>C标准库string函数：定义在cstring头文件中。<ul>
+<li>传入此类函数的指针 <strong>必须指向空字符结尾的数组</strong></li>
+</ul>
+</li>
+<li>比较字符串：与比较string不同。若直接使用运算符比较，实际比较的是 指向数组首元素的指针<ul>
+<li>若两个指针未指向同一对象，将得到未定义的结果</li>
+<li>需要调用strcmp函数，比较字符串</li>
+</ul>
+</li>
+<li>使用strcpy和strcat函数拷贝和连接字符串数组，需要预先考虑数组大小。</li>
+<li>因此尽可能使用标准库的string，更安全也更高效</li>
+</ul>
+</li>
+<li><p>与旧代码的接口</p>
+<ul>
+<li>C++程序与旧代码的衔接</li>
+<li>混用string和c风格字符串<ul>
+<li>用空字符结尾的字符数组初始化string</li>
+<li>相关运算中，允许使用空字符结尾的数组作为 <strong>其中一个运算对象</strong></li>
+<li>string的成员函数c_str，返回一个c风格的字符串（返回指针指向空字符结尾的数组，指针类型为const char*。</li>
+<li>使用c_str函数，最好拷贝一份返回的数组进行后续操作</li>
+</ul>
+</li>
+<li>数组初始化vector对象<ul>
+<li>指明拷贝区域的首元素地址和尾后地址（使用对应指针构造）</li>
+</ul>
+</li>
+<li>C++程序尽量使用vector和迭代器，避免使用内置数组和指针；尽量使用string，避免使用c风格字符串</li>
+</ul>
+</li>
+</ul>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><p>C++的多维数组，其实是数组的数组。</p>
+<ul>
+<li>二维数组 第一维称为行，第二维称为列</li>
+<li>多维数组的初始化：花括号括起来的一组值初始化</li>
+<li>多维数组的下标引用：每个维度对应一个下标运算符</li>
+<li>范围for语句处理多维数组<ul>
+<li>若要改变元素的值，需要把控制变量声明为引用类型</li>
+<li><strong>除了最内层的循环外，其他所有循环的控制变量都应该是引用类型。防止外层变量被自动转成指针，内层就开始在指针内遍历（不合法）。</strong></li>
+</ul>
+</li>
+<li>指针和多维数组<ul>
+<li>程序使用多维数组的名字时，也会自动将其转换为指向首元素的指针，实际上是指向第一个内层数组的指针。</li>
+<li>可以使用auto或decltype，避免声明指针时，在数组前面加上指针类型。</li>
+<li>类型别名 简化 多维数组的指针</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>string对象是一个可变长的字符序列</li>
+<li>vector对象是一组同类型对象的容器</li>
+<li>迭代器允许对容器中的对象进行间接访问，可以用于访问string和vector的元素或在元素间移动</li>
+<li>数组和 指向数组的指针在一个较低的层次上实现了与标准库类型string和vector类似的功能。一般来说，应该优先选用标准库提供的类型，之后再考虑c++语言内置的底层替代品：数组和指针。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo文章更新较慢</title>
+    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
+    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
+<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/06/24/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>C++_primer_V5 学习笔记-第二章</title>
     <url>/2020/07/13/c-primer-2/</url>
     <content><![CDATA[<h3 id="第I部分-C-基础-（第2章-第7章）"><a href="#第I部分-C-基础-（第2章-第7章）" class="headerlink" title="第I部分 C++基础 （第2章-第7章）"></a>第I部分 C++基础 （第2章-第7章）</h3><h3 id="第2章-变量和基本类型"><a href="#第2章-变量和基本类型" class="headerlink" title="第2章 变量和基本类型"></a>第2章 变量和基本类型</h3><p>本章主要讲述内置类型，以及c++如何支持更复杂的数据类型。</p>
@@ -784,308 +1948,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++_primer_V5 学习笔记-第三章</title>
-    <url>/2020/07/15/c-primer-3/</url>
-    <content><![CDATA[<h3 id="第3章-字符串、向量和数组"><a href="#第3章-字符串、向量和数组" class="headerlink" title="第3章 字符串、向量和数组"></a>第3章 字符串、向量和数组</h3><p>c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。</p>
-<p>本章将分别介绍数组以及标准库类型string和vector。</p>
-<a id="more"></a>
-
-<h4 id="命名空间的using声明"><a href="#命名空间的using声明" class="headerlink" title="命名空间的using声明"></a>命名空间的using声明</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span>::name</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>每个名字需要独立的using声明</li>
-<li>头文件中不应使用using声明</li>
-</ul>
-<h4 id="标准库类型string"><a href="#标准库类型string" class="headerlink" title="标准库类型string"></a>标准库类型string</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">string</span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>定义和初始化string对象</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s4</span><span class="params">(<span class="number">10</span>,<span class="string">'c'</span>)</span></span>;<span class="comment">//字符c重复10次 即cccccccccc</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>直接初始化（不使用等号）和拷贝初始化（使用等号）</p>
-</li>
-<li><p>string对象上的操作</p>
-<ul>
-<li><p>读取时，string自动忽略开头的空白，从第一个真正的字符开始读起，直到遇见下一处空白。</p>
-</li>
-<li><p>读取未知数量的string对象：while(cin&gt;&gt;word){…}. 流有效则循环读取。</p>
-</li>
-<li><p>使用getline读取一整行（包括空白符。getline返回 流参数。<strong>首先从输入流中读入内容（包括换行符），之后存入string对象（不存换行符）</strong></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">string</span> <span class="built_in">line</span>;</span><br><span class="line">	<span class="keyword">while</span>(getline(<span class="built_in">cin</span>,<span class="built_in">line</span>))	<span class="comment">//每次读一整行，直到文件末尾</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">line</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>empty函数，根据string对象是否为空返回bool值。<code>line.empty()</code> </p>
-</li>
-<li><p>size函数返回长度（string对象中字符个数）<code>line.size()</code>，返回<strong>string::size_type类型</strong>的值，<strong>无符号类型</strong>。不要在表达式中和带符号类型混用（会自动转换）</p>
-</li>
-<li><p>比较string对象：对大小写敏感。长度相等比字典序，否则比长度。</p>
-</li>
-<li><p>string对象赋值：等号</p>
-</li>
-<li><p>相加：两个string串接</p>
-<ul>
-<li><p>和字面值相加：必须确保每个 + 两侧的对象至少有一个是string</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">string</span> s6=s1+<span class="string">","</span>+<span class="string">"world"</span>;<span class="comment">//ok，等价于下一行</span></span><br><span class="line"><span class="built_in">string</span> s6=(s1+<span class="string">","</span>)+<span class="string">"world"</span>;<span class="comment">//每个加号两侧都至少有一个string</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>字符串字面值与string是 <strong>不同的类型</strong></p>
-</li>
-</ul>
-</li>
-<li><p>处理string对象中的字符</p>
-<ul>
-<li>cctype头文件</li>
-</ul>
-</li>
-<li><p>C++版本的c标准库头文件</p>
-<ul>
-<li>c语言头文件形如name.h  c++将这些文件命名为cname，去掉了h后缀。</li>
-<li>在cname头文件中定义的名字属于命名空间std，.h头文件中的不属于。</li>
-<li>C++程序应使用cname的头文件，名字总在命名空间std中，更方便。</li>
-</ul>
-</li>
-<li><p>基于范围的for语句–处理字符</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">str</span><span class="params">(<span class="string">"aaaaaa"</span>)</span></span>;</span><br><span class="line"><span class="comment">//每行输出str的一个字符</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> c:str)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;c&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>范围for–改变字符串中的字符</p>
-<ul>
-<li><p>必须把循环变量定义为引用类型</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> &amp;c:s)</span><br><span class="line">&#123;</span><br><span class="line">	c=<span class="string">'a'</span>;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实际上改变了引用绑定的 字符串中实际字符的值</p>
-</li>
-</ul>
-</li>
-<li><p>访问string的单个字符</p>
-<ul>
-<li>使用下标<ul>
-<li>从0计起</li>
-<li>检查下标的合法性</li>
-</ul>
-</li>
-<li>使用迭代器<ul>
-<li>之后介绍….</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>逻辑 与 （&amp;&amp;）</p>
-<ul>
-<li>左侧运算对象为真时，再检查右侧运算对象</li>
-</ul>
-</li>
-</ul>
-<h4 id="标准库类型vector"><a href="#标准库类型vector" class="headerlink" title="标准库类型vector"></a>标准库类型vector</h4><ul>
-<li><p>vector表示对象的集合，其中所有对象的类型都相同。每个对象有一个与之对应的索引</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ivec;</span><br><span class="line"><span class="built_in">vector</span>&lt;Sales_item&gt; Sales_vec;	<span class="comment">//包含类的vector</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; file;	<span class="comment">//vector对象的vector</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>vector是一个类模板</p>
-<ul>
-<li>模板可以看作 编译器生成类或函数编写的一份说明</li>
-<li>实例化：编译器根据模板创建类或函数</li>
-<li>提供额外信息指定模板到底实例化成什么样的类</li>
-</ul>
-</li>
-<li><p>vector不是类型（是模板</p>
-</li>
-<li><p>vector不能包含引用（引用不是对象</p>
-</li>
-<li><p>定义和初始化</p>
-<ul>
-<li>默认初始化一个vector，创建一个空vector</li>
-<li>拷贝指定初始值，类型要相同</li>
-<li>列表初始化 用大括号{}</li>
-</ul>
-</li>
-<li><p><strong>三种初始化的特点</strong></p>
-<ul>
-<li>拷贝初始化（=）：只能提供一个初始值</li>
-<li>类内初始值只能使用 拷贝初始化 或 花括号初始化</li>
-<li>初始元素值的列表，只能放在花括号里{} 进行列表初始化。</li>
-</ul>
-</li>
-<li><p>创建指定数量的vector元素</p>
-</li>
-<li><p>值初始化：只提供元素数量而略去初始值。此时会创建 值初始化 的元素初值。</p>
-<ul>
-<li>初值由元素类型决定</li>
-<li>若有些 类 类型的元素必须明确提供初值，则必须提供元素初值</li>
-<li>若只提供元素数量，则只能使用 直接初始化。</li>
-<li>使用圆括号和花括号区分初始化<ul>
-<li>圆括号：提供的值用于构造vector（容量、元素初值….）</li>
-<li>花括号：列表初始化vector，括号内的值与元素类型匹配；若括号中的值不能列表初始化，则考虑构造vector</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>向vector对象中添加元素</p>
-<ul>
-<li>push_back：将一个值压到vector的尾端</li>
-<li>vector对象能高效增长，不需要先设定大小。先定义空vector，再加入具体值。</li>
-<li>不能用for循环向vector添加元素。for语句体内不应改变其遍历序列的大小。</li>
-</ul>
-</li>
-<li><p>其他vector操作</p>
-<ul>
-<li>for语句修改所有元素（若赋值需要用引用类型）</li>
-<li>两个vector比较 依据字典序。前提是vector中元素的值可比较。</li>
-<li>计算vector对象的索引，确认下标在合理范围内</li>
-<li>不能用下标形式添加vector元素，要用push_back</li>
-<li>只能对确定已存在的元素执行下标操作，否则会出现 缓冲区溢出  的错误。 尽可能使用for语句确保下标合法。</li>
-</ul>
-</li>
-</ul>
-<h4 id="迭代器介绍"><a href="#迭代器介绍" class="headerlink" title="迭代器介绍"></a>迭代器介绍</h4><p>所有标准库容器都可以使用迭代器，但只有少部分也支持下标。</p>
-<p>迭代器也提供了对 对象 的间接访问。</p>
-<p>有效的迭代器：指向某个元素 或 指向容器中尾元素的下个位置</p>
-<ul>
-<li>使用迭代器<ul>
-<li>有迭代器的类型也拥有 返回迭代器的成员</li>
-<li>begin成员：返回 指向第一个元素的迭代器</li>
-<li>end成员： 返回 指向容器（或string）“尾元素的下一个位置”的迭代器（尾后迭代器</li>
-<li>容器为空，则begin和end指向同一个迭代器（尾后迭代器</li>
-<li>不在意迭代器的准确类型，可用auto</li>
-<li>迭代器相等：指向的元素相同，或指向同一个尾后迭代器</li>
-<li>解引用（*）迭代器来获取所指元素，前提是迭代器合法且有所指。</li>
-<li>end返回的迭代器不能递增或解引用</li>
-<li><strong>泛型编程</strong>：c++ 比如在for循环中，尽可能使用迭代器和!= == ，所有标准库容器都定义了。但很多都没有定义&lt;和&gt;。</li>
-<li>迭代器类型：标准库使用iterator、const_iterator表示。const_iterator和常量指针类似</li>
-<li>迭代器：认定某个类型是迭代器–它支持一套操作，使我们能访问容器的元素 或 从某一个元素移动到另外一个元素</li>
-<li>begin和end返回的类型由对象是否是常量决定 iterator 或const_iterator</li>
-<li>cbegin，cend一定返回const_iterator</li>
-<li>箭头运算符：解引用+成员访问</li>
-<li>任何一种改变vector容量的操作，都会使它的迭代器失效。若循环体使用了迭代器，不要向对应容器添加元素。</li>
-</ul>
-</li>
-<li>迭代器运算<ul>
-<li>算术运算<ul>
-<li>迭代器距离，类型为difference_type 带符号整型。</li>
-</ul>
-</li>
-<li>使用迭代器运算<ul>
-<li>二分搜索：有序序列中寻找给定值</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><ul>
-<li><p>存放 类型相同的对象 的容器。数组大小确定不变，不能随意向数组中添加元素。</p>
-</li>
-<li><p>不清楚元素确切个数–用vector</p>
-</li>
-<li><p>定义和初始化内置数组</p>
-<ul>
-<li><p>维度：数组元素的个数，必须是常量表达式。</p>
-</li>
-<li><p>数组元素被默认初始化。若在函数体内，默认初始化后，数组就会含有未定义的值</p>
-</li>
-<li><p>定义数组不能用auto推断列表</p>
-</li>
-<li><p>显示初始化：剩余元素被初始化为默认值。</p>
-</li>
-<li><p>字符串初始化字符数组时，要注意：字符串结尾有一个空字符。注意数组维度</p>
-</li>
-<li><p>不允许数组拷贝和赋值。一些编译器扩展支持数组赋值，但最好避免使用非标准特性。</p>
-</li>
-<li><p><strong>复杂的数组声明</strong>：从内向外阅读，优先级最高的决定这是什么</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptrs[<span class="number">10</span>];					<span class="comment">//指针的数组</span></span><br><span class="line"><span class="keyword">int</span> &amp;refs[<span class="number">10</span>]=<span class="comment">/* ??? */</span>;		<span class="comment">//引用的数组 不存在这种，引用不是对象</span></span><br><span class="line"><span class="keyword">int</span> (*Parray)[<span class="number">10</span>]= &amp;arr;		<span class="comment">//数组的指针</span></span><br><span class="line"><span class="keyword">int</span> (&amp;arrRef)[<span class="number">10</span>]= arr;			<span class="comment">//数组的引用</span></span><br><span class="line"><span class="keyword">int</span> *(&amp;arry)[<span class="number">10</span>]= ptrs;			<span class="comment">//指针的数组的引用</span></span><br><span class="line"><span class="keyword">int</span> (*(&amp;x))[<span class="number">10</span>]=Parray;  		<span class="comment">//数组的指针的引用</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>访问数组元素</p>
-<ul>
-<li>数组下标为size_t类型 无符号类型。在cstddef头文件中定义</li>
-<li>下标运算符由c++语言直接定义</li>
-<li>for语句遍历数组所有元素</li>
-<li>注意检查下标的值是否合法</li>
-</ul>
-</li>
-<li><p>指针和数组</p>
-<ul>
-<li>对数组元素取地址，可以得到指向该元素的指针</li>
-<li>编译器会将数组转换为 指向首元素的指针</li>
-<li>auto的初始值是数组时，会得到指针类型；但decltype返回的类型是数组</li>
-<li>数组的指针也是迭代器，同样，不能对尾后指针进行解引用或递增等操作。</li>
-<li>begin和end函数：将数组作为参数。分别返回首元素指针和尾后指针。 注意尾后指针不能解引用和递增</li>
-<li>指针运算：相减的结果类型是ptrdiff_t类型，是带符号类型，也定义在cstddef头文件中<ul>
-<li>运算同样适用于空指针 和 指向非数组的指针</li>
-</ul>
-</li>
-<li>解引用和指针运算的交互</li>
-<li>下标与指针：使用下标运算符时，编译器对指向数组的指针执行下标运算<ul>
-<li>·和标准库的string  vector 不同（下标无符号） ，<strong>数组的下标运算符可以处理负值</strong>。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>C风格字符串</p>
-<ul>
-<li>c++程序中最好不要使用</li>
-<li>C风格字符串是一种写法，字符串存在字符数组中，并以空字符结束。(‘\0’) 一般用指针操作</li>
-<li>C标准库string函数：定义在cstring头文件中。<ul>
-<li>传入此类函数的指针 <strong>必须指向空字符结尾的数组</strong></li>
-</ul>
-</li>
-<li>比较字符串：与比较string不同。若直接使用运算符比较，实际比较的是 指向数组首元素的指针<ul>
-<li>若两个指针未指向同一对象，将得到未定义的结果</li>
-<li>需要调用strcmp函数，比较字符串</li>
-</ul>
-</li>
-<li>使用strcpy和strcat函数拷贝和连接字符串数组，需要预先考虑数组大小。</li>
-<li>因此尽可能使用标准库的string，更安全也更高效</li>
-</ul>
-</li>
-<li><p>与旧代码的接口</p>
-<ul>
-<li>C++程序与旧代码的衔接</li>
-<li>混用string和c风格字符串<ul>
-<li>用空字符结尾的字符数组初始化string</li>
-<li>相关运算中，允许使用空字符结尾的数组作为 <strong>其中一个运算对象</strong></li>
-<li>string的成员函数c_str，返回一个c风格的字符串（返回指针指向空字符结尾的数组，指针类型为const char*。</li>
-<li>使用c_str函数，最好拷贝一份返回的数组进行后续操作</li>
-</ul>
-</li>
-<li>数组初始化vector对象<ul>
-<li>指明拷贝区域的首元素地址和尾后地址（使用对应指针构造）</li>
-</ul>
-</li>
-<li>C++程序尽量使用vector和迭代器，避免使用内置数组和指针；尽量使用string，避免使用c风格字符串</li>
-</ul>
-</li>
-</ul>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><p>C++的多维数组，其实是数组的数组。</p>
-<ul>
-<li>二维数组 第一维称为行，第二维称为列</li>
-<li>多维数组的初始化：花括号括起来的一组值初始化</li>
-<li>多维数组的下标引用：每个维度对应一个下标运算符</li>
-<li>范围for语句处理多维数组<ul>
-<li>若要改变元素的值，需要把控制变量声明为引用类型</li>
-<li><strong>除了最内层的循环外，其他所有循环的控制变量都应该是引用类型。防止外层变量被自动转成指针，内层就开始在指针内遍历（不合法）。</strong></li>
-</ul>
-</li>
-<li>指针和多维数组<ul>
-<li>程序使用多维数组的名字时，也会自动将其转换为指向首元素的指针，实际上是指向第一个内层数组的指针。</li>
-<li>可以使用auto或decltype，避免声明指针时，在数组前面加上指针类型。</li>
-<li>类型别名 简化 多维数组的指针</li>
-</ul>
-</li>
-</ul>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>string对象是一个可变长的字符序列</li>
-<li>vector对象是一组同类型对象的容器</li>
-<li>迭代器允许对容器中的对象进行间接访问，可以用于访问string和vector的元素或在元素间移动</li>
-<li>数组和 指向数组的指针在一个较低的层次上实现了与标准库类型string和vector类似的功能。一般来说，应该优先选用标准库提供的类型，之后再考虑c++语言内置的底层替代品：数组和指针。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++_primer_V5 学习笔记-第五章</title>
     <url>/2020/07/21/c-primer-5/</url>
     <content><![CDATA[<h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
@@ -1281,285 +2143,5 @@
       <tags>
         <tag>学习笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第六章</title>
-    <url>/2020/07/21/c-primer-6/</url>
-    <content><![CDATA[<h3 id="第6章-函数"><a href="#第6章-函数" class="headerlink" title="第6章 函数"></a>第6章 函数</h3><p>本章首先介绍函数的定义和声明，接下来介绍重载函数的方法，以及编译器如何从函数的若干重载形式中选取一个与调用匹配的版本。最后，介绍一些关于函数指针的知识。</p>
-<a id="more"></a>
-
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第四章</title>
-    <url>/2020/07/17/c-primer-4/</url>
-    <content><![CDATA[<h3 id="第4章-表达式"><a href="#第4章-表达式" class="headerlink" title="第4章 表达式"></a>第4章 表达式</h3><p>本章主要介绍由语言本身定义、并用于内置类型运算对象的运算符，同时简单介绍几种标准库定义的运算符。</p>
-<a id="more"></a>
-
-<p>表达式由一个或多个运算对象组成，对表达式求值将得到一个结果。字面值和变量是最简单的表达式，其结果就是字面值和变量本身的值。</p>
-<p>把 一个运算符 和 一个或多个运算对象 组合起来，可以生成较复杂的表达式。</p>
-<h4 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h4><ul>
-<li>基本概念<ul>
-<li>一元运算符：作用于一个运算对象，如取地址符&amp;、解引用符*</li>
-<li>二元运算符：作用于两个运算对象，如相等==、乘法*</li>
-<li>三元运算符</li>
-<li>函数调用：特殊的运算符，对运算对象的数量没有限制</li>
-<li>一些符号能作为一元运算符、也能作为二元运算符，由上下文决定</li>
-<li>组合运算符与运算对象：优先级、结合律、运算对象的求值顺序</li>
-<li>运算对象转换：表达式求值时转换类型，小尺寸的整数类型常常被提升为大尺寸的整数类型</li>
-<li>重载运算符：运算符作用于类 类型的运算对象时，用户可以自行定义其含义，即重载运算符。<ul>
-<li>重载运算符可以定义运算对象的类型和返回值的类型，但对象个数、运算符优先级和结合律无法改变</li>
-</ul>
-</li>
-<li>左值和右值：c++的表达式不是右值就是左值<ul>
-<li>对象被用作右值：使用对象的值（内容</li>
-<li>对象被用作左值：使用对象的身份（在内存中的位置</li>
-<li>需要右值的地方可以用左值（也使用对象的内容）；需要左值的地方不能用右值</li>
-<li>使用decltype时，若表达式结果是左值，得到一个引用类型</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>优先级与结合律<ul>
-<li>复合表达式：含有两个或多个运算符的表达式。优先级和结合律决定了运算对象组合的方式，括号无视上述规则。</li>
-<li>高优先级运算符的运算对象比低优先级更紧密地结合在一起。</li>
-<li>若运算符的优先级相同，将按照从左向右的顺序组合运算对象。</li>
-</ul>
-</li>
-<li>求值顺序<ul>
-<li>若运算符没有指定执行顺序，若表达式指向并修改了同一个对象，将会引发错误并产生未定义的行为。</li>
-<li>4种运算符规定了求值顺序：逻辑与 逻辑或 条件运算符?:  逗号运算符，</li>
-<li>运算对象的求值顺序与优先级 结合律无关</li>
-<li>处理复合表达式<ul>
-<li>用括号强制让表达式的组合关系符合程序的逻辑要求</li>
-<li>若改变了某个运算对象的值，在表达式的其他地方不要再使用这个运算对象</li>
-<li>若改变运算对象的子表达式本身 就是 另外一个子表达式的运算对象时，该规则无效。<code>*++iter</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><ul>
-<li>能作用于任意算术类型（或能转换成算术类型的类型）</li>
-<li>运算对象和求值结果都是右值。</li>
-<li>表达式求值前，小整数类型会被提升为大整数类型，最终所有运算对象转换为同一种类型。</li>
-<li>一元正号运算符、加减运算符都能作用于指针，返回运算对象的一个副本。</li>
-<li>bool值不应该参与运算，会先被提升为int类型，造成相关错误。（bool值1求负号，变int型-1 转回bool 还是true）</li>
-<li>溢出和其他算术运算异常<ul>
-<li>除数是0 产生未定义结果</li>
-<li>溢出：计算结果超出该类型能表示的范围。结果不可预知，可能环绕，即符号位溢出被修改。</li>
-</ul>
-</li>
-<li>整数相除商还是整数，弃掉商的小数部分</li>
-<li>%取余：运算对象必须是整数类型。若m%n不等于0，则符号和m相同</li>
-</ul>
-<h4 id="逻辑运算符和关系运算符"><a href="#逻辑运算符和关系运算符" class="headerlink" title="逻辑运算符和关系运算符"></a>逻辑运算符和关系运算符</h4><ul>
-<li>逻辑运算符和关系运算符的返回值都是bool类型，运算对象和求值结果都是右值。</li>
-<li>逻辑与 和 逻辑或<ul>
-<li>先求左侧值，再求右侧值；</li>
-<li>短路求值：左侧运算对象无法确定 表达式结果 时，才会计算右侧表达式的值</li>
-</ul>
-</li>
-<li>基于范围的for循环中，将其中的元素声明为引用类型，可以避免对过大元素的拷贝</li>
-<li>逻辑非</li>
-<li>关系运算符<ul>
-<li>关系运算符尽量不要连写，可以用 逻辑与 连接</li>
-</ul>
-</li>
-<li>相等性测试与布尔字面值<ul>
-<li>比较运算时，除非比较的对象是bool型，不要用bool字面值true或false作为比较对象</li>
-</ul>
-</li>
-</ul>
-<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><ul>
-<li>赋值运算的结果是它的左侧运算对象，并且是一个左值。结果的类型是左侧运算对象的类型。</li>
-<li>若左右类型不同，右侧运算对象会转为左侧对象的类型</li>
-<li>C++11允许花括号括起来的初始值列表作为右侧对象<ul>
-<li>初始列表为空时，编译器创建一个值初始化的临时量，赋给左侧对象。</li>
-</ul>
-</li>
-<li>赋值运算符满足 右结合律</li>
-<li>多重赋值语句：其中的每一个对象，类型与右边对象相同，或可由右边对象类型转换得到。</li>
-<li>赋值运算符优先级 &lt; 关系运算符优先级，条件语句中，赋值部分加括号。</li>
-<li>切勿混淆赋值运算符和相等运算符</li>
-<li>复合赋值运算符：相比普通运算符（求值两次），复合运算符只求值一次。</li>
-</ul>
-<h4 id="递增和递减运算符"><a href="#递增和递减运算符" class="headerlink" title="递增和递减运算符"></a>递增和递减运算符</h4><ul>
-<li><p>前置和后置</p>
-<ul>
-<li>前置：运算对象先加1，然后将改变后的对象作为求值结果。将对象本身作为左值返回。</li>
-<li>后置：运算对象加1，求值结果是 改变前的运算对象的副本。将 对象原始值的副本 作为右值返回。</li>
-<li>尽可能不用后置版本，需要存储原始值，这种操作可能是一种浪费。</li>
-</ul>
-</li>
-<li><p>混用解引用和递增</p>
-<ul>
-<li><p>后置递增优先级 &gt; 解引用</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> pbeg=v.<span class="built_in">begin</span>();</span><br><span class="line"><span class="keyword">while</span>(pbeg!=v.<span class="built_in">end</span>() &amp;&amp; *pbeg&gt;=<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt; *pbeg++ &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//输出当前pbeg指向的值，并将指针pbeg向前移动一个位置</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; *(pbeg++) &lt;&lt;<span class="built_in">endl</span>;<span class="comment">//等价于上面一句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>赋值运算符左右两端用到了同一个运算对象并改变了值。可能出现未知错误</p>
-</li>
-</ul>
-<h4 id="成员访问运算符"><a href="#成员访问运算符" class="headerlink" title="成员访问运算符"></a>成员访问运算符</h4><ul>
-<li>点运算符：获取类对象的一个成员。结果和成员所属的对象一致。成员所属对象是左值，结果就是左值。</li>
-<li>箭头运算符：作用于指针类型的运算对象，结果是一个左值。</li>
-</ul>
-<h4 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符"></a>条件运算符</h4><ul>
-<li>把简单的if-else逻辑嵌入到单个表达式中。</li>
-<li>cond ?expr1:expr2</li>
-<li>首先求cond 的值，若条件为真，对expr1求值并返回，否则对expr2求值并返回。</li>
-<li>嵌套条件运算符</li>
-<li>条件运算符满足 右结合律</li>
-<li>嵌套不宜过多</li>
-<li>条件运算符优先级很低，在长表达式中通常要加括号</li>
-</ul>
-<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><ul>
-<li>作用于整数类型的运算对象，并把运算对象看成二进制位的集合</li>
-<li>提供检查和设置二进制位的功能</li>
-<li>小整型的对象值会被提升为较大的整数类型</li>
-<li>处理有符号类型的结果未知（依赖机器），因此尽量处理无符号类型</li>
-<li>移位运算符<ul>
-<li>&lt;&lt;和&gt;&gt;：对运算对象执行基于二进制位的移动操作</li>
-<li>右侧运算对象不能为负，且其值严格小于结果的位数。否则会产生未定义结果。</li>
-<li>移出边界外的位数被舍弃</li>
-</ul>
-</li>
-<li>位求反运算符<ul>
-<li>char类型先提升成int型</li>
-</ul>
-</li>
-<li>位与、位或、位异或运算符</li>
-<li>移位（IO）运算符满足左结合律</li>
-</ul>
-<h4 id="sizeof运算符"><a href="#sizeof运算符" class="headerlink" title="sizeof运算符"></a>sizeof运算符</h4><ul>
-<li><p>返回一条表达式或一个类型名字所占的字节数</p>
-</li>
-<li><p>满足右结合律</p>
-</li>
-<li><p>运算对象</p>
-<ul>
-<li>类型：返回类型大小</li>
-<li>表达式结果：返回结果的类型大小,并不计算实际对象的值</li>
-</ul>
-</li>
-<li><p>对象可以是未定义的指针，因为不计算具体值，指针并没有被真正使用</p>
-</li>
-<li><p>c++11允许使用作用域运算符来获取类成员的大小</p>
-</li>
-<li><p>sizeof运算符结果依赖于作用的类型</p>
-<ul>
-<li>对char执行，结果为1</li>
-<li>对引用执行：得到被引用对象所占空间大小</li>
-<li>对指针执行：得到指针本身所占空间大小</li>
-<li>对解引用指针执行：得到指针指向对象所占空间大小，指针不需要有效。</li>
-<li>对数组执行：得到整个数组所占空间大小，等价于对其中每个元素执行并求和。不会把数组转换为指针处理</li>
-<li>对string或vector处理：只返回该类型固定部分的大小，不计算其中的元素占多少空间</li>
-</ul>
-</li>
-<li><p>可以用数组大小除以单个元素大小，得到数组元素个数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">100</span>];</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">size_t</span> sz = <span class="keyword">sizeof</span>(ia) / <span class="keyword">sizeof</span>(*ia);</span><br><span class="line"><span class="keyword">int</span> arr2[sz];</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="逗号运算符"><a href="#逗号运算符" class="headerlink" title="逗号运算符"></a>逗号运算符</h4><ul>
-<li>两个运算对象，求值顺序从左到右</li>
-<li><strong>首先对左侧表达式求值，然后丢弃求值结果。真正的结果是右侧表达式的值</strong></li>
-</ul>
-<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><ul>
-<li>如果两种类型可以相互转换，那么它们就是关联的</li>
-<li>隐式转换：自动执行类型转换，尽可能避免损失精度</li>
-<li>何时发生隐式转换：<ul>
-<li>比int小的整数类型提升</li>
-<li>非布尔转换为布尔</li>
-<li>初始化时，初始值转换为变量类型；赋值语句中，右侧对象转换为左侧对象类型</li>
-<li>算术运算或关系运算的对象有多种类型，需要转换为同一种</li>
-<li>函数调用时</li>
-</ul>
-</li>
-<li>算术转换：一种算术类型转换为另一种算术类型<ul>
-<li>运算符的运算对象转换为最宽的类型</li>
-<li>表达式中既有浮点又有整数，整数转浮点</li>
-<li>无符号运算对象：整型提升-&gt;有无符号也有带符号类型<ul>
-<li>无符号类型大于带符号类型：带符号转为无符号</li>
-<li>无符号类型小于带符号类型：转换结果依赖机器，看无符号的所有值能否都存在带符号类型中，能就转为带符号</li>
-</ul>
-</li>
-<li>其他隐式类型转换<ul>
-<li>数组转换为指针</li>
-<li>指针的转换</li>
-<li>转换为布尔类型：0-false</li>
-<li>转换成常量：将指向非常量类型的指针转换为指向相应常量的指针</li>
-<li>类类型定义的转换：</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>显式转换<ul>
-<li>强制类型转换</li>
-<li>cast-name&lt; type &gt;(expression):cast-name指定执行哪一种转换，type是转换的目标类型，expression是待转换的值</li>
-<li>执行哪一种转换<ul>
-<li>static_cast：不包含底层const就可以用，较大的算数类型赋值给较小的类型；编译器无法自动执行的类型转换</li>
-<li>const_cast：只能改变运算对象的底层const，常量转非常量（去const），对象只能改变常量属性</li>
-<li>reinterpret_cast：为运算对象的位模式提供较低层次的重新解释。如改int指针为char指针，但所指还是int型对象。很可能在运行时引发错误</li>
-<li>dynamic_cast</li>
-</ul>
-</li>
-<li>避免强制类型转换</li>
-<li>旧式的强制类型转换：表现形式不那么清晰</li>
-</ul>
-</li>
-</ul>
-<h4 id="运算符优先级表"><a href="#运算符优先级表" class="headerlink" title="运算符优先级表"></a>运算符优先级表</h4><h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
-<li>对于超过一个运算符的表达式，理解其含义需要关键要理解优先级、结合律和求值顺序</li>
-<li>大多数运算符并不明确规定运算对象的求值顺序：编译器有权自由选择先对左侧或右侧运算对象求值；如果两个运算对象指向同一个对象，且其中一个改变了对象的值，就会导致程序的严重缺陷</li>
-<li>运算对象经常从原始类型自动转换成某种关联的类型，若需要的话，也可以进行显式的类型转换</li>
-</ul>
-<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
-<li>算术转换</li>
-<li>隐式转换</li>
-<li>整型提升</li>
-<li>短路求值</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/06/24/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>hexo文章更新较慢</title>
-    <url>/2020/06/28/hexo%E6%96%87%E7%AB%A0%E6%9B%B4%E6%96%B0%E8%BE%83%E6%85%A2/</url>
-    <content><![CDATA[<p>hexo的相关设置发布到github上生效慢，是chrome的浏览器缓存问题</p>
-<h4 id="解决方法：ctrl-f5刷新chrome页面缓存"><a href="#解决方法：ctrl-f5刷新chrome页面缓存" class="headerlink" title="解决方法：ctrl+f5刷新chrome页面缓存"></a>解决方法：ctrl+f5刷新chrome页面缓存</h4>]]></content>
   </entry>
 </search>
