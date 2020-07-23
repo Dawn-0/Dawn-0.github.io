@@ -580,6 +580,407 @@
       </tags>
   </entry>
   <entry>
+    <title>C++_primer_V5 学习笔记-第一章</title>
+    <url>/2020/07/13/c-primer-1/</url>
+    <content><![CDATA[<h3 id="第1章-开始"><a href="#第1章-开始" class="headerlink" title="第1章 开始"></a>第1章 开始</h3><p>本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。</p>
+<a id="more"></a>
+
+<h4 id="编写一个简单的C-程序"><a href="#编写一个简单的C-程序" class="headerlink" title="编写一个简单的C++程序"></a>编写一个简单的C++程序</h4><ul>
+<li>函数定义<ul>
+<li>返回类型</li>
+<li>函数名</li>
+<li>形参列表（允许为空</li>
+<li>函数体</li>
+</ul>
+</li>
+<li>main函数的返回类型必须为int。</li>
+<li><strong>内置类型（built-in-type）：语言自身定义的类型</strong></li>
+<li>函数体中使用return结束函数的执行，return返回的值与函数的返回类型相容</li>
+<li>大多数系统中，main的返回值被用来指示状态，返回0表示成功，非0值常用于指出错误类型</li>
+</ul>
+<h5 id="编译、运行程序"><a href="#编译、运行程序" class="headerlink" title="编译、运行程序"></a>编译、运行程序</h5><ul>
+<li><p>集成开发环境IDE：将编译器与其他程序创建和分析工具包装在一起</p>
+</li>
+<li><p>源文件：程序文件常被称为 <strong>源文件（source file</strong></p>
+</li>
+<li><p>源文件名字以后缀结尾：.cc .cxx .cpp .cp .C    …</p>
+</li>
+<li><p>命令行运行编译器</p>
+<ul>
+<li><p>CC是编译器程序的名字 main程序在prog1.cc中</p>
+</li>
+<li><p>编译器生成一个可执行文件 windows为prog1.exe unix后缀为<strong>a.out</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ CC prog1.cc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>windows运行可执行文件</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ prog1</span><br><span class="line">$ .\prog1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>unix运行可执行文件</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ a.out</span><br><span class="line">$ ./a.out</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>在unix和windows中，执行完程序后都可以使用 <strong>echo命令获得返回值</strong> </p>
+<ul>
+<li><p>unix 获得状态</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> $?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>windows 查看状态</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">%ERRORLEVEL%</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>GNU编译器</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ g++ -o prog1 prog1.cc</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>-o prog1是编译器参数 指定可执行文件的文件名</p>
+</li>
+<li><p>该指令生成可执行文件 windows后缀为.exe UNIX无后缀</p>
+</li>
+<li><p>若省略 -o prog1参数 windows生成a.exe UNIX生成a.out</p>
+</li>
+</ul>
+</li>
+<li><p>微软Visual Studio编译器</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">me</span>\<span class="title">Programs</span>&gt; <span class="title">c1</span> /<span class="title">EHsc</span> <span class="title">prog1.cpp</span></span></span><br></pre></td></tr></table></figure>
+
+<p>c1调用编译器   /EHsc是编译器选项(打开标准异常处理</p>
+<ul>
+<li>生成可执行文件prog1.exe</li>
+</ul>
+</li>
+<li><p>编译器可以对有问题的程序结构发出警告 打开选项</p>
+<ul>
+<li>GNU使用-Wall VS编译器使用/W4</li>
+</ul>
+</li>
+</ul>
+<h4 id="初识输入输出"><a href="#初识输入输出" class="headerlink" title="初识输入输出"></a>初识输入输出</h4><ul>
+<li><p>C++语言使用 <strong>标准库</strong> 提供IO机制等</p>
+</li>
+<li><p>iostream库 </p>
+<ul>
+<li>包含istream和ostream 表示输入流和输出流</li>
+<li>一个流是一个字符序列，从IO设备读出/写入IO设备</li>
+</ul>
+</li>
+<li><p>标准输入输出对象</p>
+<ul>
+<li>cin 标准输入 istream类型</li>
+<li>cout 标准输出 ostream类型</li>
+<li>cerr 标准错误 输出警告和错误信息</li>
+<li>clog 输出程序运行时的一般性信息</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用iostream库，iostream指出了一个 <strong>头文件</strong></li>
+</ul>
+</li>
+<li><p>表达式：由运算对象和运算符组成</p>
+</li>
+<li><p>输出运算符&lt;&lt;   ： 接受两个运算对象 左侧为ostream对象 右侧是要打印的值 将给定值写入给定的ostream对象中</p>
+</li>
+<li><p>操纵符 std::endl 写入的效果是结束当前行 <strong>将与设备关联的缓冲区内容刷到设备中</strong></p>
+<ul>
+<li>缓冲刷新操作保证 到目前为止程序产生的输出 <strong>真正写入输出流中</strong> 而非内存中等待写入</li>
+<li>调试时的打印语句应该保证一直刷新流，防止崩溃时输出还留在缓冲区 难以判断出错位置</li>
+</ul>
+</li>
+<li><p>前缀std:: 表示定义在名为std的命名空间中   ::是作用域运算符</p>
+</li>
+<li><p>标准库定义的所有名字都在命名空间std中</p>
+</li>
+<li><p>输入运算符&gt;&gt; 左侧为istream对象 右侧为存入的对象</p>
+</li>
+<li><p>标准库定义了不同版本的运算符 处理不同类型的运算对象</p>
+</li>
+</ul>
+<h4 id="注释comments-简介"><a href="#注释comments-简介" class="headerlink" title="注释comments 简介"></a>注释comments 简介</h4><ul>
+<li><p>两种注释</p>
+<ul>
+<li>单行注释：双斜线开始，换行符结束。可以包含任何文本，包括额外的双斜线。</li>
+<li>界定符对注释：以 /* 开始，以 */ 结束。可以包含除了 */ 以外的任何内容，包括换行符、</li>
+</ul>
+</li>
+<li><p>常使用的风格：注释内的每行都以一个星号开头</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//abc</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注释界定符不能嵌套，最好的注释方式是用单行注释方式注释掉代码段的每一行。</p>
+</li>
+</ul>
+<h4 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h4><ul>
+<li><p>while语句</p>
+</li>
+<li><p>for语句</p>
+</li>
+<li><p>读取数量不定的输入数据</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=<span class="number">0</span>,value=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;value)</span><br><span class="line">	&#123;</span><br><span class="line">		sum+=value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>while使用istream对象作为条件，检测流的状态。若流是有效的，检测成功；遇到文件结束符（end-of-file）或无效输入。istream对象无效，检测条件为假。</li>
+</ul>
+</li>
+<li><p>文件结束符：windows ctrl+Z 再enter或return UNIX输入ctrl+D</p>
+</li>
+<li><p>编译器：检查形式上的错误，错误信息包含行号和简短描述</p>
+<ul>
+<li>语法错误</li>
+<li>类型错误</li>
+<li>声明错误</li>
+</ul>
+</li>
+<li><p>按照报告顺序逐个修正错误，修正后立即重新编译。</p>
+</li>
+<li><p>if语句</p>
+</li>
+<li><p>左花括号必须是形参列表后的第一个非空、非注释的字符</p>
+</li>
+</ul>
+<h4 id="类简介（class"><a href="#类简介（class" class="headerlink" title="类简介（class"></a>类简介（class</h4><ul>
+<li><p>定义类来定义自己的数据结构</p>
+</li>
+<li><p>在头文件中定义（后缀.h .H .hxx .hpp …)</p>
+</li>
+<li><p>类的作者决定了类 类型对象上可以使用的所有操作</p>
+</li>
+<li><p>包含标准库的头文件 使用尖括号&lt;&gt; ；不属于标准库的头文件 使用双引号””</p>
+</li>
+<li><p>文件重定向：将标准输入和标准输出与命名文件关联起来</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ addItems &lt;infile &gt;outfile</span><br></pre></td></tr></table></figure>
+
+<p>addItems是编译后的可执行文件，则上述命令会从当前目录的 一个名为infile的文件读取数据，并将结果写入一个名为outfile的文件中</p>
+</li>
+<li><p>成员函数（方法：定义为类的一部分的函数</p>
+</li>
+<li><p>点运算符(.)：指定类的成员</p>
+</li>
+<li><p>调用运算符（ () ）：调用一个函数，括号内放置实参（可能没有</p>
+</li>
+</ul>
+<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>缓冲区（buffer：IO设施通常将输入或输出数据保存在一个缓冲区中，读写缓冲区的动作与程序无关。<ul>
+<li>可以显式刷新输出缓冲，强制将缓冲区的数据写入输出设备</li>
+<li>读cin 或 程序非正常终止 时，会刷新cout</li>
+</ul>
+</li>
+<li>Cerr：ostream对象，写到cerr的数据默认不缓冲。常用于输出错误信息或不属于程序正常逻辑的输出内容。</li>
+<li>clog：ostream对象。写到clog的数据默认缓冲。报告程序的执行信息，存入一个日志文件中。</li>
+<li>main函数： <strong>每个程序有且只有一个命名为main的函数</strong></li>
+<li>命名空间：将库定义的名字放在一个单一位置的机制。避免名字冲突</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第五章</title>
+    <url>/2020/07/21/c-primer-5/</url>
+    <content><![CDATA[<h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
+<a id="more"></a>
+
+
+
+<p>c++语句提供了一组控制流语句以支持更复杂的执行路径</p>
+<h4 id="简单语句"><a href="#简单语句" class="headerlink" title="简单语句"></a>简单语句</h4><ul>
+<li>表达式语句：执行表达式并丢弃求值结果</li>
+<li>空语句：只含有单独的分号，常用于循环条件。使用空语句时加上注释</li>
+<li>复合语句（块）：用花括号括起来的 语句和声明的序列<ul>
+<li>一个块就是一个作用域，其中引入的名字只能在块内部以及子块里访问</li>
+<li>块不以分号结束</li>
+<li>空块：内部没有任何语句，等价于空语句</li>
+</ul>
+</li>
+</ul>
+<h4 id="语句作用域"><a href="#语句作用域" class="headerlink" title="语句作用域"></a>语句作用域</h4><ul>
+<li>可在控制结构内自定义变量，语句结束后，变量超出其作用范围。</li>
+<li>控制结构内的变量必须初始化</li>
+</ul>
+<h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><ul>
+<li><p>if语句：根据条件决定控制流</p>
+<ul>
+<li>条件的类型必须能转换为布尔类型</li>
+<li>嵌套if语句：使用花括号组合成块</li>
+<li>悬垂else：c++规定，else与 离他最近的 且 尚未匹配的 if匹配</li>
+<li>使用花括号控制执行路径</li>
+</ul>
+</li>
+<li><p>switch语句：计算表达式的值，根据值从几条执行路径中选择一条</p>
+<ul>
+<li><p>break语句：中断当前的控制流</p>
+</li>
+<li><p>case标签：case和对应的值组成，case标签必须是 整型常量表达式</p>
+</li>
+<li><p>若某个case标签匹配成功，将从该标签向后顺序执行所有case分支，除非程序显式中断这一过程（如break语句）</p>
+</li>
+<li><p>case标签后不一定要换行，以强调它们代表的是某一范围的值</p>
+</li>
+<li><p>最好在标签后加上break</p>
+</li>
+<li><p>default标签：若所有case标签都不能匹配上switch表达式的值，执行default标签之后的语句</p>
+</li>
+<li><p>最好定义一个空的default标签，代表考虑了默认情况</p>
+</li>
+<li><p>不允许跨过变量的初始化语句，直接跳转到该变量作用域内的另一个位置</p>
+<ul>
+<li><p>应该把变量定义在块内，从而确保后面的所有case标签都在变量的作用域之外</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="literal">true</span>:</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">string</span> name=get_name();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">false</span>:</span><br><span class="line">	<span class="keyword">if</span>(name.empty())<span class="comment">//直接报错，name变量在作用域之外</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="迭代语句"><a href="#迭代语句" class="headerlink" title="迭代语句"></a>迭代语句</h4><ul>
+<li>通常称为循环。while和for语句在循环前检查条件；do while先循环，再检查条件。</li>
+<li>while语句：只要条件为真，就重复执行循环体。条件不能为空<ul>
+<li>定义在条件部分或循环体内的变量，每次迭代都经历创建到销毁的过程</li>
+<li>不确定循环次数；循环结束后要访问循环控制变量：可以用while</li>
+</ul>
+</li>
+<li>for语句<ul>
+<li>for语句头：for+初始化值+循环控制条件+初始化变量修改</li>
+<li>执行流程：初始化 判断条件 若为真-执行循环 修改初始化的控制变量值</li>
+<li>for语句头中定义的变量只在循环体内可见</li>
+<li>for语句头的多重定义：初始化部分只能有一条声明语句，<strong>因此声明变量的基础类型必须相同</strong></li>
+<li>省略语句头的任意部分：分号必须保留。</li>
+<li>范围for语句（c++11）：表达式必须是一个序列（列表、数组、拥有begin/end成员的类型）<ul>
+<li>可以使用auto定义变量</li>
+<li>对序列元素执行写操作，<strong>循环变量要声明成引用类型</strong></li>
+<li>范围for语句预存了end()的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>do while语句<ul>
+<li>先执行循环体，后检查条件，至少执行一次循环</li>
+<li>条件后面要用 <strong>分号</strong>表示语句结束</li>
+<li>条件不能为空，循环的条件变量必须定义在循环体之外。<strong>条件部分不能定义变量</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h4><ul>
+<li><p>break语句：终止最近的while dowhile for switch语句，从这些语句之后的第一条语句开始继续执行。</p>
+<ul>
+<li>只能出现在迭代语句或switch语句内部</li>
+</ul>
+</li>
+<li><p>continue语句：终止最近循环中的当前迭代，立即开始下一次迭代</p>
+<ul>
+<li>只能出现在for while dowhile内部或嵌套。</li>
+<li>只有当switch嵌套时，才能用在switch内部。</li>
+</ul>
+</li>
+<li><p>goto语句：无条件跳转到同一函数内的另一条语句</p>
+<ul>
+<li><p>不要在程序中使用goto语句，难理解、难修改</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">goto</span> <span class="built_in">end</span>;</span><br><span class="line"><span class="built_in">end</span>: <span class="keyword">return</span>;<span class="comment">//带标签语句，可以作为goto的目标</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>转向的带标签语句必须在<strong>同一函数内</strong></p>
+</li>
+<li><p><strong>不能将程序的控制权从变量的作用域之外转移到作用域之内？</strong></p>
+<ul>
+<li>不允许跨过变量声明跳转到该变量位置</li>
+</ul>
+</li>
+<li><p>可以跳过已经执行的定义；跳回到变量定义前，会销毁并重新创建该变量</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h4><ul>
+<li><p>异常：运行反常行为，超出函数正常功能的范围。例如失去数据库连接、遇到意外输入等</p>
+</li>
+<li><p>异常处理：程序检测到无法处理的问题，发出某种信号表明遇到故障，<strong>无须知道故障将在何处解决</strong></p>
+</li>
+<li><p>异常处理机制</p>
+<ul>
+<li>throw表达式：异常检测。引发（raise）异常</li>
+<li>try语句块：异常处理。以try开始，若干catch子句结束。catch子句处理异常，也被称为异常处理代码。</li>
+<li>异常类：在throw表达式和catch子句之间传递异常的具体信息。</li>
+</ul>
+</li>
+<li><p>throw表达式</p>
+<ul>
+<li><p>关键字throw+表达式（类型为抛出的异常类型）+分号，构成表达式语句</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a!=b)</span><br><span class="line">	<span class="keyword">throw</span> runtime_error(<span class="string">"ERROR!"</span>);<span class="comment">//抛出异常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>runtime_error是标准库异常类型的一种，定义在stdexcept头文件中。</p>
+</li>
+</ul>
+</li>
+<li><p>try语句块</p>
+<ul>
+<li><p>try块+若干catch子句</p>
+</li>
+<li><p>catch子句包括：关键字catch+括号内的异常声明+一个块。选中catch子句处理异常之后，执行与之对应的块。</p>
+</li>
+<li><p>catch完成后，跳转到最后一个catch子句后的语句继续执行</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//执行正常情况的代码</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(runtime_error err)<span class="comment">//处理runtime_error的异常</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//异常处理</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;err.what()</span><br><span class="line">            &lt;&lt;<span class="string">"ERROR!"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>err.what()：what是runtime_error的一个成员函数，返回c风格字符串– 初始化一个具体对象所用的 string对象 的副本</p>
+</li>
+<li><p>函数在寻找处理代码的过程中退出</p>
+<ul>
+<li>抛出异常时，首先搜索抛出该异常的函数，如果没找到匹配的catch子句，终止该函数，在调用它的函数中继续寻找；若还没有找到catch，终止函数，继续在调用当前函数的函数中寻找。。。如此沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为止。</li>
+<li>若最后也没找到catch子句，程序转到标准库函数terminate，执行该函数将导致程序非正常退出</li>
+<li>对于没有try语句块定义的异常，处理方式一样。最终系统调用terminate函数并终止程序运行。</li>
+</ul>
+</li>
+<li><p>编写 异常 安全（exception safe）的代码很困难</p>
+<ul>
+<li>异常中断了程序的正常流程</li>
+<li>发生异常时，某些对象处理到一半就中止了，处于无效或未完成状态，资源没有正常释放</li>
+<li>异常发生期间正确执行“清理”工作的程序代码即 异常 安全（exception safe）</li>
+<li>异常发生后，<strong>程序如何确保对象有效</strong>、<strong>资源无泄漏</strong>、<strong>程序处于合理状态</strong>，十分关键</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>标准异常</p>
+<ul>
+<li>c++标准库定义的一组异常类，用于报告标准库函数遇到的问题</li>
+<li>分别定义在4个头文件中：<ul>
+<li>exception头文件：定义了最通用的异常类exception，只报告异常的发生，不提供额外信息</li>
+<li>stdexcept头文件：定义了集中常用的异常类</li>
+<li>new头文件：定义了bad_alloc异常类型</li>
+<li>type_info头文件：定义了bad_cast异常类型</li>
+</ul>
+</li>
+<li>只能以默认初始化的方式初始化exception、bad_alloc和bad_cast对象，<strong>不允许赋初值</strong></li>
+<li>其他异常行为需要使用string或C风格字符串初始化，<strong>不允许默认初始化</strong>，初始值含有错误相关的信息</li>
+<li>异常类型只定义了一个成员函数what，该函数没有参数，返回一个指向C字符串的const char*，提供关于异常的文本信息。</li>
+<li>what返回的字符串内容与异常对象的类型有关，若有字符串初始值则返回，否则由编译器决定</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>复合语句：即块</li>
+<li>悬垂else</li>
+<li>异常声明：catch子句中的声明</li>
+<li>异常安全：抛出异常后，程序能执行正确的行为</li>
+<li>控制流：程序的执行路径</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++_primer_V5 学习笔记-第三章</title>
     <url>/2020/07/15/c-primer-3/</url>
     <content><![CDATA[<h3 id="第3章-字符串、向量和数组"><a href="#第3章-字符串、向量和数组" class="headerlink" title="第3章 字符串、向量和数组"></a>第3章 字符串、向量和数组</h3><p>c++的抽象数据类型库中，string和vector是两种最重要的标准库类型，前者支持可变长字符串；后者支持可变长的集合。还有一种标准类型是迭代器，是string和vector的配套类型。</p>
@@ -882,210 +1283,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++_primer_V5 学习笔记-第一章</title>
-    <url>/2020/07/13/c-primer-1/</url>
-    <content><![CDATA[<h3 id="第1章-开始"><a href="#第1章-开始" class="headerlink" title="第1章 开始"></a>第1章 开始</h3><p>本章介绍c++的大部分基础内容：类型、变量、表达式、语句及函数。并介绍如何编译及运行程序。</p>
-<a id="more"></a>
-
-<h4 id="编写一个简单的C-程序"><a href="#编写一个简单的C-程序" class="headerlink" title="编写一个简单的C++程序"></a>编写一个简单的C++程序</h4><ul>
-<li>函数定义<ul>
-<li>返回类型</li>
-<li>函数名</li>
-<li>形参列表（允许为空</li>
-<li>函数体</li>
-</ul>
-</li>
-<li>main函数的返回类型必须为int。</li>
-<li><strong>内置类型（built-in-type）：语言自身定义的类型</strong></li>
-<li>函数体中使用return结束函数的执行，return返回的值与函数的返回类型相容</li>
-<li>大多数系统中，main的返回值被用来指示状态，返回0表示成功，非0值常用于指出错误类型</li>
-</ul>
-<h5 id="编译、运行程序"><a href="#编译、运行程序" class="headerlink" title="编译、运行程序"></a>编译、运行程序</h5><ul>
-<li><p>集成开发环境IDE：将编译器与其他程序创建和分析工具包装在一起</p>
-</li>
-<li><p>源文件：程序文件常被称为 <strong>源文件（source file</strong></p>
-</li>
-<li><p>源文件名字以后缀结尾：.cc .cxx .cpp .cp .C    …</p>
-</li>
-<li><p>命令行运行编译器</p>
-<ul>
-<li><p>CC是编译器程序的名字 main程序在prog1.cc中</p>
-</li>
-<li><p>编译器生成一个可执行文件 windows为prog1.exe unix后缀为<strong>a.out</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ CC prog1.cc</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>windows运行可执行文件</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ prog1</span><br><span class="line">$ .\prog1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>unix运行可执行文件</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ a.out</span><br><span class="line">$ ./a.out</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>在unix和windows中，执行完程序后都可以使用 <strong>echo命令获得返回值</strong> </p>
-<ul>
-<li><p>unix 获得状态</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> $?</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>windows 查看状态</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">%ERRORLEVEL%</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>GNU编译器</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ g++ -o prog1 prog1.cc</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>-o prog1是编译器参数 指定可执行文件的文件名</p>
-</li>
-<li><p>该指令生成可执行文件 windows后缀为.exe UNIX无后缀</p>
-</li>
-<li><p>若省略 -o prog1参数 windows生成a.exe UNIX生成a.out</p>
-</li>
-</ul>
-</li>
-<li><p>微软Visual Studio编译器</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">me</span>\<span class="title">Programs</span>&gt; <span class="title">c1</span> /<span class="title">EHsc</span> <span class="title">prog1.cpp</span></span></span><br></pre></td></tr></table></figure>
-
-<p>c1调用编译器   /EHsc是编译器选项(打开标准异常处理</p>
-<ul>
-<li>生成可执行文件prog1.exe</li>
-</ul>
-</li>
-<li><p>编译器可以对有问题的程序结构发出警告 打开选项</p>
-<ul>
-<li>GNU使用-Wall VS编译器使用/W4</li>
-</ul>
-</li>
-</ul>
-<h4 id="初识输入输出"><a href="#初识输入输出" class="headerlink" title="初识输入输出"></a>初识输入输出</h4><ul>
-<li><p>C++语言使用 <strong>标准库</strong> 提供IO机制等</p>
-</li>
-<li><p>iostream库 </p>
-<ul>
-<li>包含istream和ostream 表示输入流和输出流</li>
-<li>一个流是一个字符序列，从IO设备读出/写入IO设备</li>
-</ul>
-</li>
-<li><p>标准输入输出对象</p>
-<ul>
-<li>cin 标准输入 istream类型</li>
-<li>cout 标准输出 ostream类型</li>
-<li>cerr 标准错误 输出警告和错误信息</li>
-<li>clog 输出程序运行时的一般性信息</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用iostream库，iostream指出了一个 <strong>头文件</strong></li>
-</ul>
-</li>
-<li><p>表达式：由运算对象和运算符组成</p>
-</li>
-<li><p>输出运算符&lt;&lt;   ： 接受两个运算对象 左侧为ostream对象 右侧是要打印的值 将给定值写入给定的ostream对象中</p>
-</li>
-<li><p>操纵符 std::endl 写入的效果是结束当前行 <strong>将与设备关联的缓冲区内容刷到设备中</strong></p>
-<ul>
-<li>缓冲刷新操作保证 到目前为止程序产生的输出 <strong>真正写入输出流中</strong> 而非内存中等待写入</li>
-<li>调试时的打印语句应该保证一直刷新流，防止崩溃时输出还留在缓冲区 难以判断出错位置</li>
-</ul>
-</li>
-<li><p>前缀std:: 表示定义在名为std的命名空间中   ::是作用域运算符</p>
-</li>
-<li><p>标准库定义的所有名字都在命名空间std中</p>
-</li>
-<li><p>输入运算符&gt;&gt; 左侧为istream对象 右侧为存入的对象</p>
-</li>
-<li><p>标准库定义了不同版本的运算符 处理不同类型的运算对象</p>
-</li>
-</ul>
-<h4 id="注释comments-简介"><a href="#注释comments-简介" class="headerlink" title="注释comments 简介"></a>注释comments 简介</h4><ul>
-<li><p>两种注释</p>
-<ul>
-<li>单行注释：双斜线开始，换行符结束。可以包含任何文本，包括额外的双斜线。</li>
-<li>界定符对注释：以 /* 开始，以 */ 结束。可以包含除了 */ 以外的任何内容，包括换行符、</li>
-</ul>
-</li>
-<li><p>常使用的风格：注释内的每行都以一个星号开头</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//abc</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> * aaaaa</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注释界定符不能嵌套，最好的注释方式是用单行注释方式注释掉代码段的每一行。</p>
-</li>
-</ul>
-<h4 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h4><ul>
-<li><p>while语句</p>
-</li>
-<li><p>for语句</p>
-</li>
-<li><p>读取数量不定的输入数据</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=<span class="number">0</span>,value=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;value)</span><br><span class="line">	&#123;</span><br><span class="line">		sum+=value;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>while使用istream对象作为条件，检测流的状态。若流是有效的，检测成功；遇到文件结束符（end-of-file）或无效输入。istream对象无效，检测条件为假。</li>
-</ul>
-</li>
-<li><p>文件结束符：windows ctrl+Z 再enter或return UNIX输入ctrl+D</p>
-</li>
-<li><p>编译器：检查形式上的错误，错误信息包含行号和简短描述</p>
-<ul>
-<li>语法错误</li>
-<li>类型错误</li>
-<li>声明错误</li>
-</ul>
-</li>
-<li><p>按照报告顺序逐个修正错误，修正后立即重新编译。</p>
-</li>
-<li><p>if语句</p>
-</li>
-<li><p>左花括号必须是形参列表后的第一个非空、非注释的字符</p>
-</li>
-</ul>
-<h4 id="类简介（class"><a href="#类简介（class" class="headerlink" title="类简介（class"></a>类简介（class</h4><ul>
-<li><p>定义类来定义自己的数据结构</p>
-</li>
-<li><p>在头文件中定义（后缀.h .H .hxx .hpp …)</p>
-</li>
-<li><p>类的作者决定了类 类型对象上可以使用的所有操作</p>
-</li>
-<li><p>包含标准库的头文件 使用尖括号&lt;&gt; ；不属于标准库的头文件 使用双引号””</p>
-</li>
-<li><p>文件重定向：将标准输入和标准输出与命名文件关联起来</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">$ addItems &lt;infile &gt;outfile</span><br></pre></td></tr></table></figure>
-
-<p>addItems是编译后的可执行文件，则上述命令会从当前目录的 一个名为infile的文件读取数据，并将结果写入一个名为outfile的文件中</p>
-</li>
-<li><p>成员函数（方法：定义为类的一部分的函数</p>
-</li>
-<li><p>点运算符(.)：指定类的成员</p>
-</li>
-<li><p>调用运算符（ () ）：调用一个函数，括号内放置实参（可能没有</p>
-</li>
-</ul>
-<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
-<li>缓冲区（buffer：IO设施通常将输入或输出数据保存在一个缓冲区中，读写缓冲区的动作与程序无关。<ul>
-<li>可以显式刷新输出缓冲，强制将缓冲区的数据写入输出设备</li>
-<li>读cin 或 程序非正常终止 时，会刷新cout</li>
-</ul>
-</li>
-<li>Cerr：ostream对象，写到cerr的数据默认不缓冲。常用于输出错误信息或不属于程序正常逻辑的输出内容。</li>
-<li>clog：ostream对象。写到clog的数据默认缓冲。报告程序的执行信息，存入一个日志文件中。</li>
-<li>main函数： <strong>每个程序有且只有一个命名为main的函数</strong></li>
-<li>命名空间：将库定义的名字放在一个单一位置的机制。避免名字冲突</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++_primer_V5 学习笔记-第四章</title>
     <url>/2020/07/17/c-primer-4/</url>
     <content><![CDATA[<h3 id="第4章-表达式"><a href="#第4章-表达式" class="headerlink" title="第4章 表达式"></a>第4章 表达式</h3><p>本章主要介绍由语言本身定义、并用于内置类型运算对象的运算符，同时简单介绍几种标准库定义的运算符。</p>
@@ -1324,223 +1521,6 @@
       <tags>
         <tag>学习笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>C++_primer_V5 学习笔记-第五章</title>
-    <url>/2020/07/21/c-primer-5/</url>
-    <content><![CDATA[<h3 id="第5章-语句"><a href="#第5章-语句" class="headerlink" title="第5章 语句"></a>第5章 语句</h3><p>本章将详细介绍c++语言支持的条件执行语句、重复执行相同代码的循环语句和用于中断当前控制流的跳转语句。</p>
-<a id="more"></a>
-
-
-
-<p>c++语句提供了一组控制流语句以支持更复杂的执行路径</p>
-<h4 id="简单语句"><a href="#简单语句" class="headerlink" title="简单语句"></a>简单语句</h4><ul>
-<li>表达式语句：执行表达式并丢弃求值结果</li>
-<li>空语句：只含有单独的分号，常用于循环条件。使用空语句时加上注释</li>
-<li>复合语句（块）：用花括号括起来的 语句和声明的序列<ul>
-<li>一个块就是一个作用域，其中引入的名字只能在块内部以及子块里访问</li>
-<li>块不以分号结束</li>
-<li>空块：内部没有任何语句，等价于空语句</li>
-</ul>
-</li>
-</ul>
-<h4 id="语句作用域"><a href="#语句作用域" class="headerlink" title="语句作用域"></a>语句作用域</h4><ul>
-<li>可在控制结构内自定义变量，语句结束后，变量超出其作用范围。</li>
-<li>控制结构内的变量必须初始化</li>
-</ul>
-<h4 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h4><ul>
-<li><p>if语句：根据条件决定控制流</p>
-<ul>
-<li>条件的类型必须能转换为布尔类型</li>
-<li>嵌套if语句：使用花括号组合成块</li>
-<li>悬垂else：c++规定，else与 离他最近的 且 尚未匹配的 if匹配</li>
-<li>使用花括号控制执行路径</li>
-</ul>
-</li>
-<li><p>switch语句：计算表达式的值，根据值从几条执行路径中选择一条</p>
-<ul>
-<li><p>break语句：中断当前的控制流</p>
-</li>
-<li><p>case标签：case和对应的值组成，case标签必须是 整型常量表达式</p>
-</li>
-<li><p>若某个case标签匹配成功，将从该标签向后顺序执行所有case分支，除非程序显式中断这一过程（如break语句）</p>
-</li>
-<li><p>case标签后不一定要换行，以强调它们代表的是某一范围的值</p>
-</li>
-<li><p>最好在标签后加上break</p>
-</li>
-<li><p>default标签：若所有case标签都不能匹配上switch表达式的值，执行default标签之后的语句</p>
-</li>
-<li><p>最好定义一个空的default标签，代表考虑了默认情况</p>
-</li>
-<li><p>不允许跨过变量的初始化语句，直接跳转到该变量作用域内的另一个位置</p>
-<ul>
-<li><p>应该把变量定义在块内，从而确保后面的所有case标签都在变量的作用域之外</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="literal">true</span>:</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">string</span> name=get_name();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="literal">false</span>:</span><br><span class="line">	<span class="keyword">if</span>(name.empty())<span class="comment">//直接报错，name变量在作用域之外</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="迭代语句"><a href="#迭代语句" class="headerlink" title="迭代语句"></a>迭代语句</h4><ul>
-<li>通常称为循环。while和for语句在循环前检查条件；do while先循环，再检查条件。</li>
-<li>while语句：只要条件为真，就重复执行循环体。条件不能为空<ul>
-<li>定义在条件部分或循环体内的变量，每次迭代都经历创建到销毁的过程</li>
-<li>不确定循环次数；循环结束后要访问循环控制变量：可以用while</li>
-</ul>
-</li>
-<li>for语句<ul>
-<li>for语句头：for+初始化值+循环控制条件+初始化变量修改</li>
-<li>执行流程：初始化 判断条件 若为真-执行循环 修改初始化的控制变量值</li>
-<li>for语句头中定义的变量只在循环体内可见</li>
-<li>for语句头的多重定义：初始化部分只能有一条声明语句，<strong>因此声明变量的基础类型必须相同</strong></li>
-<li>省略语句头的任意部分：分号必须保留。</li>
-<li>范围for语句（c++11）：表达式必须是一个序列（列表、数组、拥有begin/end成员的类型）<ul>
-<li>可以使用auto定义变量</li>
-<li>对序列元素执行写操作，<strong>循环变量要声明成引用类型</strong></li>
-<li>范围for语句预存了end()的值</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>do while语句<ul>
-<li>先执行循环体，后检查条件，至少执行一次循环</li>
-<li>条件后面要用 <strong>分号</strong>表示语句结束</li>
-<li>条件不能为空，循环的条件变量必须定义在循环体之外。<strong>条件部分不能定义变量</strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="跳转语句"><a href="#跳转语句" class="headerlink" title="跳转语句"></a>跳转语句</h4><ul>
-<li><p>break语句：终止最近的while dowhile for switch语句，从这些语句之后的第一条语句开始继续执行。</p>
-<ul>
-<li>只能出现在迭代语句或switch语句内部</li>
-</ul>
-</li>
-<li><p>continue语句：终止最近循环中的当前迭代，立即开始下一次迭代</p>
-<ul>
-<li>只能出现在for while dowhile内部或嵌套。</li>
-<li>只有当switch嵌套时，才能用在switch内部。</li>
-</ul>
-</li>
-<li><p>goto语句：无条件跳转到同一函数内的另一条语句</p>
-<ul>
-<li><p>不要在程序中使用goto语句，难理解、难修改</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">goto</span> <span class="built_in">end</span>;</span><br><span class="line"><span class="built_in">end</span>: <span class="keyword">return</span>;<span class="comment">//带标签语句，可以作为goto的目标</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>转向的带标签语句必须在<strong>同一函数内</strong></p>
-</li>
-<li><p><strong>不能将程序的控制权从变量的作用域之外转移到作用域之内？</strong></p>
-<ul>
-<li>不允许跨过变量声明跳转到该变量位置</li>
-</ul>
-</li>
-<li><p>可以跳过已经执行的定义；跳回到变量定义前，会销毁并重新创建该变量</p>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h4><ul>
-<li><p>异常：运行反常行为，超出函数正常功能的范围。例如失去数据库连接、遇到意外输入等</p>
-</li>
-<li><p>异常处理：程序检测到无法处理的问题，发出某种信号表明遇到故障，<strong>无须知道故障将在何处解决</strong></p>
-</li>
-<li><p>异常处理机制</p>
-<ul>
-<li>throw表达式：异常检测。引发（raise）异常</li>
-<li>try语句块：异常处理。以try开始，若干catch子句结束。catch子句处理异常，也被称为异常处理代码。</li>
-<li>异常类：在throw表达式和catch子句之间传递异常的具体信息。</li>
-</ul>
-</li>
-<li><p>throw表达式</p>
-<ul>
-<li><p>关键字throw+表达式（类型为抛出的异常类型）+分号，构成表达式语句</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a!=b)</span><br><span class="line">	<span class="keyword">throw</span> runtime_error(<span class="string">"ERROR!"</span>);<span class="comment">//抛出异常</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>runtime_error是标准库异常类型的一种，定义在stdexcept头文件中。</p>
-</li>
-</ul>
-</li>
-<li><p>try语句块</p>
-<ul>
-<li><p>try块+若干catch子句</p>
-</li>
-<li><p>catch子句包括：关键字catch+括号内的异常声明+一个块。选中catch子句处理异常之后，执行与之对应的块。</p>
-</li>
-<li><p>catch完成后，跳转到最后一个catch子句后的语句继续执行</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//执行正常情况的代码</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(runtime_error err)<span class="comment">//处理runtime_error的异常</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//异常处理</span></span><br><span class="line">		<span class="built_in">cout</span>&lt;&lt;err.what()</span><br><span class="line">            &lt;&lt;<span class="string">"ERROR!"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>err.what()：what是runtime_error的一个成员函数，返回c风格字符串– 初始化一个具体对象所用的 string对象 的副本</p>
-</li>
-<li><p>函数在寻找处理代码的过程中退出</p>
-<ul>
-<li>抛出异常时，首先搜索抛出该异常的函数，如果没找到匹配的catch子句，终止该函数，在调用它的函数中继续寻找；若还没有找到catch，终止函数，继续在调用当前函数的函数中寻找。。。如此沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为止。</li>
-<li>若最后也没找到catch子句，程序转到标准库函数terminate，执行该函数将导致程序非正常退出</li>
-<li>对于没有try语句块定义的异常，处理方式一样。最终系统调用terminate函数并终止程序运行。</li>
-</ul>
-</li>
-<li><p>编写 异常 安全（exception safe）的代码很困难</p>
-<ul>
-<li>异常中断了程序的正常流程</li>
-<li>发生异常时，某些对象处理到一半就中止了，处于无效或未完成状态，资源没有正常释放</li>
-<li>异常发生期间正确执行“清理”工作的程序代码即 异常 安全（exception safe）</li>
-<li>异常发生后，<strong>程序如何确保对象有效</strong>、<strong>资源无泄漏</strong>、<strong>程序处于合理状态</strong>，十分关键</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>标准异常</p>
-<ul>
-<li>c++标准库定义的一组异常类，用于报告标准库函数遇到的问题</li>
-<li>分别定义在4个头文件中：<ul>
-<li>exception头文件：定义了最通用的异常类exception，只报告异常的发生，不提供额外信息</li>
-<li>stdexcept头文件：定义了集中常用的异常类</li>
-<li>new头文件：定义了bad_alloc异常类型</li>
-<li>type_info头文件：定义了bad_cast异常类型</li>
-</ul>
-</li>
-<li>只能以默认初始化的方式初始化exception、bad_alloc和bad_cast对象，<strong>不允许赋初值</strong></li>
-<li>其他异常行为需要使用string或C风格字符串初始化，<strong>不允许默认初始化</strong>，初始值含有错误相关的信息</li>
-<li>异常类型只定义了一个成员函数what，该函数没有参数，返回一个指向C字符串的const char*，提供关于异常的文本信息。</li>
-<li>what返回的字符串内容与异常对象的类型有关，若有字符串初始值则返回，否则由编译器决定</li>
-</ul>
-</li>
-</ul>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
-<li>复合语句：即块</li>
-<li>悬垂else</li>
-<li>异常声明：catch子句中的声明</li>
-<li>异常安全：抛出异常后，程序能执行正确的行为</li>
-<li>控制流：程序的执行路径</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/06/24/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>C++_primer_V5 学习笔记-第六章</title>
@@ -2137,6 +2117,39 @@
       <tags>
         <tag>学习笔记</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>C++_primer_V5 学习笔记-第七章</title>
+    <url>/2020/07/23/c-primer-7/</url>
+    <content><![CDATA[<h3 id="第7章-类"><a href="#第7章-类" class="headerlink" title="第7章 类"></a>第7章 类</h3><p>在C++语言中，我们使用类定义自己的数据类型。通过定义新的类型来反映待解决问题中的各种概念，可以使我们更容易编写、调试和修改程序。</p>
+<p>本章是第2章关于类的话题的延续，主要关注数据抽象的重要性。数据抽象能帮助我们将对象的具体实现与对象所能执行的操作分离开来。</p>
+<a id="more"></a>]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/06/24/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>hexo文章更新较慢</title>
