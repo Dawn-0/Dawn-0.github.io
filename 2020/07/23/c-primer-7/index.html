@@ -28,7 +28,7 @@
 <meta property="og:description" content="第7章 类在C++语言中，我们使用类定义自己的数据类型。通过定义新的类型来反映待解决问题中的各种概念，可以使我们更容易编写、调试和修改程序。 本章是第2章关于类的话题的延续，主要关注数据抽象的重要性。数据抽象能帮助我们将对象的具体实现与对象所能执行的操作分离开来。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-23T08:42:46.000Z">
-<meta property="article:modified_time" content="2020-07-23T08:49:24.963Z">
+<meta property="article:modified_time" content="2020-07-27T13:24:33.262Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -180,10 +180,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-07-23 16:42:46 / Modified: 16:49:24" itemprop="dateCreated datePublished" datetime="2020-07-23T16:42:46+08:00">2020-07-23</time>
+              <time title="Created: 2020-07-23 16:42:46" itemprop="dateCreated datePublished" datetime="2020-07-23T16:42:46+08:00">2020-07-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-07-27 21:24:33" itemprop="dateModified" datetime="2020-07-27T21:24:33+08:00">2020-07-27</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -208,6 +214,174 @@
         <h3 id="第7章-类"><a href="#第7章-类" class="headerlink" title="第7章 类"></a>第7章 类</h3><p>在C++语言中，我们使用类定义自己的数据类型。通过定义新的类型来反映待解决问题中的各种概念，可以使我们更容易编写、调试和修改程序。</p>
 <p>本章是第2章关于类的话题的延续，主要关注数据抽象的重要性。数据抽象能帮助我们将对象的具体实现与对象所能执行的操作分离开来。</p>
 <a id="more"></a>
+
+<ul>
+<li>类的基本思想是数据抽象和封装</li>
+<li>数据抽象：依赖于 接口 和 实现 分离的编程技术</li>
+<li>类的接口：包括用户所能执行的操作；</li>
+<li>类的实现：包括类的数据成员、负责接口实现的函数体、定义类所需的各种私有函数</li>
+<li>封装实现了类的接口和实现的分离。封装后的类隐藏了实现细节，用户只能使用接口，无法访问实现部分</li>
+<li>类要首先定义一个抽象数据类型，由类的设计者考虑类的实现过程，使用该类的程序员只需要抽象思考类型做了什么，无须了解类型的工作细节</li>
+</ul>
+<h4 id="定义抽象数据类型"><a href="#定义抽象数据类型" class="headerlink" title="定义抽象数据类型"></a>定义抽象数据类型</h4><ul>
+<li><p>要把类定义成抽象数据类型，需要定义一些操作以供类的用户使用，之后可以封装（隐藏）它的数据成员</p>
+</li>
+<li><p>设计类</p>
+<ul>
+<li>执行加法和IO的函数不作为类的成员，将其定义为普通函数；执行复合赋值运算的函数是成员函数</li>
+<li>类的用户是程序员，应用程序的用户是实际的程序使用者。</li>
+<li>良好设计的类，既要有直观且易于使用的接口，也必须具备高效的实现过程</li>
+</ul>
+</li>
+<li><p>添加类的函数</p>
+<ul>
+<li>成员函数的声明必须在类的内部，定义可以在内部也可以在外部</li>
+<li>作为接口组成部分的非成员函数，定义和声明都在类的外部</li>
+<li>定义在类内部的函数是隐式的inline函数</li>
+<li>引入this<ul>
+<li>成员函数通过一个名为this的额外的隐式参数来访问调用它的那个对象</li>
+<li>调用一个成员函数是，用请求该函数的对象地址初始化this</li>
+<li>任何对类成员的直接访问都被看做this的隐式引用</li>
+<li>自定义名为this的参数或变量 是非法的</li>
+<li>this是一个常量指针，总是指向当前对象，不能改变this保存的地址</li>
+</ul>
+</li>
+<li>引入const成员函数<ul>
+<li>默认情况下，this的类型是指向类类型非常量版本的常量指针</li>
+<li>因为this是常量指针，因此不能改绑定对象，从绑非常量改成绑常量；这样一来，就不能在常量对象上调用普通的成员函数‘</li>
+<li>因此，把this设置为指向常量的指针有助于提高函数的灵活性</li>
+<li>C++允许把const关键字放在成员函数的参数列表之后，表示this是一个指向常量的指针</li>
+<li>这样使用const的成员函数被称作常量成员函数</li>
+<li>常量成员函数不能改变调用它的对象的内容</li>
+<li>常量对象，以及常量对象的引用或指针都只能调用常量成员函数</li>
+</ul>
+</li>
+<li>类作用域和成员函数<ul>
+<li>类本身就是一个作用域</li>
+<li>编译器分两步处理类：首先编译成员声明，然后才编译成员函数体。成员函数可以随意使用类中的成员，不用在意顺序</li>
+</ul>
+</li>
+<li>在类的外部定义成员函数<ul>
+<li>成员函数的定义必须与类内部的对应声明匹配</li>
+<li>使用作用域运算符：类外部的函数被声明在类的作用域内，也就可以在函数内部直接使用类的成员</li>
+</ul>
+</li>
+<li>定义一个返回this对象的函数<ul>
+<li>若定义的函数类似于某个内置运算符时，尽量模仿内置运算符，把左侧运算对象当成左值返回，因此这样的函数必须返回一个引用类型</li>
+<li>可以使用解引用this指针来获得执行该函数的对象，最后函数返回该对象的引用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>定义类相关的非成员函数</p>
+<ul>
+<li>一般来说，若非成员函数是类接口的组成部分，则这些函数的声明应该与类在同一个头文件内</li>
+<li>定义read和print函数<ul>
+<li>read和print函数分别接受一个各自IO类型的引用作为其参数；因为IO类属于不能诶拷贝的类型，因此我们只能通过引用来传递他们；而且，读取和写入都会改变流的内容，因此函数只能接受普通引用，不能接受常量引用</li>
+<li>print函数不负责换行，一般来说，<strong>执行输出任务的函数应该尽量减少对格式的控制</strong>。确保由用户代码决定相关格式</li>
+</ul>
+</li>
+<li>定义add函数<ul>
+<li>默认情况下，拷贝类的对象其实是拷贝对象的数据成员</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>构造函数</p>
+<ul>
+<li><p>构造函数：类通过一个或几个特殊的成员函数来控制其对象的初始化过程</p>
+</li>
+<li><p>初始化类对象的数据成员</p>
+</li>
+<li><p>名字和类名相同，没有返回类型 </p>
+</li>
+<li><p>类可以包含多个构造函数，和重载函数类似，参数数量和类型有所区别</p>
+</li>
+<li><p>构造函数不能被声明为const</p>
+</li>
+<li><p>创建类的const对象时，构造函数先初始化，对象再获得常量属性，因此构造函数可以向const对象写值</p>
+</li>
+<li><p>合成的默认构造函数</p>
+<ul>
+<li>默认构造函数：无须实参，控制类的默认初始化；没有显式定义构造函数，编译器就会隐式定义默认构造函数</li>
+<li>初始化类的成员：若存在类内初始值，用它来初始化成员；否则默认初始化该成员</li>
+</ul>
+</li>
+<li><p>某些类不能依赖于合成的默认构造函数</p>
+<ul>
+<li>对普通的类来说，必须定义自己的默认构造函数<ul>
+<li>只有当类没有声明任何构造函数时，编译器才会自动生成默认构造函数</li>
+<li>编译器合成的默认构造函数可能执行错误的操作，对内置和符合类型可能得到未定义的值</li>
+<li>有时编译器不能为某些类合成默认的构造函数（类中有其他类的成员，且这个成员没有默认构造函数）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>定义构造函数+构造函数初始值列表</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span>&#123;</span></span><br><span class="line">	A()=<span class="keyword">default</span>;<span class="comment">//默认构造函数</span></span><br><span class="line">    </span><br><span class="line">    A(<span class="keyword">const</span> <span class="keyword">int</span> b):c1(a) &#123; &#125;<span class="comment">//": c1(a)"为构造函数初始值列表</span></span><br><span class="line">	<span class="comment">//使用int对象初始化c1，成员c2，c3被隐式初始化    </span></span><br><span class="line">    </span><br><span class="line">    A(<span class="keyword">const</span> <span class="keyword">int</span> b,<span class="keyword">unsigned</span> d,<span class="keyword">double</span> e):c1(a),c2(d),c3(e*d) &#123; &#125;</span><br><span class="line">    <span class="comment">//":c1(a),c2(d),c3(e*d)"为构造函数初始值列表</span></span><br><span class="line">    <span class="comment">//使用前两个int和unsigned型参数初始化对象c1和c2，c3的初始值由后两个参数相乘得到</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在参数列表后写上=default，要求编译器生成构造函数</li>
+<li>如果编译器不支持类内初始值，则所有构造函数都应该显式地初始化每个内置类型的成员</li>
+<li>构造函数的唯一目的是为数据成员赋初值，因此函数体是空的</li>
+</ul>
+</li>
+<li><p>在类的外部定义构造函数</p>
+<ul>
+<li><p>特殊情况：以istream为参数的构造函数需要执行实际的操作</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Sales_data::Sales_data(<span class="built_in">std</span>::istream &amp;is)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">read</span>(is,*<span class="keyword">this</span>);<span class="comment">//read函数的作用是从is中读取一条图书交易信息，然后存入this对象中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在类的外部定义构造函数时，必须指明该构造函数是哪个类的成员，若名字和类型相同，则为构造函数</p>
+</li>
+<li><p>未出现在构造函数初始值列表中的成员，将通过相应的类内初始值（如果存在的话）初始化，或执行默认初始化</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>拷贝、赋值和析构</p>
+<ul>
+<li>若不主动定义这些操作，编译器将代替生成</li>
+<li>编译器的生成版本将对对象的每个成员执行拷贝、赋值和销毁操作</li>
+<li>某些类不能依赖于合成的版本<ul>
+<li>当类需要分配类对象之外的资源时，编译器的合成版本常常会失效</li>
+<li>很多需要动态内存的类 能且应该 使用vector对象或string对象管理必要的存储空间，避免分配/释放内存带来的复杂性</li>
+<li>若类包含vector或者string成员，则其拷贝、赋值和销毁的合成版本能够正常工作</li>
+<li>类中所有分配的资源都应该直接以类的数据成员的形式存储</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="访问控制与封装"><a href="#访问控制与封装" class="headerlink" title="访问控制与封装"></a>访问控制与封装</h4><ul>
+<li>使用 访问说明符 加强类的封装性<ul>
+<li>在public说明符之后的成员在整个程序内可被访问，public成员定义类的接口</li>
+<li>在private说明符之后的成员可以被类的成员函数访问，但不能被使用该类的代码访问；private部分封装了类的实现细节</li>
+<li>构造函数和部分成员函数跟在public之后；数据恒源和实现部分的函数跟在private之后</li>
+</ul>
+</li>
+<li>使用class或struct关键字<ul>
+<li>struct和class的<strong>默认访问权限</strong>不一样，struct在第一个访问说明符之前的成员是public；class在第一个访问说明符之前的成员是private</li>
+</ul>
+</li>
+<li>友元<ul>
+<li>类可以允许其他类或函数访问它的非公有成员，方法是让其他类和函数称为它的友元</li>
+<li>以friend关键字开始声明——友元声明</li>
+<li>友元不是类的成员，也不受所在区域访问控制级别的约束</li>
+<li>封装的益处<ul>
+<li>确保用户代码不会无意间破坏封装对象的状态</li>
+<li>被封装的类的具体实现细节可以随时改变，而无需调整用户级别的代码</li>
+<li>改变类的定义无需更改用户代码，但使用了该类的源文件必须重新编译</li>
+</ul>
+</li>
+<li>友元的声明<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
     </div>
 
     
@@ -287,7 +461,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第7章-类"><span class="nav-number">1.</span> <span class="nav-text">第7章 类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第7章-类"><span class="nav-number">1.</span> <span class="nav-text">第7章 类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义抽象数据类型"><span class="nav-number">1.1.</span> <span class="nav-text">定义抽象数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问控制与封装"><span class="nav-number">1.2.</span> <span class="nav-text">访问控制与封装</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
