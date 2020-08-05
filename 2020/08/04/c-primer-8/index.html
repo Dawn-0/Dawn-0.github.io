@@ -28,7 +28,7 @@
 <meta property="og:description" content="第II部分 C++标准库（第8章-第12章）第8章 IO库本章介绍IO库的基本内容。 C语言通过一组定义在标准库中的类型来处理IO。IO库定义了读写内置类型值的操作。一些类也会定义类似的操作，来读写自己的对象。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-08-04T08:54:40.000Z">
-<meta property="article:modified_time" content="2020-08-04T13:28:14.314Z">
+<meta property="article:modified_time" content="2020-08-05T09:09:54.986Z">
 <meta property="article:author" content="Dawn">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -180,10 +180,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-08-04 16:54:40 / Modified: 21:28:14" itemprop="dateCreated datePublished" datetime="2020-08-04T16:54:40+08:00">2020-08-04</time>
+              <time title="Created: 2020-08-04 16:54:40" itemprop="dateCreated datePublished" datetime="2020-08-04T16:54:40+08:00">2020-08-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-05 17:09:54" itemprop="dateModified" datetime="2020-08-05T17:09:54+08:00">2020-08-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -220,7 +226,156 @@
 <li>“&lt;&lt;”运算符，用来向一个ostream对象写入输出数据</li>
 <li>getline函数，从一个给定的istream读取一行数据，存入一个给定的string对象中</li>
 </ul>
-<h4 id="IO类"><a href="#IO类" class="headerlink" title="IO类"></a>IO类</h4>
+<h4 id="IO类"><a href="#IO类" class="headerlink" title="IO类"></a>IO类</h4><ul>
+<li>IO类型分别定义在三个独立的头文件中：<ul>
+<li>iostream定义了用于读写流的基本类型</li>
+<li>fstream定义了读写命名文件的类型</li>
+<li>sstream定义了读写内存string对象的类型</li>
+</ul>
+</li>
+<li>标准库也定义了一组类型和对象来操纵wchar_t类型的数据</li>
+<li>标准库使我们能忽略不同类型的流之间的差异，通过 继承机制 实现<ul>
+<li>继承机制使我们可以声明一个特定的类继承自另一个类</li>
+<li>ifstream和istringstream都继承自istream，分别操作文件流和字符串流，因此可以和istream对象一样使用</li>
+</ul>
+</li>
+<li>本节的剩下部分所介绍的标准库流特性都可以无差别地应用于普通流、文件流、string流和char或宽字符版本</li>
+<li>IO对象无拷贝或赋值<ul>
+<li>不能拷贝或对IO对象赋值</li>
+<li>不能将形参或返回类型设置为流类型</li>
+<li>进行IO操作的函数通常以引用方式传递和返回流</li>
+<li>读写一个IO对象会改变其状态，因此传递和返回的引用不能是const</li>
+</ul>
+</li>
+<li>条件状态<ul>
+<li>IO操作可能发生的错误</li>
+<li>只有当一个流处于无错状态时，我们才可以从它读取数据，向它写入数据</li>
+<li>使用一个流之前检查它是否处于良好状态，可以把它当做一个条件来使用</li>
+<li>查询流的状态<ul>
+<li>IO库定义了一个与机器无关的iostate类型，提供了表达流状态的完整功能</li>
+<li>IO库定义了4个iostate类型的constexpr值<ul>
+<li>badbit：系统级错误</li>
+<li>failbit：发生可恢复错误后，failbit被置位</li>
+<li>eofbit：到达文件结束位置，eofbit和failbit都被置位</li>
+<li>goodbit：值为0表示流未发生错误</li>
+<li>若badbit、failbit、eofbit任一个被置位，则检测流状态的条件会失败</li>
+</ul>
+</li>
+<li>使用good或fail是确定流的总体状态的正确方法</li>
+</ul>
+</li>
+<li>管理条件状态<ul>
+<li>流对象的rdstate成员返回一个iostate值，对应流的当前状态。</li>
+<li>复位单一的条件状态位<ul>
+<li>用rdstate读出当前条件状态，用位操作将所需位复位来生成新的状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>管理输出缓冲<ul>
+<li>每个输出流都管理一个缓冲区，用来保存程序读写的数据</li>
+<li>有缓冲机制，系统可以将程序的多个输出操作组合成单一的系统级写操作，减少耗时，提升性能</li>
+<li>刷新缓冲<ul>
+<li>程序正常结束</li>
+<li>缓冲区满</li>
+<li>操纵符如endl，显式刷新缓冲区</li>
+<li>输出操作后，使用操作符unitbuf设置流的内部状态，清空缓冲区；默认写到cerr的内容立即刷新，设置了unitbuf</li>
+<li>输出流被关联到另一个流，读写被关联的流时，关联到的流的缓冲区会被刷新</li>
+</ul>
+</li>
+<li>刷新输出缓冲区<ul>
+<li>endl：换行并刷新缓冲区</li>
+<li>flush：刷新缓冲区，但不输出额外字符</li>
+<li>ends：向缓冲区插入一个空字符，然后刷新缓冲区</li>
+</ul>
+</li>
+<li>unitbuf操纵符<ul>
+<li>在每次输出操作后都刷新缓冲区</li>
+<li>告诉流在接下来的每次写操作之后都进行一次flush操作</li>
+<li>nounitbuf：重置流，恢复正常的缓冲区机制</li>
+<li>程序崩溃（异常终止）时，输出缓冲区不会被刷新，输出数据可能停留在缓冲区中等待打印</li>
+</ul>
+</li>
+<li>关联输入和输出流<ul>
+<li>输入流被关联到一个输出流时，从输入流读取数据的操作会先刷新关联的输出流</li>
+<li>交互式系统通常应该关联输入流和输出流，所有输出都会在读操作之前被打印出来</li>
+<li>每个流同时最多关联到一个流，但多个流可以同时关联到同一个ostream</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="文件输入输出"><a href="#文件输入输出" class="headerlink" title="文件输入输出"></a>文件输入输出</h4><ul>
+<li>使用文件流对象<ul>
+<li>读写文件时，定义一个文件流对象，并将对象与文件关联起来</li>
+<li>新C++标准中，文件名既可以是库类型string对象，也可以是C风格字符数组；旧版本只允许C风格字符数组</li>
+<li>用fstream代替iostream&amp;<ul>
+<li>在要求使用基类型对象的地方，可以用继承类型的对象来替代</li>
+<li>若一个函数接受一个ostream&amp;参数，调用时也可以传给它一个ofstream对象，istream&amp;和ifstream也类似。</li>
+<li>比如read和print</li>
+</ul>
+</li>
+<li>成员函数open和close<ul>
+<li>调用open，将空文件流对象和文件关联起来</li>
+<li>检测open是否成功；若open失败，failbit会被置位</li>
+<li>一个文件流打开后，会保持与对应文件的关联；对一个打开的文件流调用open会失败</li>
+<li>为了将文件流关联到另外一个文件，必须首先关闭已经关联的文件，之后可以打开新的文件</li>
+</ul>
+</li>
+<li>自动构造和析构<ul>
+<li>当一个fstream对象离开作用域时，与之关联的文件会自动关闭。</li>
+<li>当一个fstream对象被销毁时，close会自动被调用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>文件模式<ul>
+<li>每个流都有一个关联的文件模式，来指出如何使用文件</li>
+<li>无论用哪种方式打开文件，都可以指定文件模式</li>
+<li>每个文件流类型都定义了一个默认的文件模式</li>
+<li>以out模式打开文件会丢弃已有数据<ul>
+<li>默认打开ofstream时，文件内容会被丢弃</li>
+<li>保留被ofsream打开的文件中已有数据的唯一方法是显式指定app或in模式</li>
+</ul>
+</li>
+<li>每次调用open时都会确定文件模式<ul>
+<li>对于一个给定流，每当打开文件时，都可以改变其文件模式</li>
+<li>通常情况下，out模式意味着同时使用trunc模式</li>
+<li>每次打开文件时，都要设置文件模式，可以显式或隐式，若未指定，则使用默认值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="string流"><a href="#string流" class="headerlink" title="string流"></a>string流</h4><ul>
+<li>使用istringstream<ul>
+<li>对整行文本进行处理，其他一些工作是处理行内的单个单词时可以用</li>
+</ul>
+</li>
+<li>使用ostringstream<ul>
+<li>逐步构造输出，最后一起打印的情况</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>C++使用标准库类来处理面向流的输入和输出<ul>
+<li>iostream处理控制台IO</li>
+<li>fstream处理命名文件IO</li>
+<li>stringstream完成内存string的IO</li>
+</ul>
+</li>
+<li>类fstream和stringstream都继承自类iostream。</li>
+<li>每个IO对象维护一组条件状态，用来指出此对象上是否可以进行IO操作；若遇到错误，则对象状态变为失效，所有后续输入操作都不能执行，直到错误被纠正。标准库提供了一组函数，用来设置和检测这些状态</li>
+</ul>
+<h4 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h4><ul>
+<li>条件状态</li>
+<li>文件模式</li>
+<li>文件流</li>
+<li>字符串流</li>
+</ul>
+
     </div>
 
     
@@ -300,7 +455,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第II部分-C-标准库（第8章-第12章）"><span class="nav-number">1.</span> <span class="nav-text">第II部分 C++标准库（第8章-第12章）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第8章-IO库"><span class="nav-number">2.</span> <span class="nav-text">第8章 IO库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IO类"><span class="nav-number">2.1.</span> <span class="nav-text">IO类</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第II部分-C-标准库（第8章-第12章）"><span class="nav-number">1.</span> <span class="nav-text">第II部分 C++标准库（第8章-第12章）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第8章-IO库"><span class="nav-number">2.</span> <span class="nav-text">第8章 IO库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IO类"><span class="nav-number">2.1.</span> <span class="nav-text">IO类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件输入输出"><span class="nav-number">2.2.</span> <span class="nav-text">文件输入输出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#string流"><span class="nav-number">2.3.</span> <span class="nav-text">string流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">2.4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#术语表"><span class="nav-number">2.5.</span> <span class="nav-text">术语表</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
